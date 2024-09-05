@@ -3,17 +3,18 @@ package net.smackplays.smacksutil.platform.services;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.UUID;
 
 public interface IClientPacketSender {
-    void VeinMinerBreakPacket(ItemStack mainHandStack, BlockPos pos, boolean isCreative, boolean replaceSeeds);
+    void VeinMinerBreakPacket(BlockPos pos, boolean isCreative, boolean replaceSeeds);
 
-    void EnchantPacket(ItemStack stack);
+    void EnchantPacket(Enchantment stack, boolean addRemove);
 
-    void BackpackSortPacket(ItemStack stack);
+    void BackpackSortPacket(int slot);
 
     void BackpackOpenPacket(int slot);
 

@@ -1,42 +1,40 @@
 package net.smackplays.smacksutil.networking.c2spacket;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.Tool;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.network.handling.PlayPayloadContext;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
-public class C2SVeinMinerBreakPacketHandler {private static final C2SVeinMinerBreakPacketHandler INSTANCE = new C2SVeinMinerBreakPacketHandler();
+public class C2SVeinMinerBreakPacketHandler {
+    public static void handle(final C2SVeinMinerBreakPacket data, final IPayloadContext context) {
+        context.enqueueWork(()  -> {
+            ServerLevel level = (ServerLevel) context.player().level();
+            Player player = context.player();
+            Level world = player.level();
+            ItemStack stack = player.getMainHandItem();
+            BlockPos pos = new BlockPos((int)data.pos().x, (int)data.pos().y, (int)data.pos().z);
 
-    public static C2SVeinMinerBreakPacketHandler getInstance() {
-        return INSTANCE;
-    }
+            BlockState currBlockState = world.getBlockState(pos);
 
-    @SuppressWarnings("unused")
-    public void handleData(final C2SVeinMinerBreakPacket data, final PlayPayloadContext context) {
-        context.workHandler().submitAsync(() -> {
-            if (context.level().isPresent() && context.player().isPresent()) {
-                ServerLevel level = (ServerLevel) context.level().get();
-                Player player = context.player().get();
-                Level world = player.level();
-                BlockState currBlockState = world.getBlockState(data.pos());
-
-                world.setBlockAndUpdate(data.pos(), Blocks.AIR.defaultBlockState());
-                if (!data.isCreative()) {
-                    BlockEntity currBlockEntity = currBlockState.hasBlockEntity() ? world.getBlockEntity(data.pos()) : null;
-                    Block.dropResources(currBlockState, world, data.pos(), currBlockEntity, null, ItemStack.EMPTY);
-                    if (data.stack().isDamageableItem()) {
-                        data.stack().hurt(1, player.getRandom(), (ServerPlayer) player);
-                    }
+            world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+            if (!data.isCreative()) {
+                BlockEntity currBlockEntity = currBlockState.hasBlockEntity() ? world.getBlockEntity(pos) : null;
+                Block.dropResources(currBlockState, world, pos, currBlockEntity, null, ItemStack.EMPTY);
+                if (stack.isDamageableItem()) {
+                    Tool damageData = stack.get(DataComponents.TOOL);
+                    //stack.hurt(1, player.getRandom(), (ServerPlayer) player);
                 }
-                if (data.replaceSeeds()) {
-                    world.setBlockAndUpdate(data.pos(), currBlockState.getBlock().defaultBlockState());
-                }
+            }
+            if (data.replaceSeeds()) {
+                world.setBlockAndUpdate(pos, currBlockState.getBlock().defaultBlockState());
             }
         });
     }

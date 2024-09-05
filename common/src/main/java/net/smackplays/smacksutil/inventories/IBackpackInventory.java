@@ -2,15 +2,21 @@ package net.smackplays.smacksutil.inventories;
 
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.smackplays.smacksutil.platform.Services;
 import org.jetbrains.annotations.NotNull;
 
@@ -154,48 +160,64 @@ public interface IBackpackInventory extends WorldlyContainer {
             CompoundTag cTag = listTag.getCompound(i);
             int slot = cTag.getByte("Slot") & 255;
             if (slot < items.size()) {
-                items.set(slot, stackOf(cTag));
+                ItemStack stack = stackOf(cTag);
+                ItemEnchantments ench = stack.getEnchantments();
+                ListTag enchList = (ListTag)cTag.get("Enchantments");
+                if (enchList != null && !enchList.isEmpty()){
+                    for (Tag t : enchList){
+
+                    }
+                }
+                items.set(i, stackOf(cTag));
             }
         }
     }
 
+    default CompoundTag saveAllItems(CompoundTag tag, NonNullList<ItemStack> items) {
+        ListTag listtag = new ListTag();
+        for (int i = 0; i < items.size(); i++) {
+            ItemStack stack = items.get(i);
+            CompoundTag compoundTag = new CompoundTag();
+            ResourceLocation location = BuiltInRegistries.ITEM.getKey(stack.getItem());
+            compoundTag.putString("id", location.toString());
+            compoundTag.putFloat("Count", (float)stack.getCount());
+            if (stack.get(DataComponents.ENCHANTMENTS) != null){
+                ListTag enchantList = new ListTag();
+                ItemEnchantments enchantments = EnchantmentHelper.getEnchantmentsForCrafting(stack);
+                var enchatnList = enchantments.entrySet().stream().toList();
+                for(var entry : enchatnList){
+                    Enchantment ench = entry.getKey().value();
+                    CompoundTag tag1 = new CompoundTag();
+                    tag1.putString("description", ench.description().toString());
+                    tag1.putInt("lvl", EnchantmentHelper.getItemEnchantmentLevel(entry.getKey(), stack));
+                    enchantList.add(tag1);
+                }
+                compoundTag.put("Enchantments", enchantList);
+            }
+            listtag.add(compoundTag);
+        }
+        tag.put("Items", listtag);
+        return tag;
+
+    }
+
+    //TODO fix
     default ItemStack stackOf(CompoundTag tag) {
-        /*Item item = BuiltInRegistries.ITEM.get(new ResourceLocation(tag.getString("id")));
+        Item item = BuiltInRegistries.ITEM.get(ResourceLocation.parse(tag.getString("id")));
         ItemStack stack = new ItemStack(item);
         stack.setCount((int) tag.getFloat("Count"));
         if (tag.contains("tag", 10)) {
-            stack.setTag(tag.getCompound("tag").copy());
-            if (stack.getTag() != null) {
-                stack.getItem().verifyTagAfterLoad(stack.getTag());
-            }
+            stack.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
+            stack.getItem().verifyComponentsAfterLoad(stack);
         }
 
-        if (stack.getItem().canBeDepleted()) {
+        if (stack.get(DataComponents.CAN_BREAK) != null) {
             stack.setDamageValue(stack.getDamageValue());
         }
-        return stack;*/
-        return ItemStack.EMPTY;
+        return stack;
     }
 
-    default void saveAllItems(CompoundTag tag, NonNullList<ItemStack> items, boolean bl) {
-        ListTag listTag = new ListTag();
-
-        for(int i = 0; i < items.size(); ++i) {
-            ItemStack stack = items.get(i);
-            if (!stack.isEmpty()) {
-                CompoundTag cTag = new CompoundTag();
-                cTag.putByte("Slot", (byte)i);
-                saveStack(stack, cTag);
-                listTag.add(cTag);
-            }
-        }
-
-        if (!listTag.isEmpty() || bl) {
-            tag.put("Items", listTag);
-        }
-
-    }
-
+    //TODO fix
     default void saveStack(ItemStack stack, CompoundTag tag) {
         ResourceLocation location = BuiltInRegistries.ITEM.getKey(stack.getItem());
         tag.putString("id", location.toString());

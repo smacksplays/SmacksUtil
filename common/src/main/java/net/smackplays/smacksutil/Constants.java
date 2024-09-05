@@ -54,8 +54,8 @@ public class Constants {
     public static final String C_ENCHANTING_SLOT_HIGHLIGHTED_SPRITE_LOCATION = "textures/gui/sprites/enchanting_slot_highlighted.png";
     public static final String C_ENCHANTING_SLOT_SPRITE_LOCATION = "textures/gui/sprites/enchanting_slot.png";
     public static final String C_ENCHANTING_SLOT_DISABLED_SPRITE_LOCATION = "textures/gui/sprites/enchanting_slot_disabled.png";
-    public static final String C_SCROLLER_SPRITE_LOCATION = "container/loom/scroller";
-    public static final String C_SCROLLER_DISABLED_SPRITE_LOCATION = "container/loom/scroller_disabled";
+    public static final String C_SCROLLER_SPRITE_LOCATION = "textures/gui/sprites/scroller.png";
+    public static final String C_SCROLLER_DISABLED_SPRITE_LOCATION = "textures/gui/sprites/scroller_disabled.png";
     // --------------------------------- VEINMINER
     public static final String C_SET_BLOCK_AIR_REQUEST = "set-block-air-request";
     public static final String C_INTERACT_ENTITY_REQUEST = "interact-entity-request";

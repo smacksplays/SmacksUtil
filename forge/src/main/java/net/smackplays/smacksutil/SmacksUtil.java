@@ -1,12 +1,18 @@
 package net.smackplays.smacksutil;
 
+import net.minecraft.Util;
 import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
 import net.minecraft.core.cauldron.CauldronInteraction;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.inventory.MenuType;
-import net.minecraft.world.item.CreativeModeTabs;
-import net.minecraft.world.item.Equipable;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.*;
+import net.minecraft.world.item.component.DyedItemColor;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -37,6 +43,9 @@ import net.smackplays.smacksutil.screens.AbstractBackpackScreen;
 import net.smackplays.smacksutil.screens.AbstractEnchantingToolScreen;
 import net.smackplays.smacksutil.screens.AbstractLargeBackpackScreen;
 import net.smackplays.smacksutil.screens.AbstractTeleportationTabletScreen;
+import org.checkerframework.checker.units.qual.A;
+
+import java.util.*;
 
 import static net.smackplays.smacksutil.Constants.*;
 
@@ -68,11 +77,26 @@ public class SmacksUtil {
     public static final RegistryObject<MenuType<TeleportationTabletMenu>> TELEPORTATION_TABLET_MENU =
             MENUS.register(C_TELEPORTATION_TABLET_MENU, () -> IForgeMenuType.create(TeleportationTabletMenu::create));
 
-    public SmacksUtil() {
+    public static FMLJavaModLoadingContext c;
+
+    public static List<ArmorMaterial.Layer> layerList = Arrays.asList(
+            new ArmorMaterial.Layer(ResourceLocation.tryBuild(MOD_ID, "backpack"), "", true),
+            new ArmorMaterial.Layer(ResourceLocation.tryBuild(MOD_ID, "test1"), "_overlay", true)
+    );
+
+    public static final ArmorMaterial TESTMat = new ArmorMaterial(ArmorMaterials.LEATHER.get().defense(),
+            0,
+            SoundEvents.ARMOR_EQUIP_LEATHER,
+            () -> Ingredient.of(Items.LEATHER),
+            layerList,
+            0.0F, 0.0F);
+
+
+    public SmacksUtil(FMLJavaModLoadingContext context) {
         Constants.LOG.info("Hello Forge world!");
         CommonClass.init();
 
-        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+        IEventBus modEventBus = context.getModEventBus();
 
         modEventBus.addListener(this::interModEnqueue);
         modEventBus.addListener(this::commonSetup);
@@ -84,6 +108,7 @@ public class SmacksUtil {
         MinecraftForge.EVENT_BUS.register(this);
 
         modEventBus.addListener(this::addCreative);
+        c = context;
     }
 
     public void interModEnqueue(InterModEnqueueEvent e){
@@ -136,11 +161,9 @@ public class SmacksUtil {
         @SubscribeEvent
         public static void colors(RegisterColorHandlersEvent.Item event) {
             /*event.register((ItemStack stack, int tintIndex) -> tintIndex == 0 ?
-                    ((Equipable) BACKPACK_ITEM.get()).getColor(stack) : 0xFFFFFF, BACKPACK_ITEM.get());
+                    Objects.requireNonNull(stack.get(DataComponents.DYED_COLOR)).rgb() : 0xFFFFFF, BACKPACK_ITEM.get());
             event.register((ItemStack stack, int tintIndex) -> tintIndex == 0 ?
-                    ((Equipable) LARGE_BACKPACK_ITEM.get()).getColor(stack) : 0xFFFFFF, LARGE_BACKPACK_ITEM.get());*/
+                    Objects.requireNonNull(stack.get(DataComponents.DYED_COLOR)).rgb() : 0xFFFFFF, LARGE_BACKPACK_ITEM.get());*/
         }
     }
-
-
 }

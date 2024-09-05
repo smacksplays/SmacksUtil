@@ -8,7 +8,7 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.smackplays.smacksutil.Constants;
@@ -36,7 +36,7 @@ public class NeoForgeKeyHandler implements IKeyHandler {
             if (Services.PLATFORM.isModLoaded("curios")){
                 List<SlotResult> results = CuriosApi.getCuriosHelper().findCurios(player, "charm");
                 if (!results.isEmpty()){
-                    ItemStack stack = results.get(0).stack();
+                    ItemStack stack = results.getFirst().stack();
                     if ((stack.is(Services.PLATFORM.getMagnetItem()) || stack.is(Services.PLATFORM.getAdvancedMagnetItem())) && Services.C2S_PACKET_SENDER != null){
                         Services.C2S_PACKET_SENDER.ToggleMagnetItemPacket(-1);
                         return;
@@ -47,7 +47,7 @@ public class NeoForgeKeyHandler implements IKeyHandler {
             for (int i = slots.size() - 1; i >= 0; i--){
                 ItemStack stack = slots.get(i).getItem();
                 if ((stack.is(Services.PLATFORM.getAdvancedMagnetItem()) || stack.is(Services.PLATFORM.getMagnetItem()))  && Services.C2S_PACKET_SENDER != null){
-                    Services.C2S_PACKET_SENDER.ToggleLightWandItemPacket(i);
+                    Services.C2S_PACKET_SENDER.ToggleMagnetItemPacket(i);
                     return;
                 }
             }
@@ -60,7 +60,7 @@ public class NeoForgeKeyHandler implements IKeyHandler {
             if (Services.PLATFORM.isModLoaded("curios")){
                 List<SlotResult> results = CuriosApi.getCuriosHelper().findCurios(player, "hands");
                 if (!results.isEmpty()){
-                    ItemStack stack = results.get(0).stack();
+                    ItemStack stack = results.getFirst().stack();
                     if (stack.is(Services.PLATFORM.getAutoWandItem()) && Services.C2S_PACKET_SENDER != null){
                         Services.C2S_PACKET_SENDER.ToggleLightWandItemPacket(-1);
                         return;
@@ -84,7 +84,7 @@ public class NeoForgeKeyHandler implements IKeyHandler {
             if (Services.PLATFORM.isModLoaded("curios")){
                 List<SlotResult> results = CuriosApi.getCuriosHelper().findCurios(player, "back");
                 if (!results.isEmpty()){
-                    ItemStack stack = results.get(0).stack();
+                    ItemStack stack = results.getFirst().stack();
                     if ((stack.is(Services.PLATFORM.getLargeBackackItem()) || stack.is(Services.PLATFORM.getBackackItem())) && Services.C2S_PACKET_SENDER != null){
                         Services.C2S_PACKET_SENDER.BackpackOpenPacket(-1);
                         return;
@@ -92,6 +92,13 @@ public class NeoForgeKeyHandler implements IKeyHandler {
                 }
             }
             NonNullList<Slot> slots = player.inventoryMenu.slots;
+            for (int i = 0; i <= 8; i++){
+                ItemStack stack = slots.get(i).getItem();
+                if ((stack.is(Services.PLATFORM.getLargeBackackItem()) || stack.is(Services.PLATFORM.getBackackItem())) && Services.C2S_PACKET_SENDER != null){
+                    Services.C2S_PACKET_SENDER.BackpackOpenPacket(i);
+                    return;
+                }
+            }
             for (int i = slots.size() - 1; i >= 0; i--){
                 ItemStack stack = slots.get(i).getItem();
                 if ((stack.is(Services.PLATFORM.getLargeBackackItem()) || stack.is(Services.PLATFORM.getBackackItem())) && Services.C2S_PACKET_SENDER != null){
@@ -111,7 +118,7 @@ public class NeoForgeKeyHandler implements IKeyHandler {
     public void register() {
     }
 
-    @Mod.EventBusSubscriber(modid = Constants.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
+    @EventBusSubscriber(modid = Constants.MOD_ID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
     public static class ClientModBusEvents {
         @SubscribeEvent
         public static void onKeyRegister(RegisterKeyMappingsEvent event) {
@@ -135,7 +142,7 @@ public class NeoForgeKeyHandler implements IKeyHandler {
         }
     }
 
-    @Mod.EventBusSubscriber(modid = Constants.MOD_ID, value = Dist.CLIENT)
+    @EventBusSubscriber(modid = Constants.MOD_ID, value = Dist.CLIENT)
     public static class ClientForgeEvents {
         @SubscribeEvent
         public static void onKeyInput(InputEvent.Key event) {

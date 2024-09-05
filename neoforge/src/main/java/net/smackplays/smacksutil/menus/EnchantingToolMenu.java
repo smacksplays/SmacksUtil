@@ -12,6 +12,6 @@ public class EnchantingToolMenu extends AbstractEnchantingToolMenu {
     }
 
     public static EnchantingToolMenu create(int syncId, Inventory playerInventory) {
-        return new EnchantingToolMenu(syncId, playerInventory, new EnchantmentToolInventory(playerInventory.getSelected()));
+        return new EnchantingToolMenu(syncId, playerInventory, new EnchantmentToolInventory(playerInventory.getSelected(), playerInventory.player.registryAccess()));
     }
 }

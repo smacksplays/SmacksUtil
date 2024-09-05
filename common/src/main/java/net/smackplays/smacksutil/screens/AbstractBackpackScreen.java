@@ -5,15 +5,14 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 import net.smackplays.smacksutil.Constants;
 import net.smackplays.smacksutil.inventories.BackpackInventory;
 import net.smackplays.smacksutil.menus.AbstractBackpackMenu;
@@ -21,9 +20,7 @@ import net.smackplays.smacksutil.platform.Services;
 import net.smackplays.smacksutil.slots.BackpackSlot;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import static net.smackplays.smacksutil.Constants.C_BACKPACK_SCREEN_LOCATION;
@@ -57,19 +54,11 @@ public class AbstractBackpackScreen<T extends AbstractBackpackMenu> extends Abst
 
         BackpackInventory inv = (BackpackInventory) this.menu.inventory;
         ItemStack backpack = inv.stack;
-        /*CompoundTag tag = backpack.getOrCreateTagElement("backpack");
-        ListTag listTag = tag.getList("Items", 10);
-        Map<Integer, ItemStack> corrList = new HashMap<>();
-        for ( int i = 0; i < listTag.size(); i++){
-            CompoundTag cTag = listTag.getCompound(i);
-            int slot = cTag.getByte("Slot") & 255;
-            corrList.putIfAbsent(slot, stackOf(cTag));
+        CustomData customData = backpack.get(DataComponents.CUSTOM_DATA);
+        if (customData != null){
+            CompoundTag tag = customData.copyTag();
+            inv.loadAllItems(tag, inv.getItems());
         }
-        inv.loadAllItems(tag, inv.getItems());
-        for (int i = 4; i < inv.getItems().size(); i++){
-            inv.setItem(i, corrList.getOrDefault(i, ItemStack.EMPTY));
-        }
-*/
         BackpackGuiGraphics c = new BackpackGuiGraphics(context, this.minecraft);
         super.render(c, mouseX, mouseY, delta);
         renderTooltip(context, mouseX, mouseY);
@@ -109,7 +98,8 @@ public class AbstractBackpackScreen<T extends AbstractBackpackMenu> extends Abst
     public void onButtonWidgetPressed() {
         ItemStack backpack = ((BackpackInventory)this.menu.inventory).stack;
         if (Services.C2S_PACKET_SENDER != null) {
-            Services.C2S_PACKET_SENDER.BackpackSortPacket(backpack);
+            int slot =  this.menu.playerInventory.findSlotMatchingItem(backpack);
+            if (slot != -1) Services.C2S_PACKET_SENDER.BackpackSortPacket(slot);
         }
     }
 
@@ -119,23 +109,5 @@ public class AbstractBackpackScreen<T extends AbstractBackpackMenu> extends Abst
                 || mouseX > (double) (width + backgroundWidth) / 2 + 10
                 || mouseY < (double) (height - backgroundHeight) / 2 - 10
                 || mouseY > (double) (height + backgroundHeight) / 2 + 10;
-    }
-
-    private ItemStack stackOf(CompoundTag tag){
-        /*Item item = BuiltInRegistries.ITEM.get(ResourceLocation.tryBuild(tag.getString("id")));
-        ItemStack stack = new ItemStack(item);
-        /*stack.setCount((int) tag.getFloat("Count"));
-        if (tag.contains("tag", 10)) {
-            stack.setTag(tag.getCompound("tag").copy());
-            if (stack.getTag() != null) {
-                stack.getItem().verifyTagAfterLoad(stack.getTag());
-            }
-        }
-
-        if (stack.getItem().canBeDepleted()) {
-            stack.setDamageValue(stack.getDamageValue());
-        }
-        return stack;*/
-        return ItemStack.EMPTY;
     }
 }

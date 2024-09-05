@@ -48,6 +48,7 @@ public class BackpackGuiGraphics extends GuiGraphics {
 
             pose().popPose();
         }
+        //TODO fix
         //super.renderItemDecorations($$0, $$1, $$2, $$3, $$4);
     }
 

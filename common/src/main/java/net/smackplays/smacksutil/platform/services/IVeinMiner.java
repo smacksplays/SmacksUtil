@@ -128,7 +128,7 @@ public abstract class IVeinMiner {
             boolean canHarvest = (player.hasCorrectToolForDrops(currBlockState) || player.isCreative());
             if (canHarvest) {
                 if (Services.C2S_PACKET_SENDER != null) {
-                    Services.C2S_PACKET_SENDER.VeinMinerBreakPacket(mainHandStack, curr, isCreative, replaceSeeds);
+                    Services.C2S_PACKET_SENDER.VeinMinerBreakPacket(curr, isCreative, replaceSeeds);
                 }
             }
         }

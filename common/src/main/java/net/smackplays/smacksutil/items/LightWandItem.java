@@ -14,7 +14,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nullable;
 
 public class LightWandItem extends Item {
 
@@ -38,8 +37,7 @@ public class LightWandItem extends Item {
         if (world.getBlockState(toPlace).is(Blocks.AIR) && player != null && !player.isCrouching() && !world.getBlockState(pos).is(Blocks.AIR)) {
             world.setBlockAndUpdate(toPlace, Blocks.LIGHT.defaultBlockState());
             if (!player.isCreative()) {
-                //context.getItemInHand().hurt(1, player.getRandom(), (ServerPlayer) player);
-                ItemStack hand = context.getItemInHand();
+                context.getItemInHand().hurtAndBreak(1, (ServerLevel) world, (ServerPlayer) player, t -> {});
             }
             return InteractionResult.SUCCESS;
         }

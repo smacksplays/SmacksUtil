@@ -1,34 +1,39 @@
 package net.smackplays.smacksutil.networking.c2spacket;
 
-import net.minecraft.network.FriendlyByteBuf;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.phys.Vec3;
 import net.smackplays.smacksutil.Constants;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Vector3f;
 
-public record C2STeleportationNBTPacket(ItemStack stack, Vec3 pos, float xRot, float yRot, String name, String dim, boolean remove) implements CustomPacketPayload {
+public record C2STeleportationNBTPacket(String stack, Vector3f pos, float xRot, float yRot, String name_dim, boolean remove) implements CustomPacketPayload {
 
-    public static final ResourceLocation ID = new ResourceLocation(Constants.MOD_ID, "teleportation_nbt_packet");
+    public static final ResourceLocation ID = ResourceLocation.tryBuild(Constants.MOD_ID, "teleportation_nbt_packet");
+    public static final CustomPacketPayload.Type<C2STeleportationNBTPacket> TYPE
+            = new CustomPacketPayload.Type<>(ID);
 
-    public C2STeleportationNBTPacket(final FriendlyByteBuf buffer) {
-        this(buffer.readItem(), buffer.readVec3(), buffer.readFloat(), buffer.readFloat(), buffer.readUtf(), buffer.readUtf(), buffer.readBoolean());
-    }
+
+    public static final StreamCodec<ByteBuf, C2STeleportationNBTPacket> STREAM_CODEC = StreamCodec.composite(
+            ByteBufCodecs.STRING_UTF8,
+            C2STeleportationNBTPacket::stack,
+            ByteBufCodecs.VECTOR3F,
+            C2STeleportationNBTPacket::pos,
+            ByteBufCodecs.FLOAT,
+            C2STeleportationNBTPacket::xRot,
+            ByteBufCodecs.FLOAT,
+            C2STeleportationNBTPacket::yRot,
+            ByteBufCodecs.STRING_UTF8,
+            C2STeleportationNBTPacket::name_dim,
+            ByteBufCodecs.BOOL,
+            C2STeleportationNBTPacket::remove,
+            C2STeleportationNBTPacket::new
+    );
 
     @Override
-    public void write(final FriendlyByteBuf buffer) {
-        buffer.writeItem(stack);
-        buffer.writeVec3(pos);
-        buffer.writeFloat(xRot);
-        buffer.writeFloat(yRot);
-        buffer.writeUtf(name);
-        buffer.writeUtf(dim);
-        buffer.writeBoolean(remove);
-    }
-
-    @Override
-    public @NotNull ResourceLocation id() {
-        return ID;
+    public @NotNull Type<? extends CustomPacketPayload> type() {
+        return TYPE;
     }
 }

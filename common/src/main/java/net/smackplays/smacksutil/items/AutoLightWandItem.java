@@ -1,6 +1,7 @@
 package net.smackplays.smacksutil.items;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
@@ -11,13 +12,13 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.smackplays.smacksutil.util.PlayerComparator;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +28,7 @@ public class AutoLightWandItem extends LightWandItem {
     private static final int RED = 16711680;
 
     public AutoLightWandItem() {
-        super(new Item.Properties().rarity(Rarity.EPIC).durability(2000));
+        super(new Item.Properties().rarity(Rarity.EPIC).durability(2000).component(DataComponents.CUSTOM_DATA, CustomData.of(new CompoundTag())));
     }
 
     @Override
@@ -42,8 +43,9 @@ public class AutoLightWandItem extends LightWandItem {
     }
 
     @Override
-    public void inventoryTick(@NotNull ItemStack stack, Level world, @NotNull Entity entity, int $$3, boolean $$4) {
-        /*if (!world.isClientSide && stack.getOrCreateTag().getBoolean("enabled")) {
+    public void inventoryTick(@NotNull ItemStack stack, @NotNull Level world, @NotNull Entity entity, int $$3, boolean $$4) {
+        CustomData customData = stack.get(DataComponents.CUSTOM_DATA);
+        if (customData != null && !world.isClientSide && customData.copyTag().getBoolean("enabled")) {
             Player player = (Player) entity;
 
             BlockPos sourcePos = player.blockPosition();
@@ -56,7 +58,7 @@ public class AutoLightWandItem extends LightWandItem {
                         int light = world.getBrightness(LightLayer.BLOCK, curr);
                         if (light <= 9 && !world.getBlockState(curr.below()).is(Blocks.AIR)
                                 && (world.getBlockState(curr).is(Blocks.AIR)
-                                    || world.getBlockState(curr).is(Blocks.CAVE_AIR))
+                                || world.getBlockState(curr).is(Blocks.CAVE_AIR))
                                 && world.getBlockState(curr).getFluidState().isEmpty()
                                 && Block.isShapeFullBlock(world.getBlockState(curr.below()).getShape(world, curr))) {
                             toDark.add(curr);
@@ -67,25 +69,33 @@ public class AutoLightWandItem extends LightWandItem {
 
             toDark.sort(new PlayerComparator(player));
             if (!toDark.isEmpty()) {
-                world.setBlockAndUpdate(toDark.get(0), Blocks.LIGHT.defaultBlockState());
+                world.setBlockAndUpdate(toDark.getFirst(), Blocks.LIGHT.defaultBlockState());
             }
-        }*/
+        }
         super.inventoryTick(stack, world, entity, $$3, $$4);
     }
 
     @Override
-
     public boolean isFoil(@NotNull ItemStack stack) {
-        //return stack.getOrCreateTag().getBoolean("enabled");
+        CustomData customData = stack.get(DataComponents.CUSTOM_DATA);
+        if(customData != null){
+            CompoundTag tag = customData.copyTag();
+            return tag.getBoolean("enabled");
+        }
         return false;
     }
 
     public void toggle(ItemStack stack, Player player) {
-        /*boolean state = stack.getOrCreateTag().getBoolean("enabled");
-        stack.getOrCreateTag().putBoolean("enabled", !state);
-        String msg = !state ? "Active" : "Inactive";
-        int color = !state ? GREEN : RED;
-        notifyPlayer(player, msg, color);*/
+        CustomData customData = stack.get(DataComponents.CUSTOM_DATA);
+        if(customData != null){
+            CompoundTag tag = customData.copyTag();
+            boolean state = tag.getBoolean("enabled");
+            tag.putBoolean("enabled", !state);
+            String msg = !state ? "Active" : "Inactive";
+            int color = !state ? GREEN : RED;
+            notifyPlayer(player, msg, color);
+            stack.set(DataComponents.CUSTOM_DATA,CustomData.of(tag));
+        }
     }
 
     public void notifyPlayer(Player player, String msg, int color){
@@ -93,7 +103,10 @@ public class AutoLightWandItem extends LightWandItem {
     }
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @NotNull TooltipContext context, @NotNull List<Component> componentList, @NotNull TooltipFlag flag) {
-        /*CompoundTag tag = stack.getOrCreateTag();
-        componentList.add(1, Component.literal("Enabled: " + tag.getBoolean("enabled")));*/
+        CustomData customData = stack.get(DataComponents.CUSTOM_DATA);
+        if(customData != null){
+            CompoundTag tag = customData.copyTag();
+            componentList.add(1, Component.literal("Enabled: " + tag.getBoolean("enabled")));
+        }
     }
 }

@@ -1,34 +1,38 @@
 package net.smackplays.smacksutil;
 
-import net.minecraft.client.gui.screens.MenuScreens;
+
 import net.minecraft.core.cauldron.CauldronInteraction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.CreativeModeTabs;
-import net.minecraft.world.item.DyeableLeatherItem;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.DyedItemColor;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.InterModComms;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.event.lifecycle.InterModEnqueueEvent;
-import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.internal.versions.neoforge.NeoForgeVersion;
-import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
-import net.neoforged.neoforge.network.registration.IPayloadRegistrar;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
+import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import net.smackplays.smacksutil.config.ClothConfigNeoForge;
+import net.smackplays.smacksutil.config.ConfigNeoForge;
 import net.smackplays.smacksutil.items.*;
 import net.smackplays.smacksutil.menus.BackpackMenu;
 import net.smackplays.smacksutil.menus.EnchantingToolMenu;
@@ -44,13 +48,12 @@ import net.smackplays.smacksutil.screens.AbstractLargeBackpackScreen;
 import net.smackplays.smacksutil.screens.AbstractTeleportationTabletScreen;
 import top.theillusivec4.curios.api.SlotTypeMessage;
 
-import java.util.function.Supplier;
-
 import static net.smackplays.smacksutil.Constants.*;
 
 @SuppressWarnings({"unused", "EmptyMethod"})
 @Mod(MOD_ID)
 public class SmacksUtil {
+
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(MOD_ID);
     public static final DeferredRegister<MenuType<?>> MENUS = DeferredRegister.create(Registries.MENU, MOD_ID);
     public static final DeferredItem<Item> BACKPACK_ITEM = ITEMS.register(C_BACKPACK_ITEM, BackpackItem::new);
@@ -64,7 +67,7 @@ public class SmacksUtil {
     public static final DeferredItem<Item> ADVANCED_MAGNET_ITEM = ITEMS.register(C_ADVANCED_MAGNET_ITEM, AdvancedMagnetItem::new);
     public static final DeferredItem<Item> MOB_CATCHER_ITEM = ITEMS.register(C_MOB_CATCHER_ITEM, MobCatcherItem::new);
     public static final DeferredItem<Item> ADVANCED_MOB_CATCHER_ITEM = ITEMS.register(C_ADVANCED_MOB_CATCHER_ITEM, AdvancedMobCatcherItem::new);
-    public static final DeferredItem<Item> ENCHANTING_TOOL_ITEM = ITEMS.register(C_ENCHANTING_TOOL_ITEM, ForgeEnchantingToolItem::new);
+    public static final DeferredItem<Item> ENCHANTING_TOOL_ITEM = ITEMS.register(C_ENCHANTING_TOOL_ITEM, EnchantingToolItem::new);
     public static final DeferredItem<Item> TELEPORTATION_TABLET_ITEM = ITEMS.register(C_TELEPORTATION_TABLET_ITEM, TeleportationTablet::new);
     public static final DeferredHolder<MenuType<?>, MenuType<BackpackMenu>> BACKPACK_MENU =
             MENUS.register(C_BACKPACK_MENU, () -> new MenuType<>(BackpackMenu::createGeneric9x6, FeatureFlags.DEFAULT_FLAGS));
@@ -75,7 +78,7 @@ public class SmacksUtil {
     public static final DeferredHolder<MenuType<?>, MenuType<TeleportationTabletMenu>> TELEPORTATION_TABLET_MENU =
             MENUS.register(C_TELEPORTATION_TABLET_MENU, () -> new MenuType<>(TeleportationTabletMenu::create, FeatureFlags.DEFAULT_FLAGS));
 
-    public SmacksUtil(IEventBus modEventBus) {
+    public SmacksUtil(IEventBus modEventBus, ModContainer modContainer) {
         Constants.LOG.info("Hello NeoForge world!");
         CommonClass.init();
 
@@ -88,13 +91,9 @@ public class SmacksUtil {
         NeoForge.EVENT_BUS.register(this);
 
         modEventBus.addListener(this::addCreative);
-        if (FMLEnvironment.dist == Dist.CLIENT) {
-            Supplier<Runnable> toRun = () -> ClothConfigNeoForge::registerModsPage;
-            toRun.get().run();
-        }
         //DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> ClothConfigNeoForge::registerModsPage);
+        modContainer.registerConfig(ModConfig.Type.CLIENT, ConfigNeoForge.CLIENT_SPEC);
     }
-
     public void interModEnqueue(InterModEnqueueEvent e){
         if (Services.PLATFORM.isModLoaded("curios")){
             InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE, () -> new SlotTypeMessage.Builder("charm").size(1).build());
@@ -102,9 +101,7 @@ public class SmacksUtil {
             InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE, () -> new SlotTypeMessage.Builder("hands").size(1).build());
         }
     }
-
     private void commonSetup(final FMLCommonSetupEvent event) {
-        //event.enqueueWork(PacketHandler::register);
     }
 
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
@@ -130,107 +127,123 @@ public class SmacksUtil {
 
     }
 
-    @Mod.EventBusSubscriber(modid = MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+    @EventBusSubscriber(modid = MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static class ClientModEvents {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
-            MenuScreens.register(SmacksUtil.BACKPACK_MENU.get(), AbstractBackpackScreen<BackpackMenu>::new);
-            MenuScreens.register(SmacksUtil.LARGE_BACKPACK_MENU.get(), AbstractLargeBackpackScreen<LargeBackpackMenu>::new);
-            MenuScreens.register(SmacksUtil.ENCHANTING_TOOL_MENU.get(), AbstractEnchantingToolScreen<EnchantingToolMenu>::new);
-            MenuScreens.register(SmacksUtil.TELEPORTATION_TABLET_MENU.get(), AbstractTeleportationTabletScreen<TeleportationTabletMenu>::new);
             CauldronInteraction.WATER.map().putIfAbsent(BACKPACK_ITEM.get(), CauldronInteraction.DYED_ITEM);
             CauldronInteraction.WATER.map().putIfAbsent(LARGE_BACKPACK_ITEM.get(), CauldronInteraction.DYED_ITEM);
         }
-
         @SubscribeEvent
         public static void colors(RegisterColorHandlersEvent.Item event) {
+            event.register((backpack, layer) -> {
+                if (layer > 1 || !(backpack.getItem() instanceof BackpackItem)) {
+                    return -1;
+                }
+                if (layer == 0) {
+                    DyedItemColor data = backpack.get(DataComponents.DYED_COLOR);
+                    if (data != null){
+                        return backpack.get(DataComponents.DYED_COLOR).rgb();
+                    }
+                    return DyedItemColor.LEATHER_COLOR;
+                }
+                return -1;
+            }, BACKPACK_ITEM.get(), LARGE_BACKPACK_ITEM.get());
+            /*
             event.register((ItemStack stack, int tintIndex) -> tintIndex == 0 ?
                     ((DyeableLeatherItem) BACKPACK_ITEM.get()).getColor(stack) : 0xFFFFFF, BACKPACK_ITEM.get());
             event.register((ItemStack stack, int tintIndex) -> tintIndex == 0 ?
-                    ((DyeableLeatherItem) LARGE_BACKPACK_ITEM.get()).getColor(stack) : 0xFFFFFF, LARGE_BACKPACK_ITEM.get());
+                    ((DyeableLeatherItem) LARGE_BACKPACK_ITEM.get()).getColor(stack) : 0xFFFFFF, LARGE_BACKPACK_ITEM.get());*/
         }
     }
+    @EventBusSubscriber(modid = MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+    public static class RegisterMenuScreens {
+        @SubscribeEvent
+        public static void register(final RegisterMenuScreensEvent event) {
+            event.register(SmacksUtil.BACKPACK_MENU.get(), AbstractBackpackScreen<BackpackMenu>::new);
+            event.register(SmacksUtil.LARGE_BACKPACK_MENU.get(), AbstractLargeBackpackScreen<LargeBackpackMenu>::new);
+            event.register(SmacksUtil.ENCHANTING_TOOL_MENU.get(), AbstractEnchantingToolScreen<EnchantingToolMenu>::new);
+            event.register(SmacksUtil.TELEPORTATION_TABLET_MENU.get(), AbstractTeleportationTabletScreen<TeleportationTabletMenu>::new);
+        }
 
-    @Mod.EventBusSubscriber(modid = MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+    }
+
+    @EventBusSubscriber(modid = MOD_ID, bus = EventBusSubscriber.Bus.MOD)
     public static class PacketEvents {
         @SubscribeEvent
-        public static void register(final RegisterPayloadHandlerEvent event) {
-            final IPayloadRegistrar backpackSortRegistrar = event.registrar(Constants.MOD_ID)
-                    .versioned(NeoForgeVersion.getSpec())
-                    .optional();
-            backpackSortRegistrar.play(C2SBackpackSortPacket.ID, C2SBackpackSortPacket::new, handler -> handler
-                    .server(C2SBackpackSortPacketHandler.getInstance()::handleData)
-                    .client(C2SBackpackSortPacketHandler.getInstance()::handleData));
+        public static void register(final RegisterPayloadHandlersEvent event) {
 
-            final IPayloadRegistrar backpackOpenRegistrar = event.registrar(Constants.MOD_ID)
-                    .versioned(NeoForgeVersion.getSpec())
+            final PayloadRegistrar C2SRegistrar = event.registrar(Constants.MOD_ID)
+                    .versioned(NeoForgeVersion.getVersion())
                     .optional();
-            backpackOpenRegistrar.play(C2SBackpackOpenPacket.ID, C2SBackpackOpenPacket::new, handler -> handler
-                    .server(C2SBackpackOpenPacketHandler.getInstance()::handleData)
-                    .client(C2SBackpackOpenPacketHandler.getInstance()::handleData));
+            C2SRegistrar.playToServer(
+                    C2SBackpackSortPacket.TYPE,
+                    C2SBackpackSortPacket.STREAM_CODEC,
+                    C2SBackpackSortPacketHandler::handle
+                    );
 
-            final IPayloadRegistrar toggleMagnetItemRegistrar = event.registrar(Constants.MOD_ID)
-                    .versioned(NeoForgeVersion.getSpec())
-                    .optional();
-            toggleMagnetItemRegistrar.play(C2SToggleMagnetItemPacket.ID, C2SToggleMagnetItemPacket::new, handler -> handler
-                    .server(C2SToggleMagnetItemPacketHandler.getInstance()::handleData)
-                    .client(C2SToggleMagnetItemPacketHandler.getInstance()::handleData));
+            C2SRegistrar.playToServer(
+                    C2SBackpackOpenPacket.TYPE,
+                    C2SBackpackOpenPacket.STREAM_CODEC,
+                    C2SBackpackOpenPacketHandler::handle
+                    );
 
-            final IPayloadRegistrar toggleLightWandItemRegistrar = event.registrar(Constants.MOD_ID)
-                    .versioned(NeoForgeVersion.getSpec())
-                    .optional();
-            toggleLightWandItemRegistrar.play(C2SToggleLightWandItemPacket.ID, C2SToggleLightWandItemPacket::new, handler -> handler
-                    .server(C2SToggleLightWandItemPacketHandler.getInstance()::handleData)
-                    .client(C2SToggleLightWandItemPacketHandler.getInstance()::handleData));
+            C2SRegistrar.playToServer(
+                    C2SToggleMagnetItemPacket.TYPE,
+                    C2SToggleMagnetItemPacket.STREAM_CODEC,
+                    C2SToggleMagnetItemPacketHandler::handle
+                    );
 
-            final IPayloadRegistrar enchantRegistrar = event.registrar(Constants.MOD_ID)
-                    .versioned(NeoForgeVersion.getSpec())
-                    .optional();
-            enchantRegistrar.play(C2SEnchantPacket.ID, C2SEnchantPacket::new, handler -> handler
-                    .server(C2SEnchantPacketHandler.getInstance()::handleData)
-                    .client(C2SEnchantPacketHandler.getInstance()::handleData));
+            C2SRegistrar.playToServer(
+                    C2SToggleLightWandItemPacket.TYPE,
+                    C2SToggleLightWandItemPacket.STREAM_CODEC,
+                    C2SToggleLightWandItemPacketHandler::handle
+                    );
 
-            final IPayloadRegistrar breakBlockRegistrar = event.registrar(Constants.MOD_ID)
-                    .versioned(NeoForgeVersion.getSpec())
-                    .optional();
-            breakBlockRegistrar.play(C2SVeinMinerBreakPacket.ID, C2SVeinMinerBreakPacket::new, handler -> handler
-                    .server(C2SVeinMinerBreakPacketHandler.getInstance()::handleData)
-                    .client(C2SVeinMinerBreakPacketHandler.getInstance()::handleData));
+            C2SRegistrar.playToServer(
+                    C2SEnchantPacket.TYPE,
+                    C2SEnchantPacket.STREAM_CODEC,
+                    C2SEnchantPacketHandler::handle
+                    );
 
-            final IPayloadRegistrar setBlockAirRegistrar = event.registrar(Constants.MOD_ID)
-                    .versioned(NeoForgeVersion.getSpec())
-                    .optional();
-            setBlockAirRegistrar.play(C2SSetBlockAirPacket.ID, C2SSetBlockAirPacket::new, handler -> handler
-                    .server(C2SSetBlockAirPacketHandler.getInstance()::handleData)
-                    .client(C2SSetBlockAirPacketHandler.getInstance()::handleData));
+            C2SRegistrar.playToServer(
+                    C2SVeinMinerBreakPacket.TYPE,
+                    C2SVeinMinerBreakPacket.STREAM_CODEC,
+                    C2SVeinMinerBreakPacketHandler::handle
+                    );
 
-            final IPayloadRegistrar interactEntityRegistrar = event.registrar(Constants.MOD_ID)
-                    .versioned(NeoForgeVersion.getSpec())
-                    .optional();
-            interactEntityRegistrar.play(C2SInteractEntityPacket.ID, C2SInteractEntityPacket::new, handler -> handler
-                    .server(C2SInteractEntityPacketHandler.getInstance()::handleData)
-                    .client(C2SInteractEntityPacketHandler.getInstance()::handleData));
+            C2SRegistrar.playToServer(
+                    C2SSetBlockAirPacket.TYPE,
+                    C2SSetBlockAirPacket.STREAM_CODEC,
+                    C2SSetBlockAirPacketHandler::handle
+                    );
 
-            final IPayloadRegistrar teleportRegistrar = event.registrar(Constants.MOD_ID)
-                    .versioned(NeoForgeVersion.getSpec())
-                    .optional();
-            teleportRegistrar.play(C2STeleportationPacket.ID, C2STeleportationPacket::new, handler -> handler
-                    .server(C2STeleportationPacketHandler.getInstance()::handleData)
-                    .client(C2STeleportationPacketHandler.getInstance()::handleData));
+            C2SRegistrar.playToServer(
+                    C2SInteractEntityPacket.TYPE,
+                    C2SInteractEntityPacket.STREAM_CODEC,
+                    C2SInteractEntityPacketHandler::handle
+                    );
 
-            final IPayloadRegistrar teleportNBTRegistrar = event.registrar(Constants.MOD_ID)
-                    .versioned(NeoForgeVersion.getSpec())
-                    .optional();
-            teleportNBTRegistrar.play(C2STeleportationNBTPacket.ID, C2STeleportationNBTPacket::new, handler -> handler
-                    .server(C2STeleportationNBTPacketHandler.getInstance()::handleData)
-                    .client(C2STeleportationNBTPacketHandler.getInstance()::handleData));
+            C2SRegistrar.playToServer(
+                    C2STeleportationPacket.TYPE,
+                    C2STeleportationPacket.STREAM_CODEC,
+                    C2STeleportationPacketHandler::handle
+                    );
 
-            final IPayloadRegistrar blockBreakRegistrar = event.registrar(Constants.MOD_ID)
-                    .versioned(NeoForgeVersion.getSpec())
+            C2SRegistrar.playToServer(
+                    C2STeleportationNBTPacket.TYPE,
+                    C2STeleportationNBTPacket.STREAM_CODEC,
+                    C2STeleportationNBTPacketHandler::handle
+                    );
+
+            final PayloadRegistrar S2CRegistrar = event.registrar(Constants.MOD_ID)
+                    .versioned(NeoForgeVersion.getVersion())
                     .optional();
-            blockBreakRegistrar.play(S2CBlockBreakPacket.ID, S2CBlockBreakPacket::new, handler -> handler
-                    .client(S2CBlockBreakPacketHandler.getInstance()::handleData)
-                    .server(S2CBlockBreakPacketHandler.getInstance()::handleData));
+            S2CRegistrar.playToClient(
+                    S2CBlockBreakPacket.TYPE,
+                    S2CBlockBreakPacket.STREAM_CODEC,
+                    S2CBlockBreakPacketHandler::handle
+            );
         }
     }
 

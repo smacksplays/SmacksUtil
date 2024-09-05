@@ -19,7 +19,7 @@ public class MinecraftClientMixin {
     private void handleKeybinds(CallbackInfo info) {
         // This code is injected into the start of MinecraftServer.loadWorld()V
         if (Services.CONFIG != null && Services.CONFIG.isEnabledFastPlace()) {
-            rightClickDelay = 0;
+            rightClickDelay = 1;
         }
     }
 }

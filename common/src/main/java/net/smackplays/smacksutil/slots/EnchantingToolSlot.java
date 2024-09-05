@@ -1,6 +1,7 @@
 package net.smackplays.smacksutil.slots;
 
 
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
@@ -19,8 +20,7 @@ public class EnchantingToolSlot extends Slot {
 
     @Override
     public boolean mayPlace(ItemStack stack) {
-        //return stack.isEnchantable() || stack.getOrCreateTag().contains("Enchantments");
-        return false;
+        return stack.isEnchantable() || stack.get(DataComponents.ENCHANTMENTS) != null;
     }
 
     @Override

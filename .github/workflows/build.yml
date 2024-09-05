@@ -6,7 +6,7 @@
 name: Publish on CurseForge [Forge & Fabric & NeoForge]
 on: [ workflow_dispatch, pull_request]
 env: #Environment variables that can later be referenced using ${{ env.MINECRAFT_VERSION }}. These are useful for repeating information and allow for quick changes for new mod updates
-  MINECRAFT_VERSION: 1.20.4
+  MINECRAFT_VERSION: 1.21.1
   JAVA_VERSION: 17
   JAVA_LTS: 21
   VERSION: 0.1.0
@@ -33,14 +33,14 @@ jobs:
       - name: build
         run: ./gradlew build
       - name: publish (CurseForge Fabric)
-        if: ${{ github.base_ref == 'master_1.20.4' || github.event_name == 'workflow_dispatch' }} # Only upload artifacts built from latest java on one OS
+        if: ${{ github.base_ref == 'master_1.21.1' || github.event_name == 'workflow_dispatch' }} # Only upload artifacts built from latest java on one OS
         uses: Kir-Antipov/mc-publish@v3.3.0
         with:
           curseforge-id: 952860                                             #The id of your CurseForge project
           curseforge-token: ${{ secrets.PUBLISH_CURSEFORGE_TOKEN }}
 
-          name: SmacksUtil Fabric ${{ env.VERSION }} for MC 1.20.4
-          version: smacksutil-fabric-1.20.4-${{ env.VERSION }}
+          name: SmacksUtil Fabric ${{ env.VERSION }} for MC 1.21.1
+          version: smacksutil-fabric-1.21.1-${{ env.VERSION }}
           version-type: beta
           changelog-file: CHANGELOG.*
 
@@ -51,17 +51,17 @@ jobs:
             fabric
 
           game-versions: |
-            1.20.4
+            1.21.1
 
       - name: publish (CurseForge Forge)
-        if: ${{ github.base_ref == 'master_1.20.4' || github.event_name == 'workflow_dispatch' }} # Only upload artifacts built from latest java on one OS
+        if: ${{ github.base_ref == 'master_1.21.1' || github.event_name == 'workflow_dispatch' }} # Only upload artifacts built from latest java on one OS
         uses: Kir-Antipov/mc-publish@v3.3.0
         with:
           curseforge-id: 952860                                             #The id of your CurseForge project
           curseforge-token: ${{ secrets.PUBLISH_CURSEFORGE_TOKEN }}
 
-          name: SmacksUtil Forge ${{ env.VERSION }} for MC 1.20.4
-          version: smacksutil-forge-1.20.4-${{ env.VERSION }}
+          name: SmacksUtil Forge ${{ env.VERSION }} for MC 1.21.1
+          version: smacksutil-forge-1.21.1-${{ env.VERSION }}
           version-type: beta
           changelog-file: CHANGELOG.*
 
@@ -72,17 +72,17 @@ jobs:
             forge
 
           game-versions: |
-            1.20.4
+            1.21.1
 
       - name: publish (CurseForge NeoForge)
-        if: ${{ github.base_ref == 'master_1.20.4' || github.event_name == 'workflow_dispatch' }} # Only upload artifacts built from latest java on one OS
+        if: ${{ github.base_ref == 'master_1.21.1' || github.event_name == 'workflow_dispatch' }} # Only upload artifacts built from latest java on one OS
         uses: Kir-Antipov/mc-publish@v3.3.0
         with:
           curseforge-id: 952860                                             #The id of your CurseForge project
           curseforge-token: ${{ secrets.PUBLISH_CURSEFORGE_TOKEN }}
 
-          name: SmacksUtil NeoForge ${{ env.VERSION }} for MC 1.20.4
-          version: smacksutil-neoforge-1.20.4-${{ env.VERSION }}
+          name: SmacksUtil NeoForge ${{ env.VERSION }} for MC 1.21.1
+          version: smacksutil-neoforge-1.21.1-${{ env.VERSION }}
           version-type: beta
           changelog-file: CHANGELOG.*
 
@@ -93,7 +93,7 @@ jobs:
             neoforge
 
           game-versions: |
-            1.20.4
+            1.21.1
 
       - name: Tag exists
         uses: mukunku/tag-exists-action@v1.5.0

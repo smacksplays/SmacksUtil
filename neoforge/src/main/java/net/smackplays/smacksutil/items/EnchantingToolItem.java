@@ -10,8 +10,8 @@ import net.smackplays.smacksutil.inventories.EnchantmentToolInventory;
 import net.smackplays.smacksutil.menus.EnchantingToolMenu;
 import org.jetbrains.annotations.NotNull;
 
-public class ForgeEnchantingToolItem extends AbstractEnchantingToolItem {
-    public ForgeEnchantingToolItem() {
+public class EnchantingToolItem extends AbstractEnchantingToolItem {
+    public EnchantingToolItem() {
         super();
     }
 
@@ -25,7 +25,7 @@ public class ForgeEnchantingToolItem extends AbstractEnchantingToolItem {
 
             @Override
             public AbstractContainerMenu createMenu(int syncId, @NotNull Inventory playerInventory, @NotNull Player player) {
-                return new EnchantingToolMenu(syncId, playerInventory, new EnchantmentToolInventory(stack));
+                return new EnchantingToolMenu(syncId, playerInventory, new EnchantmentToolInventory(stack, player.registryAccess()));
             }
         };
     }

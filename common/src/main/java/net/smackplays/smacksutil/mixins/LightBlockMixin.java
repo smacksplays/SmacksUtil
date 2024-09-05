@@ -29,9 +29,11 @@ public class LightBlockMixin {
                 || context.isHoldingItem(Services.PLATFORM.getLightWandItem())
                 || context.isHoldingItem(Services.PLATFORM.getAutoWandItem()) ? Shapes.block() : Shapes.empty());
     }
-    @Inject(at = @At("HEAD"), method = "use", cancellable = true)
-    private void use(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult, CallbackInfoReturnable<InteractionResult> cir) {
+    //BlockState p_153673_, Level p_153674_, BlockPos p_153675_, Player p_153676_, BlockHitResult p_153678_
+    @Inject(at = @At("HEAD"), method = "useWithoutItem", cancellable = true)
+    private void use(BlockState blockState, Level level, BlockPos blockPos, Player player, BlockHitResult blockHitResult, CallbackInfoReturnable<InteractionResult> cir) {
         if (level.isClientSide){
+            InteractionHand interactionHand = player.getUsedItemHand();
             if (player.getItemInHand(interactionHand).is(Services.PLATFORM.getLightWandItem())
                     || player.getItemInHand(interactionHand).is(Services.PLATFORM.getAutoWandItem())) {
                 if (level.getBlockState(blockPos).is(Blocks.LIGHT)) {

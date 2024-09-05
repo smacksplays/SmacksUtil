@@ -1,5 +1,6 @@
 package net.smackplays.smacksutil.menus;
 
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -42,11 +43,12 @@ public abstract class AbstractEnchantingToolMenu extends AbstractContainerMenu {
         return this.inventory.stillValid(player);
     }
 
+    //TODO fix
     @Override
     public @NotNull ItemStack quickMoveStack(@NotNull Player player, int index) {
-        /*ItemStack itemStack = ItemStack.EMPTY;
+        ItemStack itemStack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
-        if (slot.hasItem() && (slot.getItem().isEnchantable() || slot.getItem().getOrCreateTag().contains("Enchantments"))) {
+        if (slot.hasItem() && (slot.getItem().isEnchantable() || slot.getItem().get(DataComponents.ENCHANTMENTS) != null)) {
             ItemStack itemStack2 = slot.getItem();
             itemStack = itemStack2.copy();
 
@@ -63,7 +65,6 @@ public abstract class AbstractEnchantingToolMenu extends AbstractContainerMenu {
                 slot.setChanged();
             }
         }
-        return itemStack;*/
-        return ItemStack.EMPTY;
+        return itemStack;
     }
 }

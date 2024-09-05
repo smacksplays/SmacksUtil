@@ -26,8 +26,8 @@ public class BackpackMenu extends AbstractBackpackMenu {
             if (Services.PLATFORM.isModLoaded("curios")){
                 List<SlotResult> slotResults = CuriosApi.getCuriosHelper().findCurios(playerInventory.player, "back");
                 if (!slotResults.isEmpty()){
-                    backpack = slotResults.get(0).stack();
-                    return new BackpackMenu(SmacksUtil.BACKPACK_MENU.get(), syncId, playerInventory, new BackpackInventory(backpack));
+                    backpack = slotResults.getFirst().stack();
+                    return new BackpackMenu(SmacksUtil.BACKPACK_MENU.get(), syncId, playerInventory, new BackpackInventory(backpack,playerInventory.player.registryAccess()));
                 }
             }
             for (int i = playerInventory.getContainerSize(); i >= 0; i--){
@@ -37,6 +37,6 @@ public class BackpackMenu extends AbstractBackpackMenu {
                 }
             }
         }
-        return new BackpackMenu(SmacksUtil.BACKPACK_MENU.get(), syncId, playerInventory, new BackpackInventory(backpack));
+        return new BackpackMenu(SmacksUtil.BACKPACK_MENU.get(), syncId, playerInventory, new BackpackInventory(backpack, playerInventory.player.registryAccess()));
     }
 }

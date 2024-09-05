@@ -1,32 +1,32 @@
 package net.smackplays.smacksutil.networking.c2spacket;
 
-import net.minecraft.network.FriendlyByteBuf;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
 import net.smackplays.smacksutil.Constants;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.UUID;
+public record C2SInteractEntityPacket(String stack, int entityUUID, boolean hand) implements CustomPacketPayload {
 
-public record C2SInteractEntityPacket(ItemStack stack, UUID entityUUID, boolean hand) implements CustomPacketPayload {
+    public static final ResourceLocation ID = ResourceLocation.tryBuild(Constants.MOD_ID, "interact_entity_packet");
 
-    public static final ResourceLocation ID = new ResourceLocation(Constants.MOD_ID, "interact_entity_packet");
+    public static final CustomPacketPayload.Type<C2SInteractEntityPacket> TYPE
+            = new CustomPacketPayload.Type<>(ID);
 
-    @SuppressWarnings("unused")
-    public C2SInteractEntityPacket(final FriendlyByteBuf buffer) {
-        this(buffer.readItem(), buffer.readUUID(), buffer.readBoolean());
-    }
+    public static final StreamCodec<ByteBuf, C2SInteractEntityPacket> STREAM_CODEC = StreamCodec.composite(
+            ByteBufCodecs.STRING_UTF8,
+            C2SInteractEntityPacket::stack,
+            ByteBufCodecs.INT,
+            C2SInteractEntityPacket::entityUUID,
+            ByteBufCodecs.BOOL,
+            C2SInteractEntityPacket::hand,
+            C2SInteractEntityPacket::new
+    );
 
     @Override
-    public void write(final @NotNull FriendlyByteBuf buffer) {
-        buffer.writeItem(stack);
-        buffer.writeUUID(entityUUID);
-        buffer.writeBoolean(hand);
-    }
-
-    @Override
-    public @NotNull ResourceLocation id() {
-        return ID;
+    public @NotNull Type<? extends CustomPacketPayload> type() {
+        return TYPE;
     }
 }

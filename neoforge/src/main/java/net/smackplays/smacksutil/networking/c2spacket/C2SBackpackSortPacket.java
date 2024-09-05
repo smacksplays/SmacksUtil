@@ -1,28 +1,28 @@
 package net.smackplays.smacksutil.networking.c2spacket;
 
-import net.minecraft.network.FriendlyByteBuf;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
 import net.smackplays.smacksutil.Constants;
 import org.jetbrains.annotations.NotNull;
 
-public record C2SBackpackSortPacket(ItemStack stack) implements CustomPacketPayload {
+public record C2SBackpackSortPacket(int slot) implements CustomPacketPayload {
 
-    public static final ResourceLocation ID = new ResourceLocation(Constants.MOD_ID, Constants.C_BACKPACK_SORT_REQUEST);
+    public static final ResourceLocation ID = ResourceLocation.tryBuild(Constants.MOD_ID, Constants.C_BACKPACK_SORT_REQUEST);
+    public static final CustomPacketPayload.Type<C2SBackpackSortPacket> TYPE
+            = new CustomPacketPayload.Type<>(ID);
 
-    @SuppressWarnings("unused")
-    public C2SBackpackSortPacket(final FriendlyByteBuf buffer) {
-        this(buffer.readItem());
-    }
+
+    public static final StreamCodec<ByteBuf, C2SBackpackSortPacket> STREAM_CODEC = StreamCodec.composite(
+            ByteBufCodecs.INT,
+            C2SBackpackSortPacket::slot,
+            C2SBackpackSortPacket::new
+    );
 
     @Override
-    public void write(final @NotNull FriendlyByteBuf buffer) {
-        buffer.writeItem(stack);
-    }
-
-    @Override
-    public @NotNull ResourceLocation id() {
-        return ID;
+    public @NotNull Type<? extends CustomPacketPayload> type() {
+        return TYPE;
     }
 }

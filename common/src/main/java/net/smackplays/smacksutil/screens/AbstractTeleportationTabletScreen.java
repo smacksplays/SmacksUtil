@@ -7,9 +7,6 @@ import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.StringWidget;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -181,6 +178,7 @@ public class AbstractTeleportationTabletScreen<T extends AbstractTeleportationTa
             Level level = this.menu.playerInventory.player.level();
             //String dim = level.dimensionTypeId().location().getPath();
 
+            //TODO fix
             //if (Services.C2S_PACKET_SENDER != null) {
            //     Services.C2S_PACKET_SENDER.TeleportNBTPacket(stack, pos, xRot, yRot, name, dim, false);
             //}
@@ -194,6 +192,7 @@ public class AbstractTeleportationTabletScreen<T extends AbstractTeleportationTa
         removeButtonWidget.setMessage(Component.literal(text).withColor(color));
     }
 
+    //TODO fix
     private Map<String, TeleportationData> getTeleportationList(ItemStack stack){
         Map<String, TeleportationData> map = new HashMap<>();
         /*CompoundTag tag = stack.getOrCreateTag();

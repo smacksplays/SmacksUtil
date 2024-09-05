@@ -1,8 +1,8 @@
 package net.smackplays.smacksutil.items;
 
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
@@ -13,13 +13,13 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.stream.Stream;
 
 public class MagnetItem extends Item {
 
@@ -31,7 +31,7 @@ public class MagnetItem extends Item {
     }
 
     public MagnetItem() {
-        super(new Item.Properties().rarity(Rarity.EPIC).stacksTo(1));
+        super(new Item.Properties().rarity(Rarity.EPIC).stacksTo(1).component(DataComponents.CUSTOM_DATA, CustomData.of(new CompoundTag())));
     }
 
     @Override
@@ -46,10 +46,14 @@ public class MagnetItem extends Item {
     }
 
     @Override
-    public void inventoryTick(@NotNull ItemStack stack, Level world, @NotNull Entity entity, int $$3, boolean $$4) {
-        //if (!world.isClientSide && stack.getOrCreateTag().getBoolean("enabled")){
-        //    attract(entity, world, getRange());
-        //}
+    public void inventoryTick(@NotNull ItemStack stack, @NotNull Level world, @NotNull Entity entity, int $$3, boolean $$4) {
+        CustomData customData = stack.get(DataComponents.CUSTOM_DATA);
+        if(customData != null){
+            CompoundTag tag = customData.copyTag();
+            if (!world.isClientSide && tag.getBoolean("enabled")){
+                attract(entity, world, getRange());
+            }
+        }
         super.inventoryTick(stack, world, entity, $$3, $$4);
     }
 
@@ -70,11 +74,16 @@ public class MagnetItem extends Item {
     }
 
     public void toggle(ItemStack stack, Player player){
-        /*boolean state = stack.getOrCreateTag().getBoolean("enabled");
-        stack.getOrCreateTag().putBoolean("enabled", !state);
-        String msg = !state ? "Active" : "Inactive";
-        int color = !state ? GREEN : RED;
-        notifyPlayer(player, msg, color);*/
+        CustomData customData = stack.get(DataComponents.CUSTOM_DATA);
+        if(customData != null){
+            CompoundTag tag = customData.copyTag();
+            boolean state = tag.getBoolean("enabled");
+            tag.putBoolean("enabled", !state);
+            String msg = !state ? "Active" : "Inactive";
+            int color = !state ? GREEN : RED;
+            notifyPlayer(player, msg, color);
+            stack.set(DataComponents.CUSTOM_DATA,CustomData.of(tag));
+        }
     }
 
     public void notifyPlayer(Player player, String msg, int color){
@@ -88,15 +97,21 @@ public class MagnetItem extends Item {
 
     @Override
     public boolean isFoil(@NotNull ItemStack stack) {
-        Stream<TagKey<Item>> test = stack.getTags();
-        //return stack.getOrCreateTag().getBoolean("enabled");
+        CustomData customData = stack.get(DataComponents.CUSTOM_DATA);
+        if(customData != null){
+            CompoundTag tag = customData.copyTag();
+            return tag.getBoolean("enabled");
+        }
         return false;
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable TooltipContext context, List<Component> componentList, @NotNull TooltipFlag flag) {
-        //CompoundTag tag = stack.getOrCreateTag();
-        //componentList.add(1, Component.literal("Enabled: " + tag.getBoolean("enabled")));
+    public void appendHoverText(ItemStack stack, @Nullable TooltipContext context, @NotNull List<Component> componentList, @NotNull TooltipFlag flag) {
+        CustomData customData = stack.get(DataComponents.CUSTOM_DATA);
+        if(customData != null){
+            CompoundTag tag = customData.copyTag();
+            componentList.add(1, Component.literal("Enabled: " + tag.getBoolean("enabled")));
+        }
     }
 
     public int getRange(){

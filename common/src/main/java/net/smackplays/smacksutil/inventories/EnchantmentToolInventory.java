@@ -1,23 +1,29 @@
 package net.smackplays.smacksutil.inventories;
 
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 import org.jetbrains.annotations.NotNull;
 
 public class EnchantmentToolInventory implements IEnchantmentToolInventory {
     private final ItemStack stack;
+    private final HolderLookup.Provider provider;
     private final NonNullList<ItemStack> items = NonNullList.withSize(1, ItemStack.EMPTY);
 
-    public EnchantmentToolInventory(ItemStack stack) {
+    public EnchantmentToolInventory(ItemStack stack, HolderLookup.Provider provider) {
         this.stack = stack;
-        //CompoundTag tag = stack.getTagElement("enchantment_tool");
+        this.provider = provider;
+        CustomData data = stack.get(DataComponents.CUSTOM_DATA);
+        CompoundTag tag = data.copyTag();
 
-        //if (tag != null) {
-        //    ContainerHelper.loadAllItems(tag, items);
-        //}
+        if (tag != null) {
+            ContainerHelper.loadAllItems(tag, items, provider);
+        }
     }
 
     @Override
@@ -27,8 +33,10 @@ public class EnchantmentToolInventory implements IEnchantmentToolInventory {
 
     @Override
     public void setChanged() {
-        //CompoundTag tag = stack.getOrCreateTagElement("enchantment_tool");
-        //ContainerHelper.saveAllItems(tag, items);
+        CustomData data = stack.get(DataComponents.CUSTOM_DATA);
+        CompoundTag tag = data.copyTag().getCompound("enchantment_tool");
+        tag = ContainerHelper.saveAllItems(tag, items, provider);
+        stack.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
     }
 
     @Override

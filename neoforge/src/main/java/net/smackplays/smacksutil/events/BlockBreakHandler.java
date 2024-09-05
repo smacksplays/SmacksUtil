@@ -2,7 +2,7 @@ package net.smackplays.smacksutil.events;
 
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import net.smackplays.smacksutil.Constants;
 import net.smackplays.smacksutil.platform.Services;
@@ -10,7 +10,7 @@ import net.smackplays.smacksutil.platform.Services;
 @SuppressWarnings("unused")
 public class BlockBreakHandler {
 
-    @Mod.EventBusSubscriber(modid = Constants.MOD_ID)
+    @EventBusSubscriber(modid = Constants.MOD_ID)
     public static class ClientForgeEvents {
 
         @SubscribeEvent

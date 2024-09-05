@@ -1,5 +1,6 @@
 package net.smackplays.smacksutil.items;
 
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -15,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 public class LargeBackpackItem extends AbstractBackpackItem {
 
     public LargeBackpackItem() {
-        super();
+        super(Holder.direct(SmacksUtil.TESTMat));
     }
 
     @Override
@@ -31,10 +32,5 @@ public class LargeBackpackItem extends AbstractBackpackItem {
                 return stack.getHoverName();
             }
         };
-    }
-
-    @Override
-    public EquipmentSlot getEquipmentSlot() {
-        return null;
     }
 }

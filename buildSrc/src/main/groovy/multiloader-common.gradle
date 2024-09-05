@@ -8,6 +8,8 @@ base {
     archivesName = "${mod_id}-${project.name}-${minecraft_version}"
 }
 
+version = "${mod_version}"
+
 java {
     toolchain.languageVersion = JavaLanguageVersion.of(java_version)
     withSourcesJar()
@@ -57,6 +59,7 @@ repositories {
         name = "Illusive Soulworks maven"
         url = "https://maven.theillusivec4.top/"
     }
+    maven { url = "https://www.cursemaven.com" }
 }
 
 // Declare capabilities on the outgoing configurations.
@@ -98,8 +101,8 @@ jar {
 
 processResources {
     var expandProps = [
-            'version'                      : version,
-            'group'                        : project.group, //Else we target the task's group.
+            'mod_version'                  : mod_version,
+            'mod_group'                    : mod_group, //Else we target the task's group.
             'minecraft_version'            : minecraft_version,
             'minecraft_version_range'      : minecraft_version_range,
             'fabric_version'               : fabric_version,
@@ -107,14 +110,15 @@ processResources {
             'mod_name'                     : mod_name,
             'mod_author'                   : mod_author,
             'mod_id'                       : mod_id,
-            'license'                      : license,
-            'description'                  : project.description,
+            'mod_license'                  : mod_license,
+            'mod_description'              : mod_description,
+            'mod_credits'                  : mod_credits,
             'neoforge_version'             : neoforge_version,
+            'neoforge_version_range'       : neoforge_version_range,
             'neoforge_loader_version_range': neoforge_loader_version_range,
             "forge_version"                : forge_version,
             "forge_version_range"          : forge_version_range,
             "forge_loader_version_range"   : forge_loader_version_range,
-            'credits'                      : credits,
             'java_version'                 : java_version
     ]
 

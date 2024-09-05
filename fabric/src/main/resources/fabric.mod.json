@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "id": "${mod_id}",
-  "version": "${version}",
+  "version": "${mod_version}",
   "name": "${mod_name}",
-  "description": "${description}",
+  "description": "${mod_description}",
   "authors": [
     "${mod_author}"
   ],
@@ -11,7 +11,7 @@
     "homepage": "https://fabricmc.net/",
     "sources": "https://github.com/FabricMC/fabric-example-mod"
   },
-  "license": "${license}",
+  "license": "${mod_license}",
   "icon": "assets/smacksutil/smacksutil.png",
   "environment": "*",
   "entrypoints": {
@@ -26,6 +26,9 @@
     ],
     "modmenu": [
       "net.smackplays.smacksutil.config.ModMenuIntegration"
+    ],
+    "jei_mod_plugin": [
+      "com.mrcrayfish.configured.impl.jei.ConfiguredJeiPlugin"
     ]
   },
   "mixins": [
@@ -33,10 +36,10 @@
     "${mod_id}.fabric.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.15.3",
-    "minecraft": "~1.20.4",
-    "java": ">=17",
-    "fabric-api": "*"
+    "fabricloader": ">=0.15",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}",
+    "java": ">=${java_version}"
   },
   "suggests": {
     "another-mod": "*"

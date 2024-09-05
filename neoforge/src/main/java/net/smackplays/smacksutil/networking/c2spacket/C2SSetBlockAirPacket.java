@@ -1,27 +1,29 @@
 package net.smackplays.smacksutil.networking.c2spacket;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.network.FriendlyByteBuf;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.smackplays.smacksutil.Constants;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Vector3f;
 
-public record C2SSetBlockAirPacket(BlockPos pos) implements CustomPacketPayload {
+public record C2SSetBlockAirPacket(Vector3f pos) implements CustomPacketPayload {
 
-    public static final ResourceLocation ID = new ResourceLocation(Constants.MOD_ID, "set_block_air_packet");
+    public static final ResourceLocation ID = ResourceLocation.tryBuild(Constants.MOD_ID, "set_block_air_packet");
+    public static final CustomPacketPayload.Type<C2SSetBlockAirPacket> TYPE
+            = new CustomPacketPayload.Type<>(ID);
 
-    public C2SSetBlockAirPacket(final FriendlyByteBuf buffer) {
-        this(buffer.readBlockPos());
-    }
+
+    public static final StreamCodec<ByteBuf, C2SSetBlockAirPacket> STREAM_CODEC = StreamCodec.composite(
+            ByteBufCodecs.VECTOR3F,
+            C2SSetBlockAirPacket::pos,
+            C2SSetBlockAirPacket::new
+    );
 
     @Override
-    public void write(final FriendlyByteBuf buffer) {
-        buffer.writeBlockPos(pos);
-    }
-
-    @Override
-    public @NotNull ResourceLocation id() {
-        return ID;
+    public @NotNull Type<? extends CustomPacketPayload> type() {
+        return TYPE;
     }
 }

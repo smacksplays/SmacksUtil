@@ -4,7 +4,7 @@ This project uses the Multiloader Template https://github.com/jaredlll08/MultiLo
 
 # Releases
 
-In the Project Releases the latest debelop releases can be found. The latest major releases are uploaded to curseforge.
+In the Project Releases the latest develop releases can be found. The latest major releases are uploaded to curseforge.
 
 # Issues
 

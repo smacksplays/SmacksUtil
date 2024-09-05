@@ -1,23 +1,30 @@
 package net.smackplays.smacksutil.items;
 
-
+import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.MenuType;
-import net.minecraft.world.item.Equipable;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.*;
+import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.item.component.DyedItemColor;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.smackplays.smacksutil.inventories.BackpackInventory;
 import net.smackplays.smacksutil.menus.AbstractBackpackMenu;
 import org.jetbrains.annotations.NotNull;
 
-public abstract class AbstractBackpackItem extends Item implements Equipable {
+public abstract class AbstractBackpackItem extends ArmorItem{
 
-    public AbstractBackpackItem() {
-        super(new Properties().stacksTo(1).rarity(Rarity.EPIC));
+    public AbstractBackpackItem(Holder<ArmorMaterial> material) {
+        super(material, Type.CHESTPLATE,
+                new Properties()
+                        .stacksTo(1)
+                        .rarity(Rarity.EPIC)
+                        .component(DataComponents.CUSTOM_DATA, CustomData.of(new CompoundTag()))
+                        .component(DataComponents.DYED_COLOR, new DyedItemColor(DyeColor.WHITE.getId(), true)));
     }
 
     @Override
@@ -41,6 +48,6 @@ public abstract class AbstractBackpackItem extends Item implements Equipable {
 
     public MenuProvider createScreenHandlerFactory(ItemStack stack) {
         return new SimpleMenuProvider((i, playerInventory, playerEntity) ->
-                new AbstractBackpackMenu(MenuType.GENERIC_9x6, i, playerInventory, new BackpackInventory(stack)), stack.getHoverName());
+                new AbstractBackpackMenu(MenuType.GENERIC_9x6, i, playerInventory, new BackpackInventory(stack, playerInventory.player.registryAccess())), stack.getHoverName());
     }
 }
