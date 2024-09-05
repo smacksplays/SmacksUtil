@@ -8,6 +8,7 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ArmorMaterials;
 import net.minecraft.world.item.ItemStack;
 import net.smackplays.smacksutil.SmacksUtil;
 import net.smackplays.smacksutil.inventories.BackpackInventory;
@@ -18,14 +19,15 @@ import org.jetbrains.annotations.NotNull;
 public class BackpackItem extends AbstractBackpackItem {
 
     public BackpackItem() {
-        super();
+        super(ArmorMaterials.LEATHER);
     }
 
     @Override
     public MenuProvider createScreenHandlerFactory(ItemStack stack) {
         return new ExtendedScreenHandlerFactory() {
             @Override
-            public void writeScreenOpeningData(ServerPlayer player, FriendlyByteBuf buf) {
+            public Object getScreenOpeningData(ServerPlayer player) {
+                return null;
             }
 
             @Override
@@ -35,7 +37,7 @@ public class BackpackItem extends AbstractBackpackItem {
 
             @Override
             public AbstractContainerMenu createMenu(int syncId, @NotNull Inventory playerInventory, @NotNull Player player) {
-                return new BackpackMenu(SmacksUtil.BACKPACK_MENU, syncId, playerInventory, new BackpackInventory(stack));
+                return new BackpackMenu(SmacksUtil.BACKPACK_MENU, syncId, playerInventory, new BackpackInventory(stack, player.registryAccess()));
             }
         };
     }

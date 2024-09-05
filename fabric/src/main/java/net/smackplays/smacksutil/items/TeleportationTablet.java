@@ -23,7 +23,8 @@ public class TeleportationTablet extends AbstractTeleportationTablet{
     public MenuProvider createScreenHandlerFactory(ItemStack stack) {
         return new ExtendedScreenHandlerFactory() {
             @Override
-            public void writeScreenOpeningData(ServerPlayer player, FriendlyByteBuf buf) {
+            public Object getScreenOpeningData(ServerPlayer player) {
+                return null;
             }
 
             @Override

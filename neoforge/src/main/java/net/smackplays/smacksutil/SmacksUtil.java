@@ -10,6 +10,7 @@ import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.component.DyedItemColor;
+import net.minecraft.world.level.material.MapColor;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -137,25 +138,25 @@ public class SmacksUtil {
         @SubscribeEvent
         public static void colors(RegisterColorHandlersEvent.Item event) {
             event.register((backpack, layer) -> {
-                if (layer > 1 || !(backpack.getItem() instanceof BackpackItem)) {
+                if (layer > 1 || !(backpack.getItem() instanceof AbstractBackpackItem)) {
                     return -1;
                 }
                 if (layer == 0) {
                     DyedItemColor data = backpack.get(DataComponents.DYED_COLOR);
                     if (data != null){
-                        return backpack.get(DataComponents.DYED_COLOR).rgb();
+                        return calcColor(data.rgb());
                     }
-                    return DyedItemColor.LEATHER_COLOR;
+                    return calcColor(DyeColor.WHITE.getMapColor().col);
                 }
                 return -1;
             }, BACKPACK_ITEM.get(), LARGE_BACKPACK_ITEM.get());
-            /*
-            event.register((ItemStack stack, int tintIndex) -> tintIndex == 0 ?
-                    ((DyeableLeatherItem) BACKPACK_ITEM.get()).getColor(stack) : 0xFFFFFF, BACKPACK_ITEM.get());
-            event.register((ItemStack stack, int tintIndex) -> tintIndex == 0 ?
-                    ((DyeableLeatherItem) LARGE_BACKPACK_ITEM.get()).getColor(stack) : 0xFFFFFF, LARGE_BACKPACK_ITEM.get());*/
+        }
+        private static int calcColor(int col){
+            int i = MapColor.Brightness.HIGH.modifier;
+            return -16777216 | col;
         }
     }
+
     @EventBusSubscriber(modid = MOD_ID, bus = EventBusSubscriber.Bus.MOD)
     public static class RegisterMenuScreens {
         @SubscribeEvent

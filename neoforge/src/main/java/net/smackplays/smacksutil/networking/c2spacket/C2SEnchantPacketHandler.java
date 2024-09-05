@@ -22,26 +22,33 @@ public class C2SEnchantPacketHandler {
             Player player = context.player();
 
             Optional<HolderSet.Named<Enchantment>> optional = player.registryAccess().registryOrThrow(Registries.ENCHANTMENT).getTag(EnchantmentTags.TOOLTIP_ORDER);
-            var l = optional.get().stream().toList();
-            for (Holder<Enchantment> entry : l){
-                Enchantment e = entry.value();
-                if(e.description().getString().equals(customPacketPayload.enchantment())){
-                    AbstractContainerMenu containerMenu = player.containerMenu;
-                    ItemStack stack = containerMenu.slots.get(0).getItem();
-                    if (customPacketPayload.remove()){
-                        stack.enchant(entry, customPacketPayload.level());
-                    }else{
-                        stack.enchant(entry, 0);
-                        ItemEnchantments ench = stack.getTagEnchantments();
-                        Set<Holder<Enchantment>> set = ench.keySet();
-                        Holder<Enchantment> toRemove = null;
-                        for (Holder<Enchantment> enchantmentHolder : set){
-                            if (enchantmentHolder.value().description().getString().equals(customPacketPayload.enchantment())){
-                                toRemove = enchantmentHolder;
+            if (optional.isPresent()){
+                var l = optional.get().stream().toList();
+                for (Holder<Enchantment> entry : l){
+                    Enchantment e = entry.value();
+                    if(e.description().getString().equals(customPacketPayload.enchantment())){
+                        AbstractContainerMenu containerMenu = player.containerMenu;
+                        ItemStack stack = containerMenu.slots.getFirst().getItem();
+                        if (customPacketPayload.remove()){
+                            stack.enchant(entry, customPacketPayload.level());
+                        }else{
+                            ItemEnchantments ench = stack.getTagEnchantments();
+                            Set<Holder<Enchantment>> set = ench.keySet();
+                            Holder<Enchantment> toRemove = null;
+                            for (Holder<Enchantment> enchantmentHolder : set){
+                                if (enchantmentHolder.value().description().getString().equals(customPacketPayload.enchantment())){
+                                    toRemove = enchantmentHolder;
+                                }
+                            }
+                            if (toRemove != null){
+                                stack.set(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY);
+                                for (Holder<Enchantment> en : set) {
+                                    if (!en.value().description().getString().equals(toRemove.value().description().getString())){
+                                        stack.enchant(en, en.value().getMaxLevel());
+                                    }
+                                }
                             }
                         }
-                        // TODO FIX
-                        stack.set(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY);
                     }
                 }
             }

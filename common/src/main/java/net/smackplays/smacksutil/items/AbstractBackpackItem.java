@@ -16,15 +16,16 @@ import net.smackplays.smacksutil.inventories.BackpackInventory;
 import net.smackplays.smacksutil.menus.AbstractBackpackMenu;
 import org.jetbrains.annotations.NotNull;
 
-public abstract class AbstractBackpackItem extends ArmorItem{
+import java.awt.*;
 
+public abstract class AbstractBackpackItem extends ArmorItem{
     public AbstractBackpackItem(Holder<ArmorMaterial> material) {
         super(material, Type.CHESTPLATE,
                 new Properties()
                         .stacksTo(1)
                         .rarity(Rarity.EPIC)
                         .component(DataComponents.CUSTOM_DATA, CustomData.of(new CompoundTag()))
-                        .component(DataComponents.DYED_COLOR, new DyedItemColor(DyeColor.WHITE.getId(), true)));
+                        .component(DataComponents.DYED_COLOR, new DyedItemColor(DyeColor.WHITE.getMapColor().col, true)));
     }
 
     @Override

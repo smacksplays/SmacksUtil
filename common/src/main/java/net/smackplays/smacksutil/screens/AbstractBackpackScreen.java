@@ -23,13 +23,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Optional;
 
-import static net.smackplays.smacksutil.Constants.C_BACKPACK_SCREEN_LOCATION;
-import static net.smackplays.smacksutil.Constants.MOD_ID;
+import static net.smackplays.smacksutil.Constants.*;
 
 
 public class AbstractBackpackScreen<T extends AbstractBackpackMenu> extends AbstractContainerScreen<T> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.tryBuild(MOD_ID, C_BACKPACK_SCREEN_LOCATION);
-    //A path to the gui texture. In this example we use the texture from the dispenser
     protected final int backgroundWidth = 196;
     protected final int backgroundHeight = 220;
 
@@ -41,10 +38,10 @@ public class AbstractBackpackScreen<T extends AbstractBackpackMenu> extends Abst
     protected void renderBg(GuiGraphics context, float delta, int mouseX, int mouseY) {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 0.0F);
-        RenderSystem.setShaderTexture(0, TEXTURE);
+        RenderSystem.setShaderTexture(0, C_BACKPACK_SCREEN_LOCATION_RL);
         int x = (width - backgroundWidth) / 2;
         int y = (height - backgroundHeight) / 2;
-        context.blit(TEXTURE, x, y, 0, 0, backgroundWidth, backgroundHeight);
+        context.blit(C_BACKPACK_SCREEN_LOCATION_RL, x, y, 0, 0, backgroundWidth, backgroundHeight);
         //in 1.20 or above,this method is in DrawContext class.
     }
 

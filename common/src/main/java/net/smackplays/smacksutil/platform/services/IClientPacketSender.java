@@ -26,7 +26,7 @@ public interface IClientPacketSender {
 
     void TeleportPacket(ResourceKey<Level> levelKey, Vec3 pos, float xRot, float yRot);
 
-    void TeleportNBTPacket(ItemStack stack, Vec3 pos, float xRot, float yRot, String name, String dim, boolean remove);
+    void TeleportNBTPacket(Vec3 pos, float xRot, float yRot, String name, String dim, boolean remove);
 
-    void InteractEntityPacket(ItemStack stack, UUID entityUUID, boolean hand);
+    void InteractEntityPacket(UUID entityUUID, boolean hand);
 }

@@ -5,6 +5,7 @@ import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.smackplays.smacksutil.SmacksUtil;
 import net.smackplays.smacksutil.inventories.EnchantmentToolInventory;
+import org.joml.Vector3f;
 
 public class EnchantingToolMenu extends AbstractEnchantingToolMenu {
 
@@ -13,7 +14,7 @@ public class EnchantingToolMenu extends AbstractEnchantingToolMenu {
     }
 
     @SuppressWarnings("unused")
-    public static EnchantingToolMenu create(int syncId, Inventory playerInventory, FriendlyByteBuf buf) {
-        return new EnchantingToolMenu(syncId, playerInventory, new EnchantmentToolInventory(playerInventory.getSelected()));
+    public static EnchantingToolMenu create(int syncId, Inventory playerInventory, Vector3f vec) {
+        return new EnchantingToolMenu(syncId, playerInventory, new EnchantmentToolInventory(playerInventory.getSelected(), playerInventory.player.registryAccess()));
     }
 }

@@ -11,6 +11,7 @@
     "ClientLevelMixin",
     "LightBlockMixin",
     "PlayerMixin",
+    "backpacks.GuiGraphicsMixin",
     "fastplace.MinecraftClientMixin",
     "veinminer.MouseScroll",
     "veinminer.OutlineRender"

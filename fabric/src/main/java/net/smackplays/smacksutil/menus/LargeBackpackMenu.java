@@ -10,6 +10,7 @@ import net.minecraft.world.item.ItemStack;
 import net.smackplays.smacksutil.SmacksUtil;
 import net.smackplays.smacksutil.inventories.LargeBackpackInventory;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
 
 public class LargeBackpackMenu extends AbstractLargeBackpackMenu {
 
@@ -18,7 +19,7 @@ public class LargeBackpackMenu extends AbstractLargeBackpackMenu {
     }
 
     @SuppressWarnings("unused")
-    public static LargeBackpackMenu createGeneric13x9(int syncId, Inventory playerInventory, FriendlyByteBuf buf) {
+    public static LargeBackpackMenu createGeneric13x9(int syncId, Inventory playerInventory, Vector3f vec) {
         ItemStack backpack = playerInventory.getSelected();
 
         NonNullList<Slot> slots = playerInventory.player.inventoryMenu.slots;
@@ -28,6 +29,6 @@ public class LargeBackpackMenu extends AbstractLargeBackpackMenu {
                 break;
             }
         }
-        return new LargeBackpackMenu(SmacksUtil.LARGE_BACKPACK_MENU, syncId, playerInventory, new LargeBackpackInventory(backpack));
+        return new LargeBackpackMenu(SmacksUtil.LARGE_BACKPACK_MENU, syncId, playerInventory, new LargeBackpackInventory(backpack, playerInventory.player.registryAccess()));
     }
 }

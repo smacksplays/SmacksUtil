@@ -23,7 +23,8 @@ public class FabricEnchantingToolItem extends AbstractEnchantingToolItem {
     MenuProvider createScreenHandlerFactory(ItemStack stack) {
         return new ExtendedScreenHandlerFactory() {
             @Override
-            public void writeScreenOpeningData(ServerPlayer player, FriendlyByteBuf buf) {
+            public Object getScreenOpeningData(ServerPlayer player) {
+                return null;
             }
 
             @Override
@@ -33,7 +34,7 @@ public class FabricEnchantingToolItem extends AbstractEnchantingToolItem {
 
             @Override
             public AbstractContainerMenu createMenu(int syncId, @NotNull Inventory playerInventory, @NotNull Player player) {
-                return new EnchantingToolMenu(syncId, playerInventory, new EnchantmentToolInventory(stack));
+                return new EnchantingToolMenu(syncId, playerInventory, new EnchantmentToolInventory(stack, player.registryAccess()));
             }
         };
     }

@@ -4,16 +4,14 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
-import net.smackplays.smacksutil.Constants;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3f;
 
-public record C2SVeinMinerBreakPacket(Vector3f pos, boolean isCreative, boolean replaceSeeds) implements CustomPacketPayload {
+import static net.smackplays.smacksutil.Constants.C_VEINMINER_BREAK_REQUEST_RL;
 
-    public static final ResourceLocation ID = ResourceLocation.tryBuild(Constants.MOD_ID, "veinminer_break_packet");
+public record C2SVeinMinerBreakPacket(Vector3f pos, boolean isCreative, boolean replaceSeeds) implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<C2SVeinMinerBreakPacket> TYPE
-            = new CustomPacketPayload.Type<>(ID);
+            = new CustomPacketPayload.Type<>(C_VEINMINER_BREAK_REQUEST_RL);
 
 
     public static final StreamCodec<ByteBuf, C2SVeinMinerBreakPacket> STREAM_CODEC = StreamCodec.composite(

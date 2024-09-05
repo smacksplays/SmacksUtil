@@ -7,6 +7,10 @@ import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.StringWidget;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -14,6 +18,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.smackplays.smacksutil.menus.AbstractTeleportationTabletMenu;
@@ -29,18 +34,6 @@ import java.util.Map;
 import static net.smackplays.smacksutil.Constants.*;
 
 public class AbstractTeleportationTabletScreen<T extends AbstractTeleportationTabletMenu> extends AbstractContainerScreen<T> {
-    private static final ResourceLocation TEXTURE =
-            ResourceLocation.tryBuild(MOD_ID, C_TELEPORTATION_TABLET_SCREEN_LOCATION);
-    private static final ResourceLocation ENCHANTING_SLOT_HIGHLIGHTED_SPRITE =
-            ResourceLocation.tryBuild(MOD_ID, C_ENCHANTING_SLOT_HIGHLIGHTED_SPRITE_LOCATION);
-    private static final ResourceLocation ENCHANTING_SLOT_SPRITE =
-            ResourceLocation.tryBuild(MOD_ID, C_ENCHANTING_SLOT_SPRITE_LOCATION);
-    private static final ResourceLocation ENCHANTING_SLOT_DISABLED_SPRITE =
-            ResourceLocation.tryBuild(MOD_ID, C_ENCHANTING_SLOT_DISABLED_SPRITE_LOCATION);
-    private static final ResourceLocation SCROLLER_SPRITE =
-            ResourceLocation.tryBuild(MOD_ID, C_SCROLLER_SPRITE_LOCATION);
-    private static final ResourceLocation SCROLLER_DISABLED_SPRITE =
-            ResourceLocation.tryBuild(MOD_ID, C_SCROLLER_DISABLED_SPRITE_LOCATION);
     public boolean scrolling;
     private float scrollOffs;
     protected final int backgroundWidth = 157;
@@ -64,14 +57,14 @@ public class AbstractTeleportationTabletScreen<T extends AbstractTeleportationTa
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 0.0F);
         //in 1.20 or above,this method is in DrawContext class.
-        RenderSystem.setShaderTexture(0, TEXTURE);
+        RenderSystem.setShaderTexture(0, C_TELEPORTATION_TABLET_SCREEN_LOCATION_RL);
         int x = (width - backgroundWidth) / 2;
         int y = (height - backgroundHeight) / 2;
-        context.blit(TEXTURE, x, y, 0, 0, backgroundWidth, backgroundHeight, 512, 512);
+        context.blit(C_TELEPORTATION_TABLET_SCREEN_LOCATION_RL, x, y, 0, 0, backgroundWidth, backgroundHeight, 512, 512);
         Player player = this.menu.playerInventory.player;
         ItemStack telTool = player.getInventory().getSelected();
         Map<String, TeleportationData> posMap = getTeleportationList(telTool);
-        ResourceLocation scroller = posMap.size() > 10 ? SCROLLER_SPRITE : SCROLLER_DISABLED_SPRITE;
+        ResourceLocation scroller = posMap.size() > 10 ? C_SCROLLER_SPRITE_LOCATION_RL : C_SCROLLER_DISABLED_SPRITE_LOCATION_RL;
         context.blitSprite(scroller, x + 137, (y + 15) + (int) this.scrollOffs, 12, 15);
         List<String> keyList = new ArrayList<>(posMap.keySet().stream().toList());
 
@@ -95,13 +88,13 @@ public class AbstractTeleportationTabletScreen<T extends AbstractTeleportationTa
                 boolean b3 = y + 13 + 19 * i < mouseY;
                 boolean b4 = y + 32 + 19 * i >= mouseY;
                 if (b1 && b2 && b3 && b4) {
-                    context.blit(ENCHANTING_SLOT_HIGHLIGHTED_SPRITE, x + 8, y + 15 + 19 * i, 0, 0, 126, 19, 126, 19);
+                    context.blit(C_ENCHANTING_SLOT_HIGHLIGHTED_SPRITE_LOCATION_RL, x + 8, y + 15 + 19 * i, 0, 0, 126, 19, 126, 19);
                 } else {
-                    context.blit(ENCHANTING_SLOT_SPRITE, x + 8, y + 15 + 19 * i, 0, 0, 126, 19, 126, 19);
+                    context.blit(C_ENCHANTING_SLOT_SPRITE_LOCATION_RL, x + 8, y + 15 + 19 * i, 0, 0, 126, 19, 126, 19);
                 }
                 labelList.add(new Label(Component.literal(name), 10, 20 + 19 * i, 0x404040, false));
             } else {
-                context.blit(ENCHANTING_SLOT_DISABLED_SPRITE, x + 8, y + 15 + 19 * i, 0, 0, 126, 19, 126, 19);
+                context.blit(C_ENCHANTING_SLOT_DISABLED_SPRITE_LOCATION_RL, x + 8, y + 15 + 19 * i, 0, 0, 126, 19, 126, 19);
             }
         }
     }
@@ -176,12 +169,11 @@ public class AbstractTeleportationTabletScreen<T extends AbstractTeleportationTa
             float xRot = this.menu.playerInventory.player.getXRot();
             float yRot = this.menu.playerInventory.player.getYRot();
             Level level = this.menu.playerInventory.player.level();
-            //String dim = level.dimensionTypeId().location().getPath();
+            String dim = level.dimension().location().getPath();
 
-            //TODO fix
-            //if (Services.C2S_PACKET_SENDER != null) {
-           //     Services.C2S_PACKET_SENDER.TeleportNBTPacket(stack, pos, xRot, yRot, name, dim, false);
-            //}
+            if (Services.C2S_PACKET_SENDER != null) {
+                Services.C2S_PACKET_SENDER.TeleportNBTPacket(pos, xRot, yRot, name, dim, false);
+            }
         }
     }
 
@@ -192,10 +184,10 @@ public class AbstractTeleportationTabletScreen<T extends AbstractTeleportationTa
         removeButtonWidget.setMessage(Component.literal(text).withColor(color));
     }
 
-    //TODO fix
     private Map<String, TeleportationData> getTeleportationList(ItemStack stack){
         Map<String, TeleportationData> map = new HashMap<>();
-        /*CompoundTag tag = stack.getOrCreateTag();
+        CustomData data = stack.get(DataComponents.CUSTOM_DATA);
+        CompoundTag tag = data.copyTag();
         if (tag.contains("Positions")){
             ListTag listTag = (ListTag) tag.get("Positions");
             if (listTag != null){
@@ -215,11 +207,11 @@ public class AbstractTeleportationTabletScreen<T extends AbstractTeleportationTa
                         levelKey = Level.END;
                     }
 
-                    TeleportationData data = new TeleportationData(new Vec3(x, y, z), xRot, yRot, dim, levelKey);
-                    map.putIfAbsent(name, data);
+                    TeleportationData telData = new TeleportationData(new Vec3(x, y, z), xRot, yRot, dim, levelKey);
+                    map.putIfAbsent(name, telData);
                 }
             }
-        }*/
+        }
         return map;
     }
 
@@ -261,7 +253,7 @@ public class AbstractTeleportationTabletScreen<T extends AbstractTeleportationTa
                         String name = keyList.get(i);
                         if (Services.C2S_PACKET_SENDER != null){
                             if (isRemove){
-                                Services.C2S_PACKET_SENDER.TeleportNBTPacket(stack, posMap.get(name).pos, posMap.get(name).xRot, posMap.get(name).yRot, name, posMap.get(name).dim, isRemove);
+                                Services.C2S_PACKET_SENDER.TeleportNBTPacket(posMap.get(name).pos, posMap.get(name).xRot, posMap.get(name).yRot, name, posMap.get(name).dim, isRemove);
                             } else {
                                 Services.C2S_PACKET_SENDER.TeleportPacket(posMap.get(name).levelKey, posMap.get(name).pos, posMap.get(name).xRot, posMap.get(name).yRot);
                             }

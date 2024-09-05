@@ -1,9 +1,14 @@
 package net.smackplays.smacksutil;
 
+import dev.emi.trinkets.TrinketsMain;
+import dev.emi.trinkets.payload.BreakPayload;
+import dev.emi.trinkets.payload.SyncInventoryPayload;
+import dev.emi.trinkets.payload.SyncSlotsPayload;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
+import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
 import net.minecraft.core.BlockPos;
@@ -11,29 +16,22 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.cauldron.CauldronInteraction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.smackplays.smacksutil.events.veinminer.PlayerBlockBreak;
 import net.smackplays.smacksutil.items.*;
@@ -41,12 +39,12 @@ import net.smackplays.smacksutil.menus.BackpackMenu;
 import net.smackplays.smacksutil.menus.EnchantingToolMenu;
 import net.smackplays.smacksutil.menus.LargeBackpackMenu;
 import net.smackplays.smacksutil.menus.TeleportationTabletMenu;
+import net.smackplays.smacksutil.networking.c2spacket.*;
+import net.smackplays.smacksutil.networking.s2cpacket.S2CBlockBreakPacket;
 import net.smackplays.smacksutil.platform.Services;
 import net.smackplays.smacksutil.trinkets.Trinkets;
 
-import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 
 import static net.smackplays.smacksutil.Constants.*;
 
@@ -66,21 +64,10 @@ public class SmacksUtil implements ModInitializer {
     public static final Item ADVANCED_MOB_CATCHER_ITEM = new AdvancedMobCatcherItem();
     public static final Item ENCHANTING_TOOL_ITEM = new FabricEnchantingToolItem();
     public static final Item TELEPORTATION_TABLET_ITEM = new TeleportationTablet();
-    public static final ResourceLocation ENCHANT_REQUEST_ID = new ResourceLocation(MOD_ID, C_ENCHANT_REQUEST);
-    public static final ResourceLocation BACKPACK_SORT_REQUEST_ID = new ResourceLocation(MOD_ID, C_BACKPACK_SORT_REQUEST);
-    public static final ResourceLocation SET_BLOCK_AIR_REQUEST_ID = new ResourceLocation(MOD_ID, C_SET_BLOCK_AIR_REQUEST);
-    public static final ResourceLocation TELEPORT_REQUEST_ID = new ResourceLocation(MOD_ID, C_TELEPORT_REQUEST);
-    public static final ResourceLocation TELEPORT_NBT_REQUEST_ID = new ResourceLocation(MOD_ID, C_TELEPORT_NBT_REQUEST);
-    public static final ResourceLocation INTERACT_ENTITY_REQUEST_ID = new ResourceLocation(MOD_ID, C_INTERACT_ENTITY_REQUEST);
-    public static final ResourceLocation VEINMINER_BREAK_REQUEST_ID = new ResourceLocation(MOD_ID, C_VEINMINER_BREAK_REQUEST);
-    public static final ResourceLocation BACKPACK_OPEN_REQUEST_ID = new ResourceLocation(MOD_ID, C_BACKPACK_OPEN_REQUEST);
-    public static final ResourceLocation TOGGLE_MAGNET_REQUEST_ID = new ResourceLocation(MOD_ID, C_TOGGLE_MAGNET_ITEM_REQUEST);
-    public static final ResourceLocation TOGGLE_LIGHT_WAND_REQUEST_ID = new ResourceLocation(MOD_ID, C_TOGGLE_LIGHT_WAND_REQUEST);
-    public static final ResourceLocation VEINMINER_SERVER_BLOCK_BREAK_REQUEST_ID = new ResourceLocation(MOD_ID, C_VEINMINER_SERVER_BLOCK_BREAK_REQUEST);
-    public static final MenuType<BackpackMenu> BACKPACK_MENU = new ExtendedScreenHandlerType<>(BackpackMenu::createGeneric9x6);
-    public static final MenuType<LargeBackpackMenu> LARGE_BACKPACK_MENU = new ExtendedScreenHandlerType<>(LargeBackpackMenu::createGeneric13x9);
-    public static final MenuType<EnchantingToolMenu> ENCHANTING_TOOL_MENU = new ExtendedScreenHandlerType<>(EnchantingToolMenu::create);
-    public static final MenuType<TeleportationTabletMenu> TELEPORTATION_TABLET_MENU = new ExtendedScreenHandlerType<>(TeleportationTabletMenu::create);
+    public static final MenuType<BackpackMenu> BACKPACK_MENU = new ExtendedScreenHandlerType<>(BackpackMenu::createGeneric9x6, ByteBufCodecs.VECTOR3F);
+    public static final MenuType<LargeBackpackMenu> LARGE_BACKPACK_MENU = new ExtendedScreenHandlerType<>(LargeBackpackMenu::createGeneric13x9, ByteBufCodecs.VECTOR3F);
+    public static final MenuType<EnchantingToolMenu> ENCHANTING_TOOL_MENU = new ExtendedScreenHandlerType<>(EnchantingToolMenu::create, ByteBufCodecs.VECTOR3F);
+    public static final MenuType<TeleportationTabletMenu> TELEPORTATION_TABLET_MENU = new ExtendedScreenHandlerType<>(TeleportationTabletMenu::create, ByteBufCodecs.VECTOR3F);
 
     @Override
     public void onInitialize() {
@@ -88,51 +75,53 @@ public class SmacksUtil implements ModInitializer {
         CommonClass.init();
         PlayerBlockBreakEvents.BEFORE.register(new PlayerBlockBreak());
 
-        Registry.register(BuiltInRegistries.MENU, new ResourceLocation(MOD_ID, C_LARGE_BACKPACK_MENU), LARGE_BACKPACK_MENU);
-        Registry.register(BuiltInRegistries.MENU, new ResourceLocation(MOD_ID, C_BACKPACK_MENU), BACKPACK_MENU);
-        Registry.register(BuiltInRegistries.MENU, new ResourceLocation(MOD_ID, C_ENCHANTING_TOOL_MENU), ENCHANTING_TOOL_MENU);
-        Registry.register(BuiltInRegistries.MENU, new ResourceLocation(MOD_ID, C_TELEPORTATION_TABLET_MENU), TELEPORTATION_TABLET_MENU);
+        Registry.register(BuiltInRegistries.MENU, C_LARGE_BACKPACK_MENU_RL, LARGE_BACKPACK_MENU);
+        Registry.register(BuiltInRegistries.MENU, C_BACKPACK_MENU_RL, BACKPACK_MENU);
+        Registry.register(BuiltInRegistries.MENU, C_ENCHANTING_TOOL_MENU_RL, ENCHANTING_TOOL_MENU);
+        Registry.register(BuiltInRegistries.MENU, C_TELEPORTATION_TABLET_MENU_RL, TELEPORTATION_TABLET_MENU);
 
-
-        registerItem(C_BACKPACK_ITEM, BACKPACK_ITEM);
+        registerItem(C_BACKPACK_ITEM_RL, BACKPACK_ITEM);
         CauldronInteraction.WATER.map().putIfAbsent(BACKPACK_ITEM, CauldronInteraction.SHULKER_BOX);
 
-        registerItem(C_LARGE_BACKPACK_ITEM, LARGE_BACKPACK_ITEM);
+        registerItem(C_LARGE_BACKPACK_ITEM_RL, LARGE_BACKPACK_ITEM);
         CauldronInteraction.WATER.map().putIfAbsent(LARGE_BACKPACK_ITEM, CauldronInteraction.SHULKER_BOX);
 
-        registerItem(C_BACKPACK_UPGRADE_TIER1_ITEM, BACKPACK_UPGRADE_TIER1_ITEM);
-        registerItem(C_BACKPACK_UPGRADE_TIER2_ITEM, BACKPACK_UPGRADE_TIER2_ITEM);
-        registerItem(C_BACKPACK_UPGRADE_TIER3_ITEM, BACKPACK_UPGRADE_TIER3_ITEM);
+        registerItem(C_BACKPACK_UPGRADE_TIER1_ITEM_RL, BACKPACK_UPGRADE_TIER1_ITEM);
+        registerItem(C_BACKPACK_UPGRADE_TIER2_ITEM_RL, BACKPACK_UPGRADE_TIER2_ITEM);
+        registerItem(C_BACKPACK_UPGRADE_TIER3_ITEM_RL, BACKPACK_UPGRADE_TIER3_ITEM);
 
-        registerItem(C_ENCHANTING_TOOL_ITEM, ENCHANTING_TOOL_ITEM);
+        registerItem(C_ENCHANTING_TOOL_ITEM_RL, ENCHANTING_TOOL_ITEM);
 
-        registerItem(C_LIGHT_WAND_ITEM, LIGHT_WAND_ITEM);
-        registerItem(C_AUTO_LIGHT_WAND_ITEM, AUTO_LIGHT_WAND_ITEM);
-        registerItem(C_MAGNET_ITEM, MAGNET_ITEM);
-        registerItem(C_ADVANCED_MAGNET_ITEM, ADVANCED_MAGNET_ITEM);
-        registerItem(C_MOB_CATCHER_ITEM, MOB_CATCHER_ITEM);
-        registerItem(C_ADVANCED_MOB_CATCHER_ITEM, ADVANCED_MOB_CATCHER_ITEM);
-        registerItem(C_TELEPORTATION_TABLET_ITEM, TELEPORTATION_TABLET_ITEM);
+        registerItem(C_LIGHT_WAND_ITEM_RL, LIGHT_WAND_ITEM);
+        registerItem(C_AUTO_LIGHT_WAND_ITEM_RL, AUTO_LIGHT_WAND_ITEM);
+        registerItem(C_MAGNET_ITEM_RL, MAGNET_ITEM);
+        registerItem(C_ADVANCED_MAGNET_ITEM_RL, ADVANCED_MAGNET_ITEM);
+        registerItem(C_MOB_CATCHER_ITEM_RL, MOB_CATCHER_ITEM);
+        registerItem(C_ADVANCED_MOB_CATCHER_ITEM_RL, ADVANCED_MOB_CATCHER_ITEM);
+        registerItem(C_TELEPORTATION_TABLET_ITEM_RL, TELEPORTATION_TABLET_ITEM);
 
-        ServerPlayNetworking.registerGlobalReceiver(ENCHANT_REQUEST_ID, this::handleEnchantRequest);
+        PayloadTypeRegistry.playC2S().register(C2SEnchantPacket.TYPE, C2SEnchantPacket.STREAM_CODEC);
+        ServerPlayNetworking.registerGlobalReceiver(C2SEnchantPacket.TYPE, C2SEnchantPacketHandler::handle);
+        PayloadTypeRegistry.playC2S().register(C2SBackpackSortPacket.TYPE, C2SBackpackSortPacket.STREAM_CODEC);
+        ServerPlayNetworking.registerGlobalReceiver(C2SBackpackSortPacket.TYPE, C2SBackpackSortPacketHandler::handle);
+        PayloadTypeRegistry.playC2S().register(C2SBackpackOpenPacket.TYPE, C2SBackpackOpenPacket.STREAM_CODEC);
+        ServerPlayNetworking.registerGlobalReceiver(C2SBackpackOpenPacket.TYPE, C2SBackpackOpenPacketHandler::handle);
+        PayloadTypeRegistry.playC2S().register(C2SSetBlockAirPacket.TYPE, C2SSetBlockAirPacket.STREAM_CODEC);
+        ServerPlayNetworking.registerGlobalReceiver(C2SSetBlockAirPacket.TYPE, C2SSetBlockAirPacketHandler::handle);
+        PayloadTypeRegistry.playC2S().register(C2STeleportationPacket.TYPE, C2STeleportationPacket.STREAM_CODEC);
+        ServerPlayNetworking.registerGlobalReceiver(C2STeleportationPacket.TYPE, C2STeleportationPacketHandler::handle);
+        PayloadTypeRegistry.playC2S().register(C2STeleportationNBTPacket.TYPE, C2STeleportationNBTPacket.STREAM_CODEC);
+        ServerPlayNetworking.registerGlobalReceiver(C2STeleportationNBTPacket.TYPE, C2STeleportationNBTPacketHandler::handle);
+        PayloadTypeRegistry.playC2S().register(C2SInteractEntityPacket.TYPE, C2SInteractEntityPacket.STREAM_CODEC);
+        ServerPlayNetworking.registerGlobalReceiver(C2SInteractEntityPacket.TYPE, C2SInteractEntityPacketHandler::handle);
+        PayloadTypeRegistry.playC2S().register(C2SVeinMinerBreakPacket.TYPE, C2SVeinMinerBreakPacket.STREAM_CODEC);
+        ServerPlayNetworking.registerGlobalReceiver(C2SVeinMinerBreakPacket.TYPE, C2SVeinMinerBreakPacketHandler::handle);
+        PayloadTypeRegistry.playC2S().register(C2SToggleMagnetItemPacket.TYPE, C2SToggleMagnetItemPacket.STREAM_CODEC);
+        ServerPlayNetworking.registerGlobalReceiver(C2SToggleMagnetItemPacket.TYPE, C2SToggleMagnetItemPacketHandler::handle);
+        PayloadTypeRegistry.playC2S().register(C2SToggleLightWandItemPacket.TYPE, C2SToggleLightWandItemPacket.STREAM_CODEC);
+        ServerPlayNetworking.registerGlobalReceiver(C2SToggleLightWandItemPacket.TYPE, C2SToggleLightWandItemPacketHandler::handle);
 
-        ServerPlayNetworking.registerGlobalReceiver(BACKPACK_SORT_REQUEST_ID, this::handleBackpackSortRequest);
-
-        ServerPlayNetworking.registerGlobalReceiver(BACKPACK_OPEN_REQUEST_ID, this::handleBackpackOpenRequest);
-
-        ServerPlayNetworking.registerGlobalReceiver(SET_BLOCK_AIR_REQUEST_ID, this::handleSetBlockAirRequest);
-
-        ServerPlayNetworking.registerGlobalReceiver(TELEPORT_NBT_REQUEST_ID, this::handleTeleportNBTRequest);
-
-        ServerPlayNetworking.registerGlobalReceiver(TELEPORT_REQUEST_ID, this::handleTeleportRequest);
-
-        ServerPlayNetworking.registerGlobalReceiver(INTERACT_ENTITY_REQUEST_ID, this::handleInteractEntityRequest);
-
-        ServerPlayNetworking.registerGlobalReceiver(VEINMINER_BREAK_REQUEST_ID, this::handleVeinMinerBreakRequest);
-
-        ServerPlayNetworking.registerGlobalReceiver(TOGGLE_MAGNET_REQUEST_ID, this::handleToggleMagnetRequest);
-
-        ServerPlayNetworking.registerGlobalReceiver(TOGGLE_LIGHT_WAND_REQUEST_ID, this::handleToggleLightWandRequest);
+        PayloadTypeRegistry.playS2C().register(S2CBlockBreakPacket.TYPE, S2CBlockBreakPacket.STREAM_CODEC);
 
         if (Services.PLATFORM.isModLoaded("trinkets")){
             Trinkets.init();
@@ -140,8 +129,8 @@ public class SmacksUtil implements ModInitializer {
 
     }
 
-    private void registerItem(String name, Item item) {
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(MOD_ID, name), item);
+    private void registerItem(ResourceLocation resourceLocation, Item item) {
+        Registry.register(BuiltInRegistries.ITEM, resourceLocation, item);
         ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.TOOLS_AND_UTILITIES).register(itemGroup -> itemGroup.accept(item));
     }
 
@@ -149,8 +138,8 @@ public class SmacksUtil implements ModInitializer {
                                       ServerGamePacketListenerImpl handler, FriendlyByteBuf buf, PacketSender responseSender){
         server.execute(() -> {
             AbstractContainerMenu screenHandler = player.containerMenu;
-            ItemStack item = buf.readItem();
-            screenHandler.slots.get(0).set(item);
+            //ItemStack item = buf.readItem();
+            //screenHandler.slots.getFirst().set(item);
         });
     }
 
@@ -158,12 +147,12 @@ public class SmacksUtil implements ModInitializer {
                                    ServerGamePacketListenerImpl handler, FriendlyByteBuf buf, PacketSender responseSender){
         server.execute(() -> {
             AbstractContainerMenu screenHandler = player.containerMenu;
-            ItemStack stack = buf.readItem();
+            /*ItemStack stack = buf.readItem();
             if (stack.getItem() instanceof LargeBackpackItem && screenHandler instanceof LargeBackpackMenu lBackpackMenu) {
                 lBackpackMenu.sort();
             } else if (stack.getItem() instanceof AbstractBackpackItem && screenHandler instanceof BackpackMenu backpackMenu) {
                 backpackMenu.sort();
-            }
+            }*/
         });
     }
 
@@ -191,7 +180,7 @@ public class SmacksUtil implements ModInitializer {
     private void handleTeleportNBTRequest(MinecraftServer server, ServerPlayer player,
                                           ServerGamePacketListenerImpl handler, FriendlyByteBuf buf, PacketSender responseSender){
         server.execute(() -> {
-            ItemStack stack = buf.readItem();
+            /*ItemStack stack = buf.readItem();
             Vec3 pos = buf.readVec3();
             float xRot = buf.readFloat();
             float yRot = buf.readFloat();
@@ -234,7 +223,7 @@ public class SmacksUtil implements ModInitializer {
             tag.put("Positions", posTag);
             stack.setTag(tag);
             player.getInventory().setItem(player.getInventory().selected, stack);
-            player.inventoryMenu.broadcastChanges();
+            player.inventoryMenu.broadcastChanges();*/
         });
     }
 
@@ -258,7 +247,7 @@ public class SmacksUtil implements ModInitializer {
     private void handleInteractEntityRequest(MinecraftServer server, ServerPlayer player,
                                              ServerGamePacketListenerImpl handler, FriendlyByteBuf buf, PacketSender responseSender){
         server.execute(() -> {
-            Level world = player.level();
+            /*Level world = player.level();
             ItemStack stack = buf.readItem();
             UUID entityUUID = buf.readUUID();
             AABB aabb = new AABB(player.position().add(-5,-5,-5), player.position().add(5,5,5));
@@ -280,14 +269,14 @@ public class SmacksUtil implements ModInitializer {
                 if (mobItem.pickupLivingEntity(stack, player, livingEntity, hand)){
                     livingEntity.remove(Entity.RemovalReason.KILLED);
                 }
-            }
+            }*/
         });
     }
 
     private void handleVeinMinerBreakRequest(MinecraftServer server, ServerPlayer player,
                                              ServerGamePacketListenerImpl handler, FriendlyByteBuf buf, PacketSender responseSender){
         server.execute(() -> {
-            Level world = player.level();
+            /*Level world = player.level();
             ItemStack mainHandStack = buf.readItem();
             BlockPos curr = buf.readBlockPos();
             boolean isCreative = buf.readBoolean();
@@ -304,7 +293,7 @@ public class SmacksUtil implements ModInitializer {
             }
             if (replaceSeeds) {
                 world.setBlockAndUpdate(curr, currBlockState.getBlock().defaultBlockState());
-            }
+            }*/
         });
     }
 

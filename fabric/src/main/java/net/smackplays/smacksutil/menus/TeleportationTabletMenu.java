@@ -5,6 +5,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.MenuType;
 import net.smackplays.smacksutil.SmacksUtil;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
 
 public class TeleportationTabletMenu extends AbstractTeleportationTabletMenu{
     public TeleportationTabletMenu(@Nullable MenuType<?> menuType, int syncId, Inventory playerInv) {
@@ -12,7 +13,7 @@ public class TeleportationTabletMenu extends AbstractTeleportationTabletMenu{
     }
 
     @SuppressWarnings("unused")
-    public static TeleportationTabletMenu create(int syncId, Inventory playerInventory, FriendlyByteBuf buf) {
+    public static TeleportationTabletMenu create(int syncId, Inventory playerInventory, Vector3f vec) {
         return new TeleportationTabletMenu(SmacksUtil.TELEPORTATION_TABLET_MENU, syncId, playerInventory);
     }
 }

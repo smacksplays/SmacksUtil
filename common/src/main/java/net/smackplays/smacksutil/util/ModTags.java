@@ -28,7 +28,7 @@ public class ModTags {
                 createTag("veinminer_mining");
 
         private static TagKey<Block> createTag(String name) {
-            return TagKey.create(Registries.BLOCK, Objects.requireNonNull(ResourceLocation.tryBuild(Constants.MOD_ID, name)));
+            return TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, name));
         }
     }
 

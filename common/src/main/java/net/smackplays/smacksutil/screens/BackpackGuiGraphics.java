@@ -9,8 +9,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nullable;
-
 public class BackpackGuiGraphics extends GuiGraphics {
     private final Minecraft minecraft;
 
@@ -20,7 +18,7 @@ public class BackpackGuiGraphics extends GuiGraphics {
     }
 
     @Override
-    public void renderItemDecorations(@NotNull Font font, ItemStack stack, int offsetX, int offsetY, @Nullable String yellowString) {
+    public void renderItemDecorations(@NotNull Font font, ItemStack stack, int offsetX, int offsetY, String yellowString) {
         if (!stack.isEmpty()) {
             pose().pushPose();
             if (stack.getCount() != 1 || yellowString != null) {

@@ -4,21 +4,17 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
-import net.smackplays.smacksutil.Constants;
 import org.jetbrains.annotations.NotNull;
 
-public record C2SInteractEntityPacket(String stack, int entityUUID, boolean hand) implements CustomPacketPayload {
+import static net.smackplays.smacksutil.Constants.C_INTERACT_ENTITY_REQUEST_RL;
 
-    public static final ResourceLocation ID = ResourceLocation.tryBuild(Constants.MOD_ID, "interact_entity_packet");
+public record C2SInteractEntityPacket(String entityUUID, boolean hand) implements CustomPacketPayload {
 
     public static final CustomPacketPayload.Type<C2SInteractEntityPacket> TYPE
-            = new CustomPacketPayload.Type<>(ID);
+            = new CustomPacketPayload.Type<>(C_INTERACT_ENTITY_REQUEST_RL);
 
     public static final StreamCodec<ByteBuf, C2SInteractEntityPacket> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.STRING_UTF8,
-            C2SInteractEntityPacket::stack,
-            ByteBufCodecs.INT,
             C2SInteractEntityPacket::entityUUID,
             ByteBufCodecs.BOOL,
             C2SInteractEntityPacket::hand,

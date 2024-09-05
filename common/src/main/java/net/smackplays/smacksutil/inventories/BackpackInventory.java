@@ -6,16 +6,23 @@ import net.minecraft.core.HolderSet;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.EnchantmentTags;
+import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackLinkedSet;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.Optional;
 
 public class BackpackInventory implements IBackpackInventory {
@@ -58,31 +65,33 @@ public class BackpackInventory implements IBackpackInventory {
 
     @Override
     public void loadAllItems(CompoundTag tag, NonNullList<ItemStack> items) {
-        ListTag listTag = tag.getList("Items", 10);
+        CompoundTag itemTag = tag.getCompound("Items");
+        ContainerHelper.loadAllItems(itemTag, items, registryAccess);
+        ListTag countList = tag.getList("counts", 10);
+        for (int i = 0; i < countList.size(); i++) {
+            CompoundTag countTag = countList.getCompound(i);
+            int count = countTag.getInt("count");
+            ItemStack stack = items.get(i);
+            stack.setCount(count);
+            items.set(i, stack);
+        }
+    }
 
-        for(int i = 0; i < listTag.size(); ++i) {
-            CompoundTag cTag = listTag.getCompound(i);
-            int slot = cTag.getByte("Slot") & 255;
-            if (slot < items.size()) {
-                ItemStack stack = stackOf(cTag);
-                ListTag enchList = (ListTag)cTag.get("Enchantments");
-                if (enchList != null && !enchList.isEmpty()){
-                    for (Tag t : enchList){
-                        String description = ((CompoundTag) t).getString("description");
-                        int level = ((CompoundTag) t).getInt("lvl");
-                        Optional<HolderSet.Named<Enchantment>> optional = registryAccess.registryOrThrow(Registries.ENCHANTMENT).getTag(EnchantmentTags.TOOLTIP_ORDER);
-                        if (optional.isPresent()){
-                            var l = optional.get().stream().toList();
-                            for (Holder<Enchantment> entry : l){
-                                if (entry.value().description().toString().equals(description)){
-                                    stack.enchant(entry, level);
-                                }
-                            }
-                        }
-                    }
-                }
-                items.set(i, stack);
+    @Override
+    public CompoundTag saveAllItems(CompoundTag tag, NonNullList<ItemStack> items) {
+        ListTag countList = new ListTag();
+        for (var item : items) {
+            CompoundTag t = new CompoundTag();
+            t.putInt("count", item.getCount());
+            countList.add(t);
+            if (item.getCount() > 1){
+                item.setCount(1);
             }
         }
+        tag.put("counts", countList);
+        CompoundTag itemTag = ContainerHelper.saveAllItems(new CompoundTag(), items, registryAccess);
+        tag.put("Items", itemTag);
+        loadAllItems(tag, items);
+        return tag;
     }
 }

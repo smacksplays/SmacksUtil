@@ -80,8 +80,8 @@ public class SmacksUtil {
     public static FMLJavaModLoadingContext c;
 
     public static List<ArmorMaterial.Layer> layerList = Arrays.asList(
-            new ArmorMaterial.Layer(ResourceLocation.tryBuild(MOD_ID, "backpack"), "", true),
-            new ArmorMaterial.Layer(ResourceLocation.tryBuild(MOD_ID, "test1"), "_overlay", true)
+            new ArmorMaterial.Layer(ResourceLocation.fromNamespaceAndPath(MOD_ID, "backpack"), "", true),
+            new ArmorMaterial.Layer(ResourceLocation.fromNamespaceAndPath(MOD_ID, "test1"), "_overlay", true)
     );
 
     public static final ArmorMaterial TESTMat = new ArmorMaterial(ArmorMaterials.LEATHER.get().defense(),

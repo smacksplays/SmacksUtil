@@ -42,7 +42,7 @@ public class AdvancedMobCatcherItem extends Item {
             if (listTag != null && !listTag.isEmpty()) {
                 CompoundTag tag = (CompoundTag) listTag.getFirst();
                 BlockPos clicked = context.getClickedPos();
-                if (!world.isClientSide && isHolding(stack)
+                if (isHolding(stack)
                         && world.getBlockState(clicked.above()).getCollisionShape(world, clicked.above()).isEmpty()) {
                     Entity toCreate = EntityType.loadEntityRecursive(tag, world, entity -> {
                         entity.moveTo(
@@ -59,6 +59,7 @@ public class AdvancedMobCatcherItem extends Item {
                     if (listTag.isEmpty()) {
                         mainTag.putBoolean("is_Holding", false);
                     }
+                    stack.set(DataComponents.CUSTOM_DATA, CustomData.of(mainTag));
                 }
             }
         }
@@ -86,8 +87,8 @@ public class AdvancedMobCatcherItem extends Item {
                     list.add(entityTag);
                 }
                 tag.put("Entities", list);
-                //mainHandStack.setTag(entityTag);
-                maincustomData.copyTag().putBoolean("is_Holding", true);
+                tag.putBoolean("is_Holding", true);
+                mainHandStack.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
                 setHolding(true);
                 return true;
             }

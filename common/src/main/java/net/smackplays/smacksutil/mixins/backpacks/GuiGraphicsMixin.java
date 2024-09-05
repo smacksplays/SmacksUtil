@@ -11,8 +11,6 @@ import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.*;
 
-import javax.annotation.Nullable;
-
 @Mixin(GuiGraphics.class)
 public abstract class GuiGraphicsMixin {
 
@@ -27,7 +25,7 @@ public abstract class GuiGraphicsMixin {
      * @reason display 1000 to 999 999 as 1k to 999k and 1 000 000 to 999 999 999 as 1M to 999M
      */
     @Overwrite
-    public void renderItemDecorations(Font font, ItemStack stack, int offsetX, int offsetY, @Nullable String yellowString) {
+    public void renderItemDecorations(Font font, ItemStack stack, int offsetX, int offsetY, String yellowString) {
         GuiGraphics thisObject = (GuiGraphics) (Object) this;
         if (!stack.isEmpty()) {
             pose.pushPose();

@@ -4,16 +4,14 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
-import net.smackplays.smacksutil.Constants;
 import org.jetbrains.annotations.NotNull;
+
+import static net.smackplays.smacksutil.Constants.C_ENCHANT_REQUEST_RL;
 
 public record C2SEnchantPacket(String enchantment,int level, boolean remove) implements CustomPacketPayload {
 
-    public static final ResourceLocation ID = ResourceLocation.tryBuild(Constants.MOD_ID, "enchant_packet");
-
     public static final CustomPacketPayload.Type<C2SEnchantPacket> TYPE
-            = new CustomPacketPayload.Type<>(ID);
+            = new CustomPacketPayload.Type<>(C_ENCHANT_REQUEST_RL);
 
     public static final StreamCodec<ByteBuf, C2SEnchantPacket> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.STRING_UTF8,
