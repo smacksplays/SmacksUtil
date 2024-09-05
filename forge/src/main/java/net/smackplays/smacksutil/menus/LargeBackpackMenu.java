@@ -9,10 +9,6 @@ import net.smackplays.smacksutil.SmacksUtil;
 import net.smackplays.smacksutil.inventories.LargeBackpackInventory;
 import net.smackplays.smacksutil.platform.Services;
 import org.jetbrains.annotations.Nullable;
-//import top.theillusivec4.curios.api.CuriosApi;
-//import top.theillusivec4.curios.api.SlotResult;
-
-import java.util.List;
 
 public class LargeBackpackMenu extends AbstractLargeBackpackMenu {
 

@@ -6,8 +6,6 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.smackplays.smacksutil.Constants;
 
-import java.util.Objects;
-
 public class ModTags {
     public static class Blocks {
         public static final TagKey<Block> CROP_BLOCKS =

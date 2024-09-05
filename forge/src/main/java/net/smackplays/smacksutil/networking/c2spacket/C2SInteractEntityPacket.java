@@ -3,14 +3,11 @@ package net.smackplays.smacksutil.networking.c2spacket;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.event.network.CustomPayloadEvent;
-import net.smackplays.smacksutil.items.AdvancedMobCatcherItem;
-import net.smackplays.smacksutil.items.MobCatcherItem;
 
 import java.util.List;
 import java.util.UUID;

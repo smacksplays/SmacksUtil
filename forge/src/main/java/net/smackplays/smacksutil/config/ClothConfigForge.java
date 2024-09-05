@@ -2,8 +2,6 @@ package net.smackplays.smacksutil.config;
 
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.client.ConfigScreenHandler;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.smackplays.smacksutil.SmacksUtil;
 import net.smackplays.smacksutil.platform.ForgeModConfig;
 

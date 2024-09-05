@@ -1,9 +1,5 @@
 package net.smackplays.smacksutil;
 
-import dev.emi.trinkets.TrinketsMain;
-import dev.emi.trinkets.payload.BreakPayload;
-import dev.emi.trinkets.payload.SyncInventoryPayload;
-import dev.emi.trinkets.payload.SyncSlotsPayload;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
@@ -18,7 +14,6 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
-import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;

@@ -13,10 +13,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.smackplays.smacksutil.Constants;
 import net.smackplays.smacksutil.platform.services.IKeyHandler;
-//import top.theillusivec4.curios.api.CuriosApi;
-//import top.theillusivec4.curios.api.SlotResult;
-
-import java.util.List;
 
 @SuppressWarnings("unused")
 public class ForgeKeyHandler implements IKeyHandler {

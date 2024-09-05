@@ -11,12 +11,9 @@ import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.component.DyedItemColor;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
 import net.smackplays.smacksutil.inventories.BackpackInventory;
 import net.smackplays.smacksutil.menus.AbstractBackpackMenu;
 import org.jetbrains.annotations.NotNull;
-
-import java.awt.*;
 
 public abstract class AbstractBackpackItem extends ArmorItem{
     public AbstractBackpackItem(Holder<ArmorMaterial> material) {

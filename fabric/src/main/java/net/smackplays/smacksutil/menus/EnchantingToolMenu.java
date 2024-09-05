@@ -1,6 +1,5 @@
 package net.smackplays.smacksutil.menus;
 
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.smackplays.smacksutil.SmacksUtil;

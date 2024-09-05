@@ -1,9 +1,6 @@
 package net.smackplays.smacksutil.menus;
 
-import io.netty.buffer.ByteBuf;
 import net.minecraft.core.NonNullList;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.MenuType;
