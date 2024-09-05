@@ -73,8 +73,8 @@ public class AbstractTeleportationTabletScreen<T extends AbstractTeleportationTa
             float steps = (float) scrollbarHeight / slice;
             float offset = steps - 1;
             while (this.scrollOffs > offset) {
-                posMap.remove(keyList.get(0));
-                keyList.remove(0);
+                posMap.remove(keyList.getFirst());
+                keyList.removeFirst();
                 offset += steps;
             }
         } else {
@@ -156,7 +156,6 @@ public class AbstractTeleportationTabletScreen<T extends AbstractTeleportationTa
     }
 
     private void onButtonWidgetPressed(){
-        ItemStack stack = this.menu.playerInventory.player.getInventory().getSelected();
         if (editBoxX.getValue().isBlank() || editBoxY.getValue().isBlank() || editBoxZ.getValue().isBlank() || editBoxName.getValue().isBlank()) return;
         if (NumberUtils.isParsable(editBoxX.getValue())
                 && NumberUtils.isParsable(editBoxY.getValue())
@@ -187,28 +186,31 @@ public class AbstractTeleportationTabletScreen<T extends AbstractTeleportationTa
     private Map<String, TeleportationData> getTeleportationList(ItemStack stack){
         Map<String, TeleportationData> map = new HashMap<>();
         CustomData data = stack.get(DataComponents.CUSTOM_DATA);
-        CompoundTag tag = data.copyTag();
-        if (tag.contains("Positions")){
-            ListTag listTag = (ListTag) tag.get("Positions");
-            if (listTag != null){
-                for (Tag value : listTag) {
-                    CompoundTag p = (CompoundTag) value;
-                    double x = p.getDouble("x_pos");
-                    double y = p.getDouble("y_pos");
-                    double z = p.getDouble("z_pos");
-                    float xRot = p.getFloat("x_rot");
-                    float yRot = p.getFloat("y_rot");
-                    String name = p.getString("name");
-                    String dim = p.getString("dim");
-                    ResourceKey<Level> levelKey = Level.OVERWORLD;
-                    if (dim.equals("the_nether")){
-                        levelKey = Level.NETHER;
-                    } else if (dim.equals("the_end")){
-                        levelKey = Level.END;
-                    }
+        if (data != null) {
 
-                    TeleportationData telData = new TeleportationData(new Vec3(x, y, z), xRot, yRot, dim, levelKey);
-                    map.putIfAbsent(name, telData);
+            CompoundTag tag = data.copyTag();
+            if (tag.contains("Positions")){
+                ListTag listTag = (ListTag) tag.get("Positions");
+                if (listTag != null){
+                    for (Tag value : listTag) {
+                        CompoundTag p = (CompoundTag) value;
+                        double x = p.getDouble("x_pos");
+                        double y = p.getDouble("y_pos");
+                        double z = p.getDouble("z_pos");
+                        float xRot = p.getFloat("x_rot");
+                        float yRot = p.getFloat("y_rot");
+                        String name = p.getString("name");
+                        String dim = p.getString("dim");
+                        ResourceKey<Level> levelKey = Level.OVERWORLD;
+                        if (dim.equals("the_nether")){
+                            levelKey = Level.NETHER;
+                        } else if (dim.equals("the_end")){
+                            levelKey = Level.END;
+                        }
+
+                        TeleportationData telData = new TeleportationData(new Vec3(x, y, z), xRot, yRot, dim, levelKey);
+                        map.putIfAbsent(name, telData);
+                    }
                 }
             }
         }

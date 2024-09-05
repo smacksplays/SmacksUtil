@@ -14,7 +14,6 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 public class C2SVeinMinerBreakPacketHandler {
     public static void handle(final C2SVeinMinerBreakPacket data, final IPayloadContext context) {
         context.enqueueWork(()  -> {
-            ServerLevel level = (ServerLevel) context.player().level();
             Player player = context.player();
             Level world = player.level();
             ItemStack stack = player.getMainHandItem();

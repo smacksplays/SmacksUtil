@@ -13,7 +13,6 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class C2SVeinMinerBreakPacketHandler {
     public static void handle(C2SVeinMinerBreakPacket data, ServerPlayNetworking.Context context) {
-        ServerLevel level = (ServerLevel) context.player().level();
         ServerPlayer player = context.player();
         Level world = player.level();
         ItemStack stack = player.getMainHandItem();
