@@ -12,7 +12,6 @@ public class C2SBackpackOpenPacketHandler {
         Player player = context.player();
         ItemStack stack = null;
         if (data.slot() == -1){
-            var test = TrinketsApi.getEntitySlots(player);
             //stack = CuriosApi.getCuriosHelper().findCurios(player, "back").get(0).stack();
         } else {
             stack = player.containerMenu.slots.get(data.slot()).getItem();

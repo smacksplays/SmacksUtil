@@ -4,6 +4,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.network.CustomPayloadEvent;
+import net.smackplays.smacksutil.items.AdvancedMagnetItem;
 import net.smackplays.smacksutil.items.MagnetItem;
 
 public class C2SToggleMagnetItemPacket {
@@ -27,16 +28,17 @@ public class C2SToggleMagnetItemPacket {
             return;
         ItemStack stack = null;
         if (slot == -1){
-            //List<SlotResult> results = CuriosApi.getCuriosHelper().findCurios(player, "charm");
-            //if (!results.isEmpty()){
-            //    stack = results.get(0).stack();
-            //}
+            // TODO Curios currently not available
+            //stack = CuriosApi.getCuriosHelper().findCurios(player, "charm").getFirst().stack();
         } else {
             stack = player.containerMenu.slots.get(slot).getItem();
         }
-
-        if (stack != null && stack.getItem() instanceof MagnetItem item) {
-            item.toggle(stack, player);
+        if (stack != null) {
+            if (stack.getItem() instanceof MagnetItem item) {
+                item.toggle(stack, player);
+            } else if (stack.getItem() instanceof AdvancedMagnetItem item){
+                item.toggle(stack, player);
+            }
         }
     }
 }

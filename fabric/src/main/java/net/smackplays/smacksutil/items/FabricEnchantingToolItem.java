@@ -11,6 +11,7 @@ import net.minecraft.world.item.ItemStack;
 import net.smackplays.smacksutil.inventories.EnchantmentToolInventory;
 import net.smackplays.smacksutil.menus.EnchantingToolMenu;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Vector3f;
 
 @SuppressWarnings("unused")
 public class FabricEnchantingToolItem extends AbstractEnchantingToolItem {
@@ -20,10 +21,10 @@ public class FabricEnchantingToolItem extends AbstractEnchantingToolItem {
 
     @Override
     MenuProvider createScreenHandlerFactory(ItemStack stack) {
-        return new ExtendedScreenHandlerFactory() {
+        return new ExtendedScreenHandlerFactory<>() {
             @Override
-            public Object getScreenOpeningData(ServerPlayer player) {
-                return null;
+            public Vector3f getScreenOpeningData(ServerPlayer player) {
+                return new Vector3f();
             }
 
             @Override

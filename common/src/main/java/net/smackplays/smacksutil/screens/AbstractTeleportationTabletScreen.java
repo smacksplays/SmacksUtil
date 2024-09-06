@@ -23,8 +23,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.smackplays.smacksutil.menus.AbstractTeleportationTabletMenu;
 import net.smackplays.smacksutil.platform.Services;
+import net.smackplays.smacksutil.util.MapUtil;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.jetbrains.annotations.NotNull;
+import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -214,6 +216,7 @@ public class AbstractTeleportationTabletScreen<T extends AbstractTeleportationTa
                 }
             }
         }
+        map = MapUtil.sortByValue(map);
         return map;
     }
 
@@ -246,13 +249,23 @@ public class AbstractTeleportationTabletScreen<T extends AbstractTeleportationTa
                 Map<String, TeleportationData> posMap = getTeleportationList(stack);
                 List<String> keyList = posMap.keySet().stream().toList();
                 int list_size = Math.min(posMap.size(), 10);
+                int list_offset = 0;
+                if (this.scrollOffs > 0 && keyList.size() > 6) {
+                    int slice = keyList.size() - 10;
+                    float steps = (float) 99 / slice;
+                    float offset = steps - 1;
+                    while (this.scrollOffs > offset) {
+                        offset += steps;
+                        list_offset ++;
+                    }
+                }
                 for (int i = 0; i < list_size; ++i) {
                     boolean b1 = x + 6.5 < mouseX;
                     boolean b2 = x + 134 > mouseX;
                     boolean b3 = y + 14 + 19 * i < mouseY;
                     boolean b4 = y + 33 + 19 * i >= mouseY;
                     if (b1 && b2 && b3 && b4) {
-                        String name = keyList.get(i);
+                        String name = keyList.get(i + list_offset);
                         if (Services.C2S_PACKET_SENDER != null){
                             if (isRemove){
                                 Services.C2S_PACKET_SENDER.TeleportNBTPacket(posMap.get(name).pos, posMap.get(name).xRot, posMap.get(name).yRot, name, posMap.get(name).dim, isRemove);
@@ -336,10 +349,34 @@ public class AbstractTeleportationTabletScreen<T extends AbstractTeleportationTa
     }
 
     @SuppressWarnings("SameParameterValue")
-    private record Label(Component component, int x, int y, int color, boolean shadow) {
+    public record Label(Component component, int x, int y, int color, boolean shadow) {
     }
 
-    private record TeleportationData(Vec3 pos, float xRot, float yRot, String dim, ResourceKey<Level> levelKey) {
+    public record TeleportationData(Vec3 pos, float xRot, float yRot, String dim, ResourceKey<Level> levelKey) {
+    }
+
+    @Override
+    public boolean keyPressed(int GLFW_code, int $$1, int $$2) {
+        if (GLFW_code == GLFW.GLFW_KEY_ESCAPE &&
+                (editBoxX.isFocused() || editBoxY.isFocused()
+                        || editBoxZ.isFocused() || editBoxName.isFocused())){
+            if (editBoxX.isFocused()){
+                editBoxX.setFocused(false);
+            } else if (editBoxX.isFocused()){
+                editBoxX.setFocused(false);
+            } else if (editBoxY.isFocused()){
+                editBoxY.setFocused(false);
+            } else if (editBoxZ.isFocused()){
+                editBoxZ.setFocused(false);
+            } else if (editBoxName.isFocused()){
+                editBoxName.setFocused(false);
+            }
+            return true;
+        }
+        if (editBoxX.isFocused() || editBoxY.isFocused() || editBoxZ.isFocused() || editBoxName.isFocused()){
+            return true;
+        }
+        return super.keyPressed(GLFW_code, $$1, $$2);
     }
 }
 

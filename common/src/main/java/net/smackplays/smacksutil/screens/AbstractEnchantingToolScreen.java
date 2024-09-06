@@ -200,6 +200,17 @@ public class AbstractEnchantingToolScreen<T extends AbstractEnchantingToolMenu> 
         if (!stack.isEmpty()) {
             ArrayList<Holder<Enchantment>> list = getEnchantments(stack);
             int list_size = Math.min(list.size(), 6);
+
+            if (this.scrollOffs > 0 && enchantSlot.hasItem() && list.size() > 6) {
+                int slice = list.size() - 6;
+                float steps = (float) 99 / slice;
+                float offset = steps - 1;
+                while (this.scrollOffs > offset) {
+                    list.removeFirst();
+                    offset += steps;
+                }
+            }
+
             for (int i = 0; i < list_size; ++i) {
                 boolean b1 = x + 6.5 < mouseX;
                 boolean b2 = x + 134 > mouseX;

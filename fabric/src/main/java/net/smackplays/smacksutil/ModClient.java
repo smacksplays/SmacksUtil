@@ -4,6 +4,7 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
+import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.multiplayer.ClientPacketListener;
@@ -17,6 +18,7 @@ import net.smackplays.smacksutil.menus.BackpackMenu;
 import net.smackplays.smacksutil.menus.EnchantingToolMenu;
 import net.smackplays.smacksutil.menus.LargeBackpackMenu;
 import net.smackplays.smacksutil.menus.TeleportationTabletMenu;
+import net.smackplays.smacksutil.networking.c2spacket.*;
 import net.smackplays.smacksutil.networking.s2cpacket.S2CBlockBreakPacket;
 import net.smackplays.smacksutil.networking.s2cpacket.S2CBlockBreakPacketHandler;
 import net.smackplays.smacksutil.platform.Services;
@@ -53,6 +55,7 @@ public class ModClient implements ClientModInitializer {
             return -1;
         }, BACKPACK_ITEM, LARGE_BACKPACK_ITEM);
 
+        PayloadTypeRegistry.playS2C().register(S2CBlockBreakPacket.TYPE, S2CBlockBreakPacket.STREAM_CODEC);
         ClientPlayNetworking.registerGlobalReceiver(S2CBlockBreakPacket.TYPE, S2CBlockBreakPacketHandler::handle);
     }
 

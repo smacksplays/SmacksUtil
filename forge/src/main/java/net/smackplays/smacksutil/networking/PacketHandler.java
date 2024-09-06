@@ -38,11 +38,11 @@ public class PacketHandler {
                 .consumerMainThread(C2SSetBlockAirPacket::handle)
                 .add();
 
-        INSTANCE.messageBuilder(C2SBreakBlockPacket.class, NetworkDirection.PLAY_TO_SERVER)
-                .encoder(C2SBreakBlockPacket::encode)
-                .decoder(C2SBreakBlockPacket::new)
-                .consumerMainThread(C2SBreakBlockPacket::handle)
-                .add();
+        //INSTANCE.messageBuilder(C2SBreakBlockPacket.class, NetworkDirection.PLAY_TO_SERVER)
+        //        .encoder(C2SBreakBlockPacket::encode)
+        //        .decoder(C2SBreakBlockPacket::new)
+        //        .consumerMainThread(C2SBreakBlockPacket::handle)
+        //        .add();
 
         INSTANCE.messageBuilder(C2SEnchantPacket.class, NetworkDirection.PLAY_TO_SERVER)
                 .encoder(C2SEnchantPacket::encode)

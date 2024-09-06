@@ -87,10 +87,8 @@ public class Constants {
     public static final ResourceLocation C_ENCHANTING_SLOT_SPRITE_LOCATION_RL = ResourceLocation.fromNamespaceAndPath(MOD_ID, C_ENCHANTING_SLOT_SPRITE_LOCATION);
     public static final String C_ENCHANTING_SLOT_DISABLED_SPRITE_LOCATION = "textures/gui/sprites/enchanting_slot_disabled.png";
     public static final ResourceLocation C_ENCHANTING_SLOT_DISABLED_SPRITE_LOCATION_RL = ResourceLocation.fromNamespaceAndPath(MOD_ID, C_ENCHANTING_SLOT_DISABLED_SPRITE_LOCATION);
-    public static final String C_SCROLLER_SPRITE_LOCATION = "textures/gui/sprites/scroller.png";
-    public static final ResourceLocation  C_SCROLLER_SPRITE_LOCATION_RL = ResourceLocation.fromNamespaceAndPath(MOD_ID, C_SCROLLER_SPRITE_LOCATION);
-    public static final String C_SCROLLER_DISABLED_SPRITE_LOCATION = "textures/gui/sprites/scroller_disabled.png";
-    public static final ResourceLocation  C_SCROLLER_DISABLED_SPRITE_LOCATION_RL = ResourceLocation.fromNamespaceAndPath(MOD_ID, C_SCROLLER_DISABLED_SPRITE_LOCATION);
+    public static final ResourceLocation  C_SCROLLER_SPRITE_LOCATION_RL = ResourceLocation.withDefaultNamespace("container/creative_inventory/scroller");
+    public static final ResourceLocation  C_SCROLLER_DISABLED_SPRITE_LOCATION_RL = ResourceLocation.withDefaultNamespace("container/creative_inventory/scroller_disabled");
 
     // --------------------------------- VEINMINER
     public static final String C_SET_BLOCK_AIR_REQUEST = "set-block-air-request";

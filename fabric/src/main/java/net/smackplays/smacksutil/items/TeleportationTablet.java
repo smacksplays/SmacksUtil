@@ -11,6 +11,7 @@ import net.minecraft.world.item.ItemStack;
 import net.smackplays.smacksutil.SmacksUtil;
 import net.smackplays.smacksutil.menus.TeleportationTabletMenu;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Vector3f;
 
 @SuppressWarnings("unused")
 public class TeleportationTablet extends AbstractTeleportationTablet{
@@ -20,10 +21,10 @@ public class TeleportationTablet extends AbstractTeleportationTablet{
 
     @Override
     public MenuProvider createScreenHandlerFactory(ItemStack stack) {
-        return new ExtendedScreenHandlerFactory() {
+        return new ExtendedScreenHandlerFactory<>() {
             @Override
-            public Object getScreenOpeningData(ServerPlayer player) {
-                return null;
+            public Vector3f getScreenOpeningData(ServerPlayer player) {
+                return new Vector3f();
             }
 
             @Override

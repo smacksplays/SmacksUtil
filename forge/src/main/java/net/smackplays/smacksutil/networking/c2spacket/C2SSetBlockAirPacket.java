@@ -27,7 +27,6 @@ public class C2SSetBlockAirPacket {
         if (player == null)
             return;
         Level world = player.level();
-        if (world.isClientSide) return;
         world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
     }
 }

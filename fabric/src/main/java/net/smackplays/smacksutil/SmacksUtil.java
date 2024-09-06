@@ -116,7 +116,6 @@ public class SmacksUtil implements ModInitializer {
         PayloadTypeRegistry.playC2S().register(C2SToggleLightWandItemPacket.TYPE, C2SToggleLightWandItemPacket.STREAM_CODEC);
         ServerPlayNetworking.registerGlobalReceiver(C2SToggleLightWandItemPacket.TYPE, C2SToggleLightWandItemPacketHandler::handle);
 
-        PayloadTypeRegistry.playS2C().register(S2CBlockBreakPacket.TYPE, S2CBlockBreakPacket.STREAM_CODEC);
 
         if (Services.PLATFORM.isModLoaded("trinkets")){
             Trinkets.init();

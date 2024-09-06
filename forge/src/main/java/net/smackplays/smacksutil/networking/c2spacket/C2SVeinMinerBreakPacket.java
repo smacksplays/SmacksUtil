@@ -38,9 +38,9 @@ public class C2SVeinMinerBreakPacket {
     public void handle(CustomPayloadEvent.Context context) {
         context.enqueueWork(() -> {
             ServerPlayer player = context.getSender();
-            ItemStack stack = player.getMainHandItem();
-            if (player == null) return;
             Level world = player.level();
+            ItemStack stack = player.getMainHandItem();
+
             BlockState currBlockState = world.getBlockState(pos);
 
             world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());

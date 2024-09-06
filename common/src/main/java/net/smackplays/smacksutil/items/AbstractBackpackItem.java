@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 
 public abstract class AbstractBackpackItem extends ArmorItem{
     public AbstractBackpackItem(Holder<ArmorMaterial> material) {
-        super(material, Type.CHESTPLATE,
+        super(material, Type.BODY,
                 new Properties()
                         .stacksTo(1)
                         .rarity(Rarity.EPIC)

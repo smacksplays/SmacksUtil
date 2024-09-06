@@ -13,6 +13,7 @@ import net.smackplays.smacksutil.SmacksUtil;
 import net.smackplays.smacksutil.inventories.LargeBackpackInventory;
 import net.smackplays.smacksutil.menus.LargeBackpackMenu;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Vector3f;
 
 @SuppressWarnings("unused")
 public class LargeBackpackItem extends AbstractBackpackItem {
@@ -23,10 +24,10 @@ public class LargeBackpackItem extends AbstractBackpackItem {
 
     @Override
     public MenuProvider createScreenHandlerFactory(ItemStack stack) {
-        return new ExtendedScreenHandlerFactory() {
+        return new ExtendedScreenHandlerFactory<>() {
             @Override
-            public Object getScreenOpeningData(ServerPlayer player) {
-                return null;
+            public Vector3f getScreenOpeningData(ServerPlayer player) {
+                return new Vector3f();
             }
 
             @Override

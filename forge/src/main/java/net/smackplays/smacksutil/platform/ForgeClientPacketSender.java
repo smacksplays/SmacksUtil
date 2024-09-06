@@ -20,14 +20,14 @@ public class ForgeClientPacketSender implements IClientPacketSender {
 
     @Override
     public void EnchantPacket(Enchantment enchantment, boolean addRemove) {
-        String ench = enchantment.toString();
+        String ench = enchantment.description().getString();
         int level = enchantment.getMaxLevel();
         PacketHandler.sendToServer(new C2SEnchantPacket(ench, level, addRemove));
     }
 
     @Override
     public void BackpackSortPacket(int slot) {
-        PacketHandler.sendToServer(new C2SBackpackSortPacket());
+        PacketHandler.sendToServer(new C2SBackpackSortPacket(slot));
     }
 
     @Override
@@ -52,7 +52,7 @@ public class ForgeClientPacketSender implements IClientPacketSender {
 
     @Override
     public void TeleportPacket(ResourceKey<Level> levelKey, Vec3 pos, float xRot, float yRot) {
-        PacketHandler.sendToServer(new C2STeleportationPacket(levelKey, pos, xRot, yRot));
+        PacketHandler.sendToServer(new C2STeleportationPacket(levelKey.toString(), pos, xRot, yRot));
     }
 
     @Override
@@ -62,6 +62,6 @@ public class ForgeClientPacketSender implements IClientPacketSender {
 
     @Override
     public void InteractEntityPacket(UUID entityUUID, boolean hand) {
-        PacketHandler.sendToServer(new C2SInteractEntityPacket(entityUUID, hand));
+        PacketHandler.sendToServer(new C2SInteractEntityPacket(entityUUID.toString(), hand));
     }
 }

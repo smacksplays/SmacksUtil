@@ -27,10 +27,8 @@ public class C2SToggleLightWandItemPacket {
             return;
         ItemStack stack = null;
         if (slot == -1){
-            //List<SlotResult> results = CuriosApi.getCuriosHelper().findCurios(player, "hands");
-           // if (!results.isEmpty()){
-           //     stack = results.get(0).stack();
-          //  }
+            // TODO-Curios currently not available
+            //stack = CuriosApi.getCuriosHelper().findCurios(player, "hands").get(0).stack();
         } else {
             stack = player.containerMenu.slots.get(slot).getItem();
         }

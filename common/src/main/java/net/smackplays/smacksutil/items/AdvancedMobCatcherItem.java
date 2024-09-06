@@ -6,6 +6,9 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentContents;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -133,7 +136,8 @@ public class AdvancedMobCatcherItem extends Item {
                 if (listTag == null) return;
                 for (Tag ltag : listTag) {
                     CompoundTag compoundTag = (CompoundTag) ltag;
-                    Component storedEntity = Component.literal("Entity: " + compoundTag.getString("id"));
+                    Component storedEntity = Component.literal("Entity: " +
+                            Component.translatable("entity." + compoundTag.getString("id").replace(":", ".")).getString());
                     componentList.add(storedEntity);
                 }
             }

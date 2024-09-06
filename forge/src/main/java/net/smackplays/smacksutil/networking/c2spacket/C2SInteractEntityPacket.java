@@ -17,48 +17,48 @@ import java.util.List;
 import java.util.UUID;
 
 public class C2SInteractEntityPacket {
-    private final UUID entityUUID;
+    private final String entityUUID;
     private final boolean isMainHnad;
 
-    public C2SInteractEntityPacket(UUID u, boolean m) {
+    public C2SInteractEntityPacket(String u, boolean m) {
         entityUUID = u;
         isMainHnad = m;
     }
 
     public C2SInteractEntityPacket(FriendlyByteBuf buffer) {
-        entityUUID = buffer.readUUID();
+        entityUUID = buffer.readUtf();
         isMainHnad = buffer.readBoolean();
     }
 
     public void encode(FriendlyByteBuf buffer) {
-        buffer.writeUUID(entityUUID);
+        buffer.writeUtf(entityUUID);
         buffer.writeBoolean(isMainHnad);
     }
 
     public void handle(CustomPayloadEvent.Context context) {
         ServerPlayer player = context.getSender();
-        if (player == null)
-            return;
-        Level world = player.level();
-        ItemStack stack = player.getMainHandItem();
-        AABB aabb = new AABB(player.position().add(-5,-5,-5), player.position().add(5,5,5));
-        List<LivingEntity> entityList = world.getEntitiesOfClass(LivingEntity.class, aabb, entity -> true);
-        LivingEntity livingEntity = null;
-        for  (LivingEntity e : entityList){
-            if (e.getUUID().equals(entityUUID)){
-                livingEntity = e;
+        if (player != null) {
+            ItemStack stack = player.getMainHandItem();
+            Level world = player.level();
+            AABB aabb = new AABB(player.position().add(-5,-5,-5), player.position().add(5,5,5));
+            List<LivingEntity> entityList = world.getEntitiesOfClass(LivingEntity.class, aabb, entity -> true);
+            LivingEntity livingEntity = null;
+            for  (LivingEntity e : entityList){
+                if (e.getUUID().equals(UUID.fromString(entityUUID))){
+                    livingEntity = e;
+                }
             }
-        }
-        if (livingEntity == null) return;
-        InteractionHand hand = isMainHnad ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
-        if (stack.getItem() instanceof MobCatcherItem mobItem){
-            if (mobItem.pickupLivingEntity(stack, player, livingEntity, hand)){
-                livingEntity.remove(Entity.RemovalReason.KILLED);
+            if (livingEntity == null) return;
+            InteractionHand hand = isMainHnad ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
+            if (stack.getItem() instanceof MobCatcherItem mobItem){
+                if (mobItem.pickupLivingEntity(stack, player, livingEntity, hand)){
+                    livingEntity.remove(Entity.RemovalReason.KILLED);
+                }
             }
-        }
-        if (stack.getItem() instanceof AdvancedMobCatcherItem mobItem){
-            if (mobItem.pickupLivingEntity(stack, player, livingEntity, hand)){
-                livingEntity.remove(Entity.RemovalReason.KILLED);
+            if (stack.getItem() instanceof AdvancedMobCatcherItem mobItem){
+                if (mobItem.pickupLivingEntity(stack, player, livingEntity, hand)){
+                    livingEntity.remove(Entity.RemovalReason.KILLED);
+                }
             }
         }
     }

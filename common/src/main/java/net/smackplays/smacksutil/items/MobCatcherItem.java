@@ -93,7 +93,8 @@ public class MobCatcherItem extends Item {
         if (customData != null){
             CompoundTag tag = customData.copyTag();
             if (!tag.isEmpty()) {
-                Component storedEntity = Component.literal("Entity: " + tag.getString("id"));
+                Component storedEntity = Component.literal("Entity: " +
+                        Component.translatable("entity." + tag.getString("id").replace(":", ".")).getString());
                 componentList.add(storedEntity);
             }
         }

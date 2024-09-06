@@ -43,7 +43,7 @@ public class ForgeKeyHandler implements IKeyHandler {
             for (int i = slots.size() - 1; i >= 0; i--){
                 ItemStack stack = slots.get(i).getItem();
                 if ((stack.is(Services.PLATFORM.getAdvancedMagnetItem()) || stack.is(Services.PLATFORM.getMagnetItem())) && Services.C2S_PACKET_SENDER != null){
-                    Services.C2S_PACKET_SENDER.ToggleLightWandItemPacket(i);
+                    Services.C2S_PACKET_SENDER.ToggleMagnetItemPacket(i);
                     return;
                 }
             }

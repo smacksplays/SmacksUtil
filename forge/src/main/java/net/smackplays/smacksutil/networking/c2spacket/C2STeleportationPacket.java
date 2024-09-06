@@ -13,12 +13,12 @@ import net.minecraftforge.event.network.CustomPayloadEvent;
 import java.util.Set;
 
 public class C2STeleportationPacket {
-    private final ResourceKey<Level> levelKey;
+    private final String levelKey;
     private final Vec3 pos;
     private final float xRot;
     private final float yRot;
 
-    public C2STeleportationPacket(ResourceKey<Level> levelKey, Vec3 pos, float xRot, float yRot) {
+    public C2STeleportationPacket(String levelKey, Vec3 pos, float xRot, float yRot) {
         this.levelKey = levelKey;
         this.pos = pos;
         this.xRot = xRot;
@@ -26,15 +26,14 @@ public class C2STeleportationPacket {
     }
 
     public C2STeleportationPacket(FriendlyByteBuf buffer) {
-        var tempKey = buffer.readRegistryKey();
-        levelKey = ResourceKey.create(Registries.DIMENSION, tempKey.location());
+        levelKey = buffer.readUtf();
         pos = buffer.readVec3();
         xRot = buffer.readFloat();
         yRot = buffer.readFloat();
     }
 
     public void encode(FriendlyByteBuf buffer) {
-        buffer.writeResourceKey(levelKey);
+        buffer.writeUtf(levelKey);
         buffer.writeVec3(pos);
         buffer.writeFloat(xRot);
         buffer.writeFloat(yRot);
@@ -45,14 +44,22 @@ public class C2STeleportationPacket {
         if (player == null) return;
         Level level = player.level();
 
-        MinecraftServer server = level.getServer();
-        ServerLevel serverLevel = null;
-        if (server != null) {
-            serverLevel = server.getLevel(levelKey);
+        ResourceKey<?> tempKey = null;
+
+        Set<ResourceKey<Level>> levelSet = player.registryAccess().registryOrThrow(Registries.DIMENSION).registryKeySet();
+        for (ResourceKey<Level> key : levelSet){
+            if (key.toString().equals(levelKey)){
+                tempKey = key;
+            }
         }
-        //player.teleportTo(pos.x, pos.y, pos.z);
-        if (serverLevel != null) {
-            player.teleportTo(serverLevel, pos.x, pos.y, pos.z, Set.of(), yRot, xRot);
+        if (tempKey != null){
+            ResourceKey<Level> levelKey = ResourceKey.create(Registries.DIMENSION, tempKey.location());
+            MinecraftServer server = level.getServer();
+            ServerLevel serverLevel = server.getLevel(levelKey);
+            //player.teleportTo(pos.x, pos.y, pos.z);
+            if (serverLevel != null) {
+                player.teleportTo(serverLevel, pos.x, pos.y, pos.z, Set.of(), yRot, xRot);
+            }
         }
     }
 }

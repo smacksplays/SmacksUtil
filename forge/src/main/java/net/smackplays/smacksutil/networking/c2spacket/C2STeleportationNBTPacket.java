@@ -3,13 +3,16 @@ package net.smackplays.smacksutil.networking.c2spacket;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.network.CustomPayloadEvent;
+import org.joml.Vector3f;
 
 import java.nio.charset.StandardCharsets;
 
@@ -53,9 +56,8 @@ public class C2STeleportationNBTPacket {
         if (player == null)
             return;
         ItemStack stack = player.getMainHandItem();
-        CustomData data = stack.get(DataComponents.CUSTOM_DATA);
-        if (data != null) {
-            CompoundTag tag = data.copyTag();
+        CustomData customData = stack.get(DataComponents.CUSTOM_DATA);
+        if (customData != null){CompoundTag tag = customData.copyTag();
             ListTag posTag = (ListTag)tag.get("Positions");
             if (posTag == null) {
                 posTag = new ListTag();
@@ -84,7 +86,17 @@ public class C2STeleportationNBTPacket {
                     }
                 }
             } else {
-                posTag.add(teleportTag);
+                boolean contained = false;
+                for (int i = 0; i < posTag.size(); i++) {
+                    CompoundTag t = (CompoundTag) posTag.get(i);
+                    if(name.equals(t.getString("name"))) {
+                        contained = true;
+                        break;
+                    }
+                }
+                if (!contained){
+                    posTag.add(teleportTag);
+                }
             }
             tag.put("Positions", posTag);
             stack.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
