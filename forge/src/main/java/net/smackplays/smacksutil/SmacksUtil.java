@@ -3,12 +3,11 @@ package net.smackplays.smacksutil;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.core.cauldron.CauldronInteraction;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.inventory.MenuType;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.component.DyedItemColor;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
@@ -39,9 +38,6 @@ import net.smackplays.smacksutil.screens.AbstractBackpackScreen;
 import net.smackplays.smacksutil.screens.AbstractEnchantingToolScreen;
 import net.smackplays.smacksutil.screens.AbstractLargeBackpackScreen;
 import net.smackplays.smacksutil.screens.AbstractTeleportationTabletScreen;
-
-import java.util.Arrays;
-import java.util.List;
 
 import static net.smackplays.smacksutil.Constants.*;
 

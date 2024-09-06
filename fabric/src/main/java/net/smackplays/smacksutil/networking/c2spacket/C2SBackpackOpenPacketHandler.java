@@ -1,6 +1,5 @@
 package net.smackplays.smacksutil.networking.c2spacket;
 
-import dev.emi.trinkets.api.TrinketsApi;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
