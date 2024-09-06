@@ -7,7 +7,7 @@ import java.util.*;
 public class MapUtil {
     public static Map<String, AbstractTeleportationTabletScreen.TeleportationData> sortByValue(Map<String, AbstractTeleportationTabletScreen.TeleportationData> map) {
         List<Map.Entry<String, AbstractTeleportationTabletScreen.TeleportationData>> list = new ArrayList<>(map.entrySet().stream().toList());
-        list.sort(Comparator.comparing(Map.Entry::getKey));
+        list.sort(Map.Entry.comparingByKey());
 
         Map<String, AbstractTeleportationTabletScreen.TeleportationData> result = new LinkedHashMap<>();
         for (Map.Entry<String, AbstractTeleportationTabletScreen.TeleportationData> entry : list) {

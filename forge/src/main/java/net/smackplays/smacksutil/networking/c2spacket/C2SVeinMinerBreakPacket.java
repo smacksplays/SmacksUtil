@@ -38,21 +38,23 @@ public class C2SVeinMinerBreakPacket {
     public void handle(CustomPayloadEvent.Context context) {
         context.enqueueWork(() -> {
             ServerPlayer player = context.getSender();
-            Level world = player.level();
-            ItemStack stack = player.getMainHandItem();
+            if (player != null){
+                Level world = player.level();
+                ItemStack stack = player.getMainHandItem();
 
-            BlockState currBlockState = world.getBlockState(pos);
+                BlockState currBlockState = world.getBlockState(pos);
 
-            world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
-            if (!isCreative) {
-                BlockEntity currBlockEntity = currBlockState.hasBlockEntity() ? world.getBlockEntity(pos) : null;
-                Block.dropResources(currBlockState, world, pos, currBlockEntity, null, ItemStack.EMPTY);
-                if (stack.isDamageableItem()) {
-                    stack.hurtAndBreak(1, (ServerLevel)player.level(), player, c -> {});
+                world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+                if (!isCreative) {
+                    BlockEntity currBlockEntity = currBlockState.hasBlockEntity() ? world.getBlockEntity(pos) : null;
+                    Block.dropResources(currBlockState, world, pos, currBlockEntity, null, ItemStack.EMPTY);
+                    if (stack.isDamageableItem()) {
+                        stack.hurtAndBreak(1, (ServerLevel)player.level(), player, c -> {});
+                    }
                 }
-            }
-            if (replaceSeeds) {
-                world.setBlockAndUpdate(pos, currBlockState.getBlock().defaultBlockState());
+                if (replaceSeeds) {
+                    world.setBlockAndUpdate(pos, currBlockState.getBlock().defaultBlockState());
+                }
             }
         });
     }

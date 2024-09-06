@@ -92,11 +92,11 @@ public class SmacksUtil {
     }
 
     public void interModEnqueue(InterModEnqueueEvent e){
-        if (Services.PLATFORM.isModLoaded("curios")){
+        //if (Services.PLATFORM.isModLoaded("curios")){
             //InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE, () -> new SlotTypeMessage.Builder("charm").size(1).build());
             //InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE, () -> new SlotTypeMessage.Builder("back").size(1).build());
             //InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE, () -> new SlotTypeMessage.Builder("hands").size(1).build());
-        }
+        //}
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {

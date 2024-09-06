@@ -27,12 +27,13 @@ public class C2SToggleMagnetItemPacket {
         if (player == null)
             return;
         ItemStack stack = null;
-        if (slot == -1){
+        /*if (slot == -1){
             // TODO Curios currently not available
             //stack = CuriosApi.getCuriosHelper().findCurios(player, "charm").getFirst().stack();
         } else {
             stack = player.containerMenu.slots.get(slot).getItem();
-        }
+        }*/
+        stack = player.containerMenu.slots.get(slot).getItem();
         if (stack != null) {
             if (stack.getItem() instanceof MagnetItem item) {
                 item.toggle(stack, player);

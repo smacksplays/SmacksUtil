@@ -55,10 +55,12 @@ public class C2STeleportationPacket {
         if (tempKey != null){
             ResourceKey<Level> levelKey = ResourceKey.create(Registries.DIMENSION, tempKey.location());
             MinecraftServer server = level.getServer();
-            ServerLevel serverLevel = server.getLevel(levelKey);
-            //player.teleportTo(pos.x, pos.y, pos.z);
-            if (serverLevel != null) {
-                player.teleportTo(serverLevel, pos.x, pos.y, pos.z, Set.of(), yRot, xRot);
+            if (server != null) {
+                ServerLevel serverLevel = server.getLevel(levelKey);
+                //player.teleportTo(pos.x, pos.y, pos.z);
+                if (serverLevel != null) {
+                    player.teleportTo(serverLevel, pos.x, pos.y, pos.z, Set.of(), yRot, xRot);
+                }
             }
         }
     }

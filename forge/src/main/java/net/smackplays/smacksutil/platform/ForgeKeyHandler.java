@@ -29,7 +29,7 @@ public class ForgeKeyHandler implements IKeyHandler {
     @Override
     public void toggleMagnetConsume(KeyMapping key, Player player) {
         if (key.consumeClick()) {
-            if (Services.PLATFORM.isModLoaded("curios")){
+            //if (Services.PLATFORM.isModLoaded("curios")){
                 //List<SlotResult> results = CuriosApi.getCuriosHelper().findCurios(player, "charm");
                // if (!results.isEmpty()){
                //     ItemStack stack = results.get(0).stack();
@@ -38,7 +38,7 @@ public class ForgeKeyHandler implements IKeyHandler {
                  //       return;
                  //   }
                 //}
-            }
+            //}
             NonNullList<Slot> slots = player.inventoryMenu.slots;
             for (int i = slots.size() - 1; i >= 0; i--){
                 ItemStack stack = slots.get(i).getItem();
@@ -53,7 +53,7 @@ public class ForgeKeyHandler implements IKeyHandler {
     @Override
     public void toggleLightWandConsume(KeyMapping key, Player player) {
         if (key.consumeClick()) {
-            if (Services.PLATFORM.isModLoaded("curios")){
+            //if (Services.PLATFORM.isModLoaded("curios")){
                 //List<SlotResult> results = CuriosApi.getCuriosHelper().findCurios(player, "hands");
                 //if (!results.isEmpty()){
                 //    ItemStack stack = results.get(0).stack();
@@ -62,7 +62,7 @@ public class ForgeKeyHandler implements IKeyHandler {
                 //        return;
                 //    }
                 //}
-            }
+            //}
             NonNullList<Slot> slots = player.inventoryMenu.slots;
             for (int i = slots.size() - 1; i >= 0; i--){
                 ItemStack stack = slots.get(i).getItem();
@@ -77,7 +77,7 @@ public class ForgeKeyHandler implements IKeyHandler {
     @Override
     public void openBackpackConsume(KeyMapping key, Player player) {
         if (key.consumeClick()) {
-            if (Services.PLATFORM.isModLoaded("curios")){
+            //if (Services.PLATFORM.isModLoaded("curios")){
                 //List<SlotResult> results = CuriosApi.getCuriosHelper().findCurios(player, "back");
                 //if (!results.isEmpty()){
                 //    ItemStack stack = results.get(0).stack();
@@ -86,7 +86,7 @@ public class ForgeKeyHandler implements IKeyHandler {
                 //        return;
                 //    }
                // }
-            }
+            //}
             NonNullList<Slot> slots = player.inventoryMenu.slots;
             for (int i = slots.size() - 1; i >= 0; i--){
                 ItemStack stack = slots.get(i).getItem();

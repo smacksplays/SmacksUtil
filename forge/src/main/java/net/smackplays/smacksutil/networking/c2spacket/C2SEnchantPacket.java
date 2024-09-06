@@ -49,7 +49,6 @@ public class C2SEnchantPacket {
             var l = optional.get().stream().toList();
             for (Holder<Enchantment> entry : l){
                 Enchantment e = entry.value();
-                var t = e.description().getString();
                 if(e.description().getString().equals(enchantment)){
                     AbstractContainerMenu containerMenu = player.containerMenu;
                     ItemStack stack = containerMenu.slots.getFirst().getItem();

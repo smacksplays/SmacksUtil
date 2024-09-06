@@ -83,9 +83,9 @@ public class C2STeleportationNBTPacket {
                 }
             } else {
                 boolean contained = false;
-                for (int i = 0; i < posTag.size(); i++) {
-                    CompoundTag t = (CompoundTag) posTag.get(i);
-                    if(name.equals(t.getString("name"))) {
+                for (net.minecraft.nbt.Tag value : posTag) {
+                    CompoundTag t = (CompoundTag) value;
+                    if (name.equals(t.getString("name"))) {
                         contained = true;
                         break;
                     }
