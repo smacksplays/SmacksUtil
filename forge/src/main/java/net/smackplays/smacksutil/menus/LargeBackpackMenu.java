@@ -34,6 +34,6 @@ public class LargeBackpackMenu extends AbstractLargeBackpackMenu {
                 }
             }
         }
-        return new LargeBackpackMenu(SmacksUtil.LARGE_BACKPACK_MENU.get(), syncId, playerInventory, new LargeBackpackInventory(backpack));
+        return new LargeBackpackMenu(SmacksUtil.LARGE_BACKPACK_MENU.get(), syncId, playerInventory, new LargeBackpackInventory(backpack, playerInventory.player.registryAccess()));
     }
 }

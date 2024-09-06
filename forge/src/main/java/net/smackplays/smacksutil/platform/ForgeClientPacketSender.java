@@ -3,6 +3,7 @@ package net.smackplays.smacksutil.platform;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.smackplays.smacksutil.networking.PacketHandler;
@@ -13,18 +14,20 @@ import java.util.UUID;
 
 public class ForgeClientPacketSender implements IClientPacketSender {
     @Override
-    public void VeinMinerBreakPacket(ItemStack mainHandStack, BlockPos pos, boolean isCreative, boolean replaceSeeds) {
-        PacketHandler.sendToServer(new C2SVeinMinerBreakPacket(mainHandStack, pos, isCreative, replaceSeeds));
+    public void VeinMinerBreakPacket(BlockPos pos, boolean isCreative, boolean replaceSeeds) {
+        PacketHandler.sendToServer(new C2SVeinMinerBreakPacket(pos, isCreative, replaceSeeds));
     }
 
     @Override
-    public void EnchantPacket(ItemStack stack) {
-        PacketHandler.sendToServer(new C2SEnchantPacket(stack));
+    public void EnchantPacket(Enchantment enchantment, boolean addRemove) {
+        String ench = enchantment.toString();
+        int level = enchantment.getMaxLevel();
+        PacketHandler.sendToServer(new C2SEnchantPacket(ench, level, addRemove));
     }
 
     @Override
-    public void BackpackSortPacket(ItemStack stack) {
-        PacketHandler.sendToServer(new C2SBackpackSortPacket(stack));
+    public void BackpackSortPacket(int slot) {
+        PacketHandler.sendToServer(new C2SBackpackSortPacket());
     }
 
     @Override
@@ -53,12 +56,12 @@ public class ForgeClientPacketSender implements IClientPacketSender {
     }
 
     @Override
-    public void TeleportNBTPacket(ItemStack stack, Vec3 pos, float xRot, float yRot, String name, String dim, boolean remove) {
-        PacketHandler.sendToServer(new C2STeleportationNBTPacket(stack, pos, xRot, yRot, name, dim, remove));
+    public void TeleportNBTPacket(Vec3 pos, float xRot, float yRot, String name, String dim, boolean remove) {
+        PacketHandler.sendToServer(new C2STeleportationNBTPacket(pos, xRot, yRot, name, dim, remove));
     }
 
     @Override
-    public void InteractEntityPacket(ItemStack stack, UUID entityUUID, boolean hand) {
-        PacketHandler.sendToServer(new C2SInteractEntityPacket(stack, entityUUID, hand));
+    public void InteractEntityPacket(UUID entityUUID, boolean hand) {
+        PacketHandler.sendToServer(new C2SInteractEntityPacket(entityUUID, hand));
     }
 }

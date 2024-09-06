@@ -3,34 +3,34 @@ package net.smackplays.smacksutil.networking.c2spacket;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.event.network.CustomPayloadEvent;
+import net.smackplays.smacksutil.items.AdvancedMobCatcherItem;
+import net.smackplays.smacksutil.items.MobCatcherItem;
 
 import java.util.List;
 import java.util.UUID;
 
 public class C2SInteractEntityPacket {
-    //private final ItemStack stack;
     private final UUID entityUUID;
     private final boolean isMainHnad;
 
-    public C2SInteractEntityPacket(ItemStack s, UUID u, boolean m) {
-        //stack = s;
+    public C2SInteractEntityPacket(UUID u, boolean m) {
         entityUUID = u;
         isMainHnad = m;
     }
 
     public C2SInteractEntityPacket(FriendlyByteBuf buffer) {
-        //stack = buffer.readItem();
         entityUUID = buffer.readUUID();
         isMainHnad = buffer.readBoolean();
     }
 
     public void encode(FriendlyByteBuf buffer) {
-        //buffer.writeItem(stack);
         buffer.writeUUID(entityUUID);
         buffer.writeBoolean(isMainHnad);
     }
@@ -40,6 +40,7 @@ public class C2SInteractEntityPacket {
         if (player == null)
             return;
         Level world = player.level();
+        ItemStack stack = player.getMainHandItem();
         AABB aabb = new AABB(player.position().add(-5,-5,-5), player.position().add(5,5,5));
         List<LivingEntity> entityList = world.getEntitiesOfClass(LivingEntity.class, aabb, entity -> true);
         LivingEntity livingEntity = null;
@@ -50,7 +51,7 @@ public class C2SInteractEntityPacket {
         }
         if (livingEntity == null) return;
         InteractionHand hand = isMainHnad ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
-        /*if (stack.getItem() instanceof MobCatcherItem mobItem){
+        if (stack.getItem() instanceof MobCatcherItem mobItem){
             if (mobItem.pickupLivingEntity(stack, player, livingEntity, hand)){
                 livingEntity.remove(Entity.RemovalReason.KILLED);
             }
@@ -59,6 +60,6 @@ public class C2SInteractEntityPacket {
             if (mobItem.pickupLivingEntity(stack, player, livingEntity, hand)){
                 livingEntity.remove(Entity.RemovalReason.KILLED);
             }
-        }*/
+        }
     }
 }

@@ -9,7 +9,6 @@ import org.jetbrains.annotations.NotNull;
 import static net.smackplays.smacksutil.Constants.C_BACKPACK_OPEN_REQUEST_RL;
 
 public record C2SBackpackOpenPacket(int slot) implements CustomPacketPayload {
-
     public static final Type<C2SBackpackOpenPacket> TYPE
             = new Type<>(C_BACKPACK_OPEN_REQUEST_RL);
 

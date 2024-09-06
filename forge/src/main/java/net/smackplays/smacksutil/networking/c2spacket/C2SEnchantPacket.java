@@ -7,18 +7,26 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.network.CustomPayloadEvent;
 
 public class C2SEnchantPacket {
-    //private final ItemStack stack;
+    private final String enchantment;
+    private final int level;
+    private final boolean addRemove;
 
-    public C2SEnchantPacket(ItemStack s) {
-        // = s;
+    public C2SEnchantPacket(String enchantment, int level, boolean addRemove) {
+        this.enchantment = enchantment;
+        this.level = level;
+        this.addRemove = addRemove;
     }
 
     public C2SEnchantPacket(FriendlyByteBuf buffer) {
-        //stack = buffer.readItem();
+        enchantment = buffer.readUtf();
+        level = buffer.readInt();
+        addRemove = buffer.readBoolean();
     }
 
     public void encode(FriendlyByteBuf buffer) {
-       // buffer.writeItem(stack);
+       buffer.writeUtf(enchantment);
+       buffer.writeInt(level);
+       buffer.writeBoolean(addRemove);
     }
 
     public void handle(CustomPayloadEvent.Context context) {

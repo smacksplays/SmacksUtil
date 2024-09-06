@@ -25,7 +25,7 @@ public class ForgeEnchantingToolItem extends AbstractEnchantingToolItem {
 
             @Override
             public AbstractContainerMenu createMenu(int syncId, @NotNull Inventory playerInventory, @NotNull Player player) {
-                return new EnchantingToolMenu(syncId, playerInventory, new EnchantmentToolInventory(stack));
+                return new EnchantingToolMenu(syncId, playerInventory, new EnchantmentToolInventory(stack, player.registryAccess()));
             }
         };
     }

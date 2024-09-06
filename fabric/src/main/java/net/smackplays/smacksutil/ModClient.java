@@ -2,11 +2,17 @@ package net.smackplays.smacksutil;
 
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.multiplayer.ClientPacketListener;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.component.DyedItemColor;
+import net.minecraft.world.level.material.MapColor;
+import net.smackplays.smacksutil.items.AbstractBackpackItem;
 import net.smackplays.smacksutil.menus.BackpackMenu;
 import net.smackplays.smacksutil.menus.EnchantingToolMenu;
 import net.smackplays.smacksutil.menus.LargeBackpackMenu;
@@ -33,8 +39,19 @@ public class ModClient implements ClientModInitializer {
         MenuScreens.register(ENCHANTING_TOOL_MENU, AbstractEnchantingToolScreen<EnchantingToolMenu>::new);
         MenuScreens.register(TELEPORTATION_TABLET_MENU, AbstractTeleportationTabletScreen<TeleportationTabletMenu>::new);
 
-        //ColorProviderRegistry.ITEM.register((stack, tintIndex) -> tintIndex == 0 ? ((DyeableLeatherItem) BACKPACK_ITEM).getColor(stack) : 0xFFFFFF, BACKPACK_ITEM);
-        //ColorProviderRegistry.ITEM.register((stack, tintIndex) -> tintIndex == 0 ? ((DyeableLeatherItem) LARGE_BACKPACK_ITEM).getColor(stack) : 0xFFFFFF, LARGE_BACKPACK_ITEM);
+        ColorProviderRegistry.ITEM.register((backpack, layer) -> {
+            if (layer > 1 || !(backpack.getItem() instanceof AbstractBackpackItem)) {
+                return -1;
+            }
+            if (layer == 0) {
+                DyedItemColor data = backpack.get(DataComponents.DYED_COLOR);
+                if (data != null){
+                    return calcColor(data.rgb());
+                }
+                return calcColor(DyeColor.WHITE.getMapColor().col);
+            }
+            return -1;
+        }, BACKPACK_ITEM, LARGE_BACKPACK_ITEM);
 
         ClientPlayNetworking.registerGlobalReceiver(S2CBlockBreakPacket.TYPE, S2CBlockBreakPacketHandler::handle);
     }
@@ -45,6 +62,10 @@ public class ModClient implements ClientModInitializer {
                 Services.VEIN_MINER.veinMiner(client.level, client.player, buf.readBlockPos());
             }
         });
+    }
+    private static int calcColor(int col){
+        int i = MapColor.Brightness.HIGH.modifier;
+        return -16777216 | col;
     }
 
 }

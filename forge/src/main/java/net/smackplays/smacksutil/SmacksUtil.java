@@ -2,11 +2,14 @@ package net.smackplays.smacksutil;
 
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.core.cauldron.CauldronInteraction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.component.DyedItemColor;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.material.MapColor;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -153,10 +156,23 @@ public class SmacksUtil {
 
         @SubscribeEvent
         public static void colors(RegisterColorHandlersEvent.Item event) {
-            /*event.register((ItemStack stack, int tintIndex) -> tintIndex == 0 ?
-                    Objects.requireNonNull(stack.get(DataComponents.DYED_COLOR)).rgb() : 0xFFFFFF, BACKPACK_ITEM.get());
-            event.register((ItemStack stack, int tintIndex) -> tintIndex == 0 ?
-                    Objects.requireNonNull(stack.get(DataComponents.DYED_COLOR)).rgb() : 0xFFFFFF, LARGE_BACKPACK_ITEM.get());*/
+            event.register((backpack, layer) -> {
+                if (layer > 1 || !(backpack.getItem() instanceof AbstractBackpackItem)) {
+                    return -1;
+                }
+                if (layer == 0) {
+                    DyedItemColor data = backpack.get(DataComponents.DYED_COLOR);
+                    if (data != null){
+                        return calcColor(data.rgb());
+                    }
+                    return calcColor(DyeColor.WHITE.getMapColor().col);
+                }
+                return -1;
+            }, BACKPACK_ITEM.get(), LARGE_BACKPACK_ITEM.get());
+        }
+        private static int calcColor(int col){
+            int i = MapColor.Brightness.HIGH.modifier;
+            return -16777216 | col;
         }
     }
 }

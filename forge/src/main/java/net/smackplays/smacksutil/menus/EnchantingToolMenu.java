@@ -14,6 +14,6 @@ public class EnchantingToolMenu extends AbstractEnchantingToolMenu {
 
     @SuppressWarnings("unused")
     public static EnchantingToolMenu create(int syncId, Inventory playerInventory, FriendlyByteBuf buf) {
-        return new EnchantingToolMenu(syncId, playerInventory, new EnchantmentToolInventory(playerInventory.getSelected()));
+        return new EnchantingToolMenu(syncId, playerInventory, new EnchantmentToolInventory(playerInventory.getSelected(), playerInventory.player.registryAccess()));
     }
 }
