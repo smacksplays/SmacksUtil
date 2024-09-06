@@ -33,7 +33,6 @@ import net.smackplays.smacksutil.menus.EnchantingToolMenu;
 import net.smackplays.smacksutil.menus.LargeBackpackMenu;
 import net.smackplays.smacksutil.menus.TeleportationTabletMenu;
 import net.smackplays.smacksutil.networking.PacketHandler;
-import net.smackplays.smacksutil.platform.Services;
 import net.smackplays.smacksutil.screens.AbstractBackpackScreen;
 import net.smackplays.smacksutil.screens.AbstractEnchantingToolScreen;
 import net.smackplays.smacksutil.screens.AbstractLargeBackpackScreen;

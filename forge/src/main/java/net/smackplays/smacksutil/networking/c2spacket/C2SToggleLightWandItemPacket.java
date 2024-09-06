@@ -26,13 +26,12 @@ public class C2SToggleLightWandItemPacket {
         if (player == null)
             return;
         ItemStack stack = null;
-        /*if (slot == -1){
+        if (slot == -1){
             // TODO-Curios currently not available
             //stack = CuriosApi.getCuriosHelper().findCurios(player, "hands").get(0).stack();
         } else {
             stack = player.containerMenu.slots.get(slot).getItem();
-        }*/
-        stack = player.containerMenu.slots.get(slot).getItem();
+        }
 
         if (stack != null && stack.getItem() instanceof AutoLightWandItem item) {
             item.toggle(stack, player);
