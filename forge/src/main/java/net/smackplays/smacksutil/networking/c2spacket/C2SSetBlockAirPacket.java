@@ -6,6 +6,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.event.network.CustomPayloadEvent;
+import net.smackplays.smacksutil.networking.c2shandlers.C2SCommonInteractEntityPacketHandler;
+import net.smackplays.smacksutil.networking.c2shandlers.C2SCommonSetBlockAirPacketHandler;
 
 public class C2SSetBlockAirPacket {
     private final BlockPos pos;
@@ -23,10 +25,8 @@ public class C2SSetBlockAirPacket {
     }
 
     public void handle(CustomPayloadEvent.Context context) {
-        ServerPlayer player = context.getSender();
-        if (player == null)
-            return;
-        Level world = player.level();
-        world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+        if (context.getSender() != null) {
+            C2SCommonSetBlockAirPacketHandler.handle(context.getSender().level(), pos);
+        }
     }
 }

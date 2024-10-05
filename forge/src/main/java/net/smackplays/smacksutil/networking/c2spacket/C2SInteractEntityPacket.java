@@ -11,6 +11,8 @@ import net.minecraft.world.phys.AABB;
 import net.minecraftforge.event.network.CustomPayloadEvent;
 import net.smackplays.smacksutil.items.AdvancedMobCatcherItem;
 import net.smackplays.smacksutil.items.MobCatcherItem;
+import net.smackplays.smacksutil.networking.c2shandlers.C2SCommonEnchantPacketHandler;
+import net.smackplays.smacksutil.networking.c2shandlers.C2SCommonInteractEntityPacketHandler;
 
 import java.util.List;
 import java.util.UUID;
@@ -35,30 +37,8 @@ public class C2SInteractEntityPacket {
     }
 
     public void handle(CustomPayloadEvent.Context context) {
-        ServerPlayer player = context.getSender();
-        if (player != null) {
-            ItemStack stack = player.getMainHandItem();
-            Level world = player.level();
-            AABB aabb = new AABB(player.position().add(-5,-5,-5), player.position().add(5,5,5));
-            List<LivingEntity> entityList = world.getEntitiesOfClass(LivingEntity.class, aabb, entity -> true);
-            LivingEntity livingEntity = null;
-            for  (LivingEntity e : entityList){
-                if (e.getUUID().equals(UUID.fromString(entityUUID))){
-                    livingEntity = e;
-                }
-            }
-            if (livingEntity == null) return;
-            InteractionHand hand = isMainHnad ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
-            if (stack.getItem() instanceof MobCatcherItem mobItem){
-                if (mobItem.pickupLivingEntity(stack, player, livingEntity, hand)){
-                    livingEntity.remove(Entity.RemovalReason.KILLED);
-                }
-            }
-            if (stack.getItem() instanceof AdvancedMobCatcherItem mobItem){
-                if (mobItem.pickupLivingEntity(stack, player, livingEntity, hand)){
-                    livingEntity.remove(Entity.RemovalReason.KILLED);
-                }
-            }
+        if (context.getSender() != null) {
+            C2SCommonInteractEntityPacketHandler.handle(context.getSender(), entityUUID, isMainHnad);
         }
     }
 }

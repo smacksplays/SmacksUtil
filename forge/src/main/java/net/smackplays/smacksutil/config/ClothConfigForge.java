@@ -7,6 +7,12 @@ import net.smackplays.smacksutil.platform.ForgeModConfig;
 
 public class ClothConfigForge {
     public static void registerModsPage() {
-        SmacksUtil.c.registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class, () -> new ConfigScreenHandler.ConfigScreenFactory((client, parent) -> ForgeModConfig.create().setTitle(Component.literal("SmacksUtil")).setParentScreen(parent).build()));
+        SmacksUtil.config.registerExtensionPoint(
+                ConfigScreenHandler.ConfigScreenFactory.class,
+                () -> new ConfigScreenHandler.ConfigScreenFactory(
+                        (client, parent) ->
+                                ForgeModConfig.create().setTitle(
+                                        Component.literal("SmacksUtil")
+                                ).setParentScreen(parent).build()));
     }
 }

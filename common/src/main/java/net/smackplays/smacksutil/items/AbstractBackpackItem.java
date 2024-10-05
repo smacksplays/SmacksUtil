@@ -15,6 +15,11 @@ import net.smackplays.smacksutil.inventories.BackpackInventory;
 import net.smackplays.smacksutil.menus.AbstractBackpackMenu;
 import org.jetbrains.annotations.NotNull;
 
+
+/**
+ * @author smack_plays
+ * Test
+ */
 public abstract class AbstractBackpackItem extends ArmorItem{
     public AbstractBackpackItem(Holder<ArmorMaterial> material) {
         super(material, Type.BODY,

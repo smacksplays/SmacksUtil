@@ -5,6 +5,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.network.CustomPayloadEvent;
 import net.smackplays.smacksutil.items.AutoLightWandItem;
+import net.smackplays.smacksutil.networking.c2shandlers.C2SCommonTeleportationPacketHandler;
+import net.smackplays.smacksutil.networking.c2shandlers.C2SCommonToggleLightWandItemPacketHandler;
 
 public class C2SToggleLightWandItemPacket {
     private final int slot;
@@ -22,19 +24,8 @@ public class C2SToggleLightWandItemPacket {
     }
 
     public void handle(CustomPayloadEvent.Context context) {
-        ServerPlayer player = context.getSender();
-        if (player == null)
-            return;
-        ItemStack stack = null;
-        if (slot == -1){
-            // TODO-Curios currently not available
-            //stack = CuriosApi.getCuriosHelper().findCurios(player, "hands").get(0).stack();
-        } else {
-            stack = player.containerMenu.slots.get(slot).getItem();
-        }
-
-        if (stack != null && stack.getItem() instanceof AutoLightWandItem item) {
-            item.toggle(stack, player);
+        if (context.getSender() != null) {
+            C2SCommonToggleLightWandItemPacketHandler.handle(context.getSender(), slot);
         }
     }
 }

@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(LevelRenderer.class)
 public abstract class OutlineRender {
-    @Inject(at = @At("HEAD"), method = "renderHitOutline")
+    @Inject(at = @At("HEAD"), method = "renderHitOutline", cancellable = true)
     private void drawBlockOutline(PoseStack matrices, VertexConsumer vertexConsumer,
                                   Entity entity, double cameraX, double cameraY,
                                   double cameraZ, BlockPos pos, BlockState state, CallbackInfo ci) {
@@ -27,6 +27,7 @@ public abstract class OutlineRender {
                 Services.VEIN_MINER.drawOutline(matrices, cameraX, cameraY,
                         cameraZ, pos, entity.level(), (Player) entity);
             }
+            ci.cancel();
         }
     }
 }

@@ -10,34 +10,13 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.smackplays.smacksutil.items.AdvancedMobCatcherItem;
 import net.smackplays.smacksutil.items.MobCatcherItem;
+import net.smackplays.smacksutil.networking.c2shandlers.C2SCommonInteractEntityPacketHandler;
 
 import java.util.List;
 import java.util.UUID;
 
 public class C2SInteractEntityPacketHandler {
     public static void handle(C2SInteractEntityPacket data, ServerPlayNetworking.Context context) {
-        Player player = context.player();
-        ItemStack stack = player.getMainHandItem();
-        Level world = player.level();
-        AABB aabb = new AABB(player.position().add(-5,-5,-5), player.position().add(5,5,5));
-        List<LivingEntity> entityList = world.getEntitiesOfClass(LivingEntity.class, aabb, entity -> true);
-        LivingEntity livingEntity = null;
-        for  (LivingEntity e : entityList){
-            if (e.getUUID().equals(UUID.fromString(data.entityUUID()))){
-                livingEntity = e;
-            }
-        }
-        if (livingEntity == null) return;
-        InteractionHand hand = data.hand() ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
-        if (stack.getItem() instanceof MobCatcherItem mobItem){
-            if (mobItem.pickupLivingEntity(stack, player, livingEntity, hand)){
-                livingEntity.remove(Entity.RemovalReason.KILLED);
-            }
-        }
-        if (stack.getItem() instanceof AdvancedMobCatcherItem mobItem){
-            if (mobItem.pickupLivingEntity(stack, player, livingEntity, hand)){
-                livingEntity.remove(Entity.RemovalReason.KILLED);
-            }
-        }
+        C2SCommonInteractEntityPacketHandler.handle(context.player(), data.entityUUID(), data.hand());
     }
 }

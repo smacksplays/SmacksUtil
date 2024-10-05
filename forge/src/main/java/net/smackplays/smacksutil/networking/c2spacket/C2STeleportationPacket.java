@@ -9,6 +9,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.network.CustomPayloadEvent;
+import net.smackplays.smacksutil.networking.c2shandlers.C2SCommonTeleportationNBTPacketHandler;
+import net.smackplays.smacksutil.networking.c2shandlers.C2SCommonTeleportationPacketHandler;
 
 import java.util.Set;
 
@@ -40,28 +42,8 @@ public class C2STeleportationPacket {
     }
 
     public void handle(CustomPayloadEvent.Context context) {
-        ServerPlayer player = context.getSender();
-        if (player == null) return;
-        Level level = player.level();
-
-        ResourceKey<?> tempKey = null;
-
-        Set<ResourceKey<Level>> levelSet = player.registryAccess().registryOrThrow(Registries.DIMENSION).registryKeySet();
-        for (ResourceKey<Level> key : levelSet){
-            if (key.toString().equals(levelKey)){
-                tempKey = key;
-            }
-        }
-        if (tempKey != null){
-            ResourceKey<Level> levelKey = ResourceKey.create(Registries.DIMENSION, tempKey.location());
-            MinecraftServer server = level.getServer();
-            if (server != null) {
-                ServerLevel serverLevel = server.getLevel(levelKey);
-                //player.teleportTo(pos.x, pos.y, pos.z);
-                if (serverLevel != null) {
-                    player.teleportTo(serverLevel, pos.x, pos.y, pos.z, Set.of(), yRot, xRot);
-                }
-            }
+        if (context.getSender() != null) {
+            C2SCommonTeleportationPacketHandler.handle(context.getSender(), context.getSender().level(), levelKey, pos, xRot, yRot);
         }
     }
 }

@@ -11,6 +11,8 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.event.network.CustomPayloadEvent;
+import net.smackplays.smacksutil.networking.c2shandlers.C2SCommonToggleLightWandItemPacketHandler;
+import net.smackplays.smacksutil.networking.c2shandlers.C2SCommonVeinMinerBreakPacketHandler;
 
 public class C2SVeinMinerBreakPacket {
     private final BlockPos pos;
@@ -36,26 +38,8 @@ public class C2SVeinMinerBreakPacket {
     }
 
     public void handle(CustomPayloadEvent.Context context) {
-        context.enqueueWork(() -> {
-            ServerPlayer player = context.getSender();
-            if (player != null){
-                Level world = player.level();
-                ItemStack stack = player.getMainHandItem();
-
-                BlockState currBlockState = world.getBlockState(pos);
-
-                world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
-                if (!isCreative) {
-                    BlockEntity currBlockEntity = currBlockState.hasBlockEntity() ? world.getBlockEntity(pos) : null;
-                    Block.dropResources(currBlockState, world, pos, currBlockEntity, null, ItemStack.EMPTY);
-                    if (stack.isDamageableItem()) {
-                        stack.hurtAndBreak(1, (ServerLevel)player.level(), player, c -> {});
-                    }
-                }
-                if (replaceSeeds) {
-                    world.setBlockAndUpdate(pos, currBlockState.getBlock().defaultBlockState());
-                }
-            }
-        });
+        if (context.getSender() != null) {
+            C2SCommonVeinMinerBreakPacketHandler.handle(context.getSender(), context.getSender().level(), pos, isCreative, replaceSeeds);
+        }
     }
 }

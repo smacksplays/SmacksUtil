@@ -1,14 +1,10 @@
 package net.smackplays.smacksutil.networking.c2spacket;
 
-import net.minecraft.core.component.DataComponents;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.network.CustomPayloadEvent;
+import net.smackplays.smacksutil.networking.c2shandlers.C2SCommonTeleportationNBTPacketHandler;
+import net.smackplays.smacksutil.networking.c2shandlers.C2SCommonTeleportationPacketHandler;
 
 import java.nio.charset.StandardCharsets;
 
@@ -18,7 +14,7 @@ public class C2STeleportationNBTPacket {
     private final float yRot;
     private final String name;
     private final String dim;
-    private final boolean remove;
+    private final boolean addRemove;
 
     public C2STeleportationNBTPacket(Vec3 pos, float xRot, float yRot, String name, String dim, boolean remove) {
         this.pos = pos;
@@ -26,7 +22,7 @@ public class C2STeleportationNBTPacket {
         this.yRot = yRot;
         this.name = name;
         this.dim = dim;
-        this.remove = remove;
+        this.addRemove = remove;
     }
 
     public C2STeleportationNBTPacket(FriendlyByteBuf buffer) {
@@ -35,7 +31,7 @@ public class C2STeleportationNBTPacket {
         yRot = buffer.readFloat();
         name = buffer.readUtf();
         dim = buffer.readUtf();
-        remove = buffer.readBoolean();
+        addRemove = buffer.readBoolean();
     }
 
     public void encode(FriendlyByteBuf buffer) {
@@ -44,60 +40,12 @@ public class C2STeleportationNBTPacket {
         buffer.writeFloat(yRot);
         buffer.writeByteArray(name.getBytes(StandardCharsets.UTF_8));
         buffer.writeByteArray(dim.getBytes(StandardCharsets.UTF_8));
-        buffer.writeBoolean(remove);
+        buffer.writeBoolean(addRemove);
     }
 
     public void handle(CustomPayloadEvent.Context context) {
-        ServerPlayer player = context.getSender();
-        if (player == null)
-            return;
-        ItemStack stack = player.getMainHandItem();
-        CustomData customData = stack.get(DataComponents.CUSTOM_DATA);
-        if (customData != null){CompoundTag tag = customData.copyTag();
-            ListTag posTag = (ListTag)tag.get("Positions");
-            if (posTag == null) {
-                posTag = new ListTag();
-            }
-            CompoundTag teleportTag = new CompoundTag();
-            teleportTag.putString("name", name);
-            teleportTag.putDouble("x_pos", pos.x());
-            teleportTag.putDouble("y_pos", pos.y());
-            teleportTag.putDouble("z_pos", pos.z());
-            teleportTag.putDouble("x_rot", xRot);
-            teleportTag.putDouble("y_rot", yRot);
-            teleportTag.putString("dim", dim);
-            if (remove){
-                for (int i = 0; i < posTag.size(); i++){
-                    CompoundTag t = (CompoundTag) posTag.get(i);
-                    if (t.contains("name")){
-                        String n = t.getString("name");
-                        if (n.equals(name)){
-                            posTag.remove(i);
-                            tag.put("Positions", posTag);
-                            stack.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
-                            player.getInventory().setItem(player.getInventory().selected, stack);
-                            player.inventoryMenu.broadcastChanges();
-                            return;
-                        }
-                    }
-                }
-            } else {
-                boolean contained = false;
-                for (net.minecraft.nbt.Tag value : posTag) {
-                    CompoundTag t = (CompoundTag) value;
-                    if (name.equals(t.getString("name"))) {
-                        contained = true;
-                        break;
-                    }
-                }
-                if (!contained){
-                    posTag.add(teleportTag);
-                }
-            }
-            tag.put("Positions", posTag);
-            stack.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
-            player.getInventory().setItem(player.getInventory().selected, stack);
-            player.inventoryMenu.broadcastChanges();
+        if (context.getSender() != null) {
+            C2SCommonTeleportationNBTPacketHandler.handle(context.getSender(), pos, xRot, yRot, name, dim, addRemove);
         }
     }
 }

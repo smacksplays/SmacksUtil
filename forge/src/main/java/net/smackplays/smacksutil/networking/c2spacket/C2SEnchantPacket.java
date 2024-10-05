@@ -12,6 +12,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraftforge.event.network.CustomPayloadEvent;
+import net.smackplays.smacksutil.networking.c2shandlers.C2SCommonBackpackOpenPacketHandler;
+import net.smackplays.smacksutil.networking.c2shandlers.C2SCommonEnchantPacketHandler;
 
 import java.util.Optional;
 import java.util.Set;
@@ -40,40 +42,8 @@ public class C2SEnchantPacket {
     }
 
     public void handle(CustomPayloadEvent.Context context) {
-        ServerPlayer player = context.getSender();
-        if (player == null)
-            return;
-
-        Optional<HolderSet.Named<Enchantment>> optional = player.registryAccess().registryOrThrow(Registries.ENCHANTMENT).getTag(EnchantmentTags.TOOLTIP_ORDER);
-        if (optional.isPresent()){
-            var l = optional.get().stream().toList();
-            for (Holder<Enchantment> entry : l){
-                Enchantment e = entry.value();
-                if(e.description().getString().equals(enchantment)){
-                    AbstractContainerMenu containerMenu = player.containerMenu;
-                    ItemStack stack = containerMenu.slots.getFirst().getItem();
-                    if (addRemove){
-                        stack.enchant(entry, level);
-                    }else{
-                        ItemEnchantments ench = stack.getEnchantments();
-                        Set<Holder<Enchantment>> set = ench.keySet();
-                        Holder<Enchantment> toRemove = null;
-                        for (Holder<Enchantment> enchantmentHolder : set){
-                            if (enchantmentHolder.value().description().getString().equals(enchantment)){
-                                toRemove = enchantmentHolder;
-                            }
-                        }
-                        if (toRemove != null){
-                            stack.set(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY);
-                            for (Holder<Enchantment> en : set) {
-                                if (!en.value().description().getString().equals(toRemove.value().description().getString())){
-                                    stack.enchant(en, en.value().getMaxLevel());
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+        if (context.getSender() != null) {
+            C2SCommonEnchantPacketHandler.handle(context.getSender(), enchantment, level, addRemove);
         }
     }
 }

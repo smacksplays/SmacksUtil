@@ -5,6 +5,7 @@ import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
@@ -185,5 +186,37 @@ public class AbstractBackpackMenu extends AbstractContainerMenu {
             items.set(i + 4, temp.get(i));
             this.slots.get(i).set(impInv.getItem(i));
         }
+    }
+
+    @Override
+    public void clicked(int slot_num1, int slot_num2, ClickType clickType, Player player) {
+        if (clickType == ClickType.SWAP){
+            Slot slot1 = player.containerMenu.slots.get(slot_num1);
+            ItemStack itemStack1 = slot1.getItem();
+            ItemStack offHandStack = playerInventory.getItem(slot_num2);
+            if (offHandStack.isEmpty() && itemStack1.getCount() <= itemStack1.getMaxStackSize()) {
+                super.clicked(slot_num1, slot_num2, clickType, player);
+            } else if (offHandStack.isEmpty() && itemStack1.getCount() > itemStack1.getMaxStackSize()) {
+                int count = itemStack1.getCount();
+                ItemStack offHandStack1 = itemStack1.copy();
+                slot1.setByPlayer(itemStack1.split(count - itemStack1.getMaxStackSize()));
+                offHandStack1.setCount(itemStack1.getMaxStackSize());
+                playerInventory.setItem(slot_num2, offHandStack1);
+            } else if (itemStack1.isEmpty()){
+                super.clicked(slot_num1, slot_num2, clickType, player);
+            } else if (ItemStack.isSameItemSameComponents(itemStack1, offHandStack)){
+                itemStack1.setCount(itemStack1.getCount() + offHandStack.getCount());
+                playerInventory.setItem(slot_num2, ItemStack.EMPTY);
+            } else if (!ItemStack.isSameItemSameComponents(itemStack1, offHandStack)
+                    && itemStack1.getCount() <= itemStack1.getMaxStackSize()
+                    && offHandStack.getCount() <= offHandStack.getMaxStackSize()) {
+                ItemStack temp = offHandStack.copy();
+                playerInventory.setItem(slot_num2, itemStack1);
+                slot1.set(temp);
+            }
+            slot1.setChanged();
+            return;
+        }
+        super.clicked(slot_num1, slot_num2, clickType, player);
     }
 }

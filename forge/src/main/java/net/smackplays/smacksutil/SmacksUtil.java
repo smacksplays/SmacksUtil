@@ -68,7 +68,7 @@ public class SmacksUtil {
     public static final RegistryObject<MenuType<TeleportationTabletMenu>> TELEPORTATION_TABLET_MENU =
             MENUS.register(C_TELEPORTATION_TABLET_MENU, () -> IForgeMenuType.create(TeleportationTabletMenu::create));
 
-    public static FMLJavaModLoadingContext c;
+    public static FMLJavaModLoadingContext config;
 
 
     public SmacksUtil(FMLJavaModLoadingContext context) {
@@ -87,7 +87,7 @@ public class SmacksUtil {
         MinecraftForge.EVENT_BUS.register(this);
 
         modEventBus.addListener(this::addCreative);
-        c = context;
+        config = context;
     }
 
     public void interModEnqueue(InterModEnqueueEvent e){

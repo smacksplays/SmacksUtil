@@ -1,10 +1,13 @@
 package net.smackplays.smacksutil.platform;
 
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.FMLLoader;
 import net.smackplays.smacksutil.SmacksUtil;
 import net.smackplays.smacksutil.platform.services.IPlatformHelper;
+import top.theillusivec4.curios.api.CuriosApi;
 
 public class NeoForgePlatformHelper implements IPlatformHelper {
 
@@ -101,5 +104,31 @@ public class NeoForgePlatformHelper implements IPlatformHelper {
     @Override
     public boolean isClient() {
         return FMLLoader.getDist().isClient();
+    }
+
+    @Override
+    public ItemStack C2SCommonBackpackOpenPacketHandler(Player player, int slot) {
+        // TODO fix - CuriosAPI
+        //stack = CuriosApi.getCuriosHelper().findCurios(player, "back").get(0).stack();
+        return ItemStack.EMPTY;
+    }
+
+    @Override
+    public ItemStack C2SCommonToggleLightWandItemPacketHandler(Player player, int slot) {
+        // TODO fix - CuriosAPI
+        //stack = CuriosApi.getCuriosHelper().findCurios(player, "back").get(0).stack();
+        return ItemStack.EMPTY;
+    }
+
+    @Override
+    public ItemStack C2SCommonToggleMagnetItemPacketHandler(Player player, int slot) {
+        // TODO fix - CuriosAPI
+        //stack = CuriosApi.getCuriosHelper().findCurios(player, "back").get(0).stack();
+        return ItemStack.EMPTY;
+    }
+
+    @Override
+    public ItemStack getTrinketorCuriosStack(Player player, String slot) {
+        return CuriosApi.getCuriosHelper().findCurios(player, slot).getFirst().stack();
     }
 }

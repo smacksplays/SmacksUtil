@@ -94,8 +94,7 @@ public class AbstractBackpackScreen<T extends AbstractBackpackMenu> extends Abst
     public void onButtonWidgetPressed() {
         ItemStack backpack = ((BackpackInventory)this.menu.inventory).stack;
         if (Services.C2S_PACKET_SENDER != null) {
-            int slot =  this.menu.playerInventory.findSlotMatchingItem(backpack);
-            if (slot != -1) Services.C2S_PACKET_SENDER.BackpackSortPacket(slot);
+            Services.C2S_PACKET_SENDER.BackpackSortPacket(this.menu.playerInventory.findSlotMatchingItem(backpack));
         }
     }
 

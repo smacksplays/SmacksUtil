@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -11,6 +12,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TieredItem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.smackplays.smacksutil.platform.Services;
@@ -89,7 +91,6 @@ public abstract class IVeinMiner {
         BlockState sourceBlockState = worldIn.getBlockState(sourcePosIn);
         ArrayList<BlockPos> matching;
         setMode();
-
         if (sourceBlockState.is(ModTags.Blocks.CROP_BLOCKS)) {
             matching = (ArrayList<BlockPos>) CropsMode.getBlocks(worldIn, playerIn, sourcePosIn, radius, isExactMatch).clone();
         } else if (sourceBlockState.is(ModTags.Blocks.ORE_BLOCKS)) {

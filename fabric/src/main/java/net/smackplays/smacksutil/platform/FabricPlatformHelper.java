@@ -2,7 +2,9 @@ package net.smackplays.smacksutil.platform;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.smackplays.smacksutil.SmacksUtil;
 import net.smackplays.smacksutil.platform.services.IPlatformHelper;
 
@@ -74,5 +76,26 @@ public class FabricPlatformHelper implements IPlatformHelper {
     public boolean isClient(){
         EnvType t = FabricLoader.getInstance().getEnvironmentType();
         return t.name().equals("CLIENT");
+    }
+
+    @Override
+    public ItemStack C2SCommonBackpackOpenPacketHandler(Player player, int slot) {
+        // TODO fix - Trinkets API
+        //stack = CuriosApi.getCuriosHelper().findCurios(player, "back").get(0).stack();
+        return ItemStack.EMPTY;
+    }
+
+    @Override
+    public ItemStack C2SCommonToggleLightWandItemPacketHandler(Player player, int slot) {
+        // TODO fix - Trinkets API
+        //stack = CuriosApi.getCuriosHelper().findCurios(player, "back").get(0).stack();
+        return ItemStack.EMPTY;
+    }
+
+    @Override
+    public ItemStack C2SCommonToggleMagnetItemPacketHandler(Player player, int slot) {
+        // TODO fix - Trinkets API
+        //stack = CuriosApi.getCuriosHelper().findCurios(player, "back").get(0).stack();
+        return ItemStack.EMPTY;
     }
 }

@@ -77,13 +77,13 @@ public class NeoForgeClientPacketSender implements IClientPacketSender {
         Minecraft minecraft = Minecraft.getInstance();
         Vector3f pos3f = new Vector3f((float)pos.x, (float)pos.y, (float)pos.z);
         Objects.requireNonNull(minecraft.getConnection()).send(new C2STeleportationNBTPacket(pos3f, xRot, yRot, name, dim, remove));
-        //PacketHandler.sendToServer(new C2STeleportationNBTPacket(stack, pos, xRot, yRot, name, dim, remove));
+        //PacketHandler.sendToServer(new C2STeleportationNBTPacket(stack, pos, xRot, yRot, name, dim, addRemove));
     }
 
     @Override
     public void InteractEntityPacket(UUID entityUUID, boolean hand) {
         Minecraft minecraft = Minecraft.getInstance();
         Objects.requireNonNull(minecraft.getConnection()).send(new C2SInteractEntityPacket(entityUUID.toString(), hand));
-        //PacketHandler.sendToServer(new C2SInteractEntityPacket(stack, entityUUID, hand));
+        //PacketHandler.sendToServer(new C2SInteractEntityPacket(stack, entityUUID, isMainHand));
     }
 }

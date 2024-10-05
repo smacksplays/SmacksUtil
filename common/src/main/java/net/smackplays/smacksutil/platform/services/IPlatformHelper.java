@@ -1,6 +1,8 @@
 package net.smackplays.smacksutil.platform.services;
 
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
 public interface IPlatformHelper {
 
@@ -47,4 +49,12 @@ public interface IPlatformHelper {
     Item getUpgrade3Item();
 
     boolean isClient();
+
+    ItemStack C2SCommonBackpackOpenPacketHandler(Player player, int slot);
+
+    ItemStack C2SCommonToggleLightWandItemPacketHandler(Player player, int slot);
+
+    ItemStack C2SCommonToggleMagnetItemPacketHandler(Player player, int slot);
+
+    ItemStack getTrinketorCuriosStack(Player player, String slot);
 }

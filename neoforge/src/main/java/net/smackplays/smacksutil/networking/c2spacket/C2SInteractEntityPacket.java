@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 import static net.smackplays.smacksutil.Constants.C_INTERACT_ENTITY_REQUEST_RL;
 
-public record C2SInteractEntityPacket(String entityUUID, boolean hand) implements CustomPacketPayload {
+public record C2SInteractEntityPacket(String entityUUID, boolean isMainHand) implements CustomPacketPayload {
 
     public static final CustomPacketPayload.Type<C2SInteractEntityPacket> TYPE
             = new CustomPacketPayload.Type<>(C_INTERACT_ENTITY_REQUEST_RL);
@@ -17,7 +17,7 @@ public record C2SInteractEntityPacket(String entityUUID, boolean hand) implement
             ByteBufCodecs.STRING_UTF8,
             C2SInteractEntityPacket::entityUUID,
             ByteBufCodecs.BOOL,
-            C2SInteractEntityPacket::hand,
+            C2SInteractEntityPacket::isMainHand,
             C2SInteractEntityPacket::new
     );
 

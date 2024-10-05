@@ -1,8 +1,9 @@
 package net.smackplays.smacksutil.platform;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -38,7 +39,6 @@ public class ForgeVeinMiner extends IVeinMiner {
         VoxelShape shape = combine(world, pos, (ArrayList<BlockPos>) toRender.clone());
 
         VertexConsumer vertex = Minecraft.getInstance().renderBuffers().bufferSource().getBuffer(CustomRenderLayer.LINES);
-
         drawCuboidShapeOutline(pose, vertex, shape,
                 (double) pos.getX() - cameraX, (double) pos.getY() - cameraY, (double) pos.getZ() - cameraZ);
         isDrawing = false;

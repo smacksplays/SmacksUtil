@@ -1,6 +1,8 @@
 package net.smackplays.smacksutil;
 
 
+import me.shedaniel.autoconfig.AutoConfig;
+import me.shedaniel.clothconfig.ClothConfigForgeDemo;
 import net.minecraft.core.cauldron.CauldronInteraction;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
@@ -22,6 +24,7 @@ import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.event.lifecycle.InterModEnqueueEvent;
+import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.common.NeoForge;
@@ -33,7 +36,7 @@ import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import net.smackplays.smacksutil.config.ConfigNeoForge;
+import net.smackplays.smacksutil.config.ClothConfigNeoForge;
 import net.smackplays.smacksutil.items.*;
 import net.smackplays.smacksutil.menus.BackpackMenu;
 import net.smackplays.smacksutil.menus.EnchantingToolMenu;
@@ -42,6 +45,7 @@ import net.smackplays.smacksutil.menus.TeleportationTabletMenu;
 import net.smackplays.smacksutil.networking.c2spacket.*;
 import net.smackplays.smacksutil.networking.s2cpacket.S2CBlockBreakPacket;
 import net.smackplays.smacksutil.networking.s2cpacket.S2CBlockBreakPacketHandler;
+import net.smackplays.smacksutil.platform.NeoForgeModConfig;
 import net.smackplays.smacksutil.platform.Services;
 import net.smackplays.smacksutil.screens.AbstractBackpackScreen;
 import net.smackplays.smacksutil.screens.AbstractEnchantingToolScreen;
@@ -79,6 +83,7 @@ public class SmacksUtil {
     public static final DeferredHolder<MenuType<?>, MenuType<TeleportationTabletMenu>> TELEPORTATION_TABLET_MENU =
             MENUS.register(C_TELEPORTATION_TABLET_MENU, () -> new MenuType<>(TeleportationTabletMenu::create, FeatureFlags.DEFAULT_FLAGS));
 
+
     public SmacksUtil(IEventBus modEventBus, ModContainer modContainer) {
         Constants.LOG.info("Hello NeoForge world!");
         CommonClass.init();
@@ -92,8 +97,10 @@ public class SmacksUtil {
         NeoForge.EVENT_BUS.register(this);
 
         modEventBus.addListener(this::addCreative);
-        //DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> ClothConfigNeoForge::registerModsPage);
-        modContainer.registerConfig(ModConfig.Type.CLIENT, ConfigNeoForge.CLIENT_SPEC);
+
+        if (FMLEnvironment.dist.isClient()) {
+            ClothConfigNeoForge.registerModsPage();
+        }
     }
     public void interModEnqueue(InterModEnqueueEvent e){
         if (Services.PLATFORM.isModLoaded("curios")){

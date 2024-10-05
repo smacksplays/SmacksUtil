@@ -9,7 +9,7 @@ import org.joml.Vector3f;
 
 import static net.smackplays.smacksutil.Constants.C_TELEPORT_NBT_REQUEST_RL;
 
-public record C2STeleportationNBTPacket(Vector3f pos, float xRot, float yRot, String name, String dim, boolean remove) implements CustomPacketPayload {
+public record C2STeleportationNBTPacket(Vector3f pos, float xRot, float yRot, String name, String dim, boolean addRemove) implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<C2STeleportationNBTPacket> TYPE
             = new CustomPacketPayload.Type<>(C_TELEPORT_NBT_REQUEST_RL);
 
@@ -26,7 +26,7 @@ public record C2STeleportationNBTPacket(Vector3f pos, float xRot, float yRot, St
             ByteBufCodecs.STRING_UTF8,
             C2STeleportationNBTPacket::dim,
             ByteBufCodecs.BOOL,
-            C2STeleportationNBTPacket::remove,
+            C2STeleportationNBTPacket::addRemove,
             C2STeleportationNBTPacket::new
     );
 

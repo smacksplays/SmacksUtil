@@ -8,8 +8,13 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
+import net.smackplays.smacksutil.items.AbstractBackpackItem;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.*;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(GuiGraphics.class)
 public abstract class GuiGraphicsMixin {
@@ -20,14 +25,10 @@ public abstract class GuiGraphicsMixin {
     @Final
     @Shadow
     private PoseStack pose;
-    /**
-     * @author smackplays
-     * @reason display 1000 to 999 999 as 1k to 999k and 1 000 000 to 999 999 999 as 1M to 999M
-     */
-    @Overwrite
-    public void renderItemDecorations(Font font, ItemStack stack, int offsetX, int offsetY, String yellowString) {
+    @Inject(at = @At("HEAD"), method = "renderItemDecorations*", cancellable = true)
+    public void renderItemDecorations(Font font, ItemStack stack, int offsetX, int offsetY, String yellowString, CallbackInfo ci) {
         GuiGraphics thisObject = (GuiGraphics) (Object) this;
-        if (!stack.isEmpty()) {
+        if (!stack.isEmpty() && AbstractBackpackItem.class.isAssignableFrom(stack.getItem().getClass())) {
             pose.pushPose();
             if (stack.getCount() != 1 || yellowString != null) {
                 String countString = yellowString == null ? smacksUtil$getCorrCountString(stack) : yellowString;
@@ -51,8 +52,8 @@ public abstract class GuiGraphicsMixin {
                 int $$13 = $$12 + Mth.ceil(16.0F * $$11);
                 thisObject.fill(RenderType.guiOverlay(), offsetX, $$12, offsetX + 16, $$13, Integer.MAX_VALUE);
             }
-
             pose.popPose();
+            ci.cancel();
         }
     }
 
