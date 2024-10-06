@@ -9,7 +9,7 @@ public class C2SCommonToggleLightWandItemPacketHandler {
     public static void handle(ServerPlayer player, int slot) {
         ItemStack stack = null;
         if (slot == -1){
-            stack = Services.PLATFORM.getTrinketorCuriosStack(player, "hands");
+            stack = Services.PLATFORM.getTrinketOrCuriosStack(player, "hands");
         } else {
             stack = player.containerMenu.slots.get(slot).getItem();
         }

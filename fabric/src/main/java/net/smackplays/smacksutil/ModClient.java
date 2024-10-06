@@ -59,11 +59,11 @@ public class ModClient implements ClientModInitializer {
     }
 
     public void handleServerBlockBreak (Minecraft client, ClientPacketListener handler, FriendlyByteBuf buf, PacketSender responseSender){
-        client.execute(() -> {
-            if (Services.KEY_HANDLER.isVeinKeyDown()){
-                Services.VEIN_MINER.veinMiner(client.level, client.player, buf.readBlockPos());
-            }
-        });
+        //client.execute(() -> {
+         //   if (Services.KEY_HANDLER.isVeinKeyDown()){
+         //       Services.VEIN_MINER.veinMiner(client.level, client.player, buf.readBlockPos());
+         //   }
+        //});
     }
     private static int calcColor(int col){
         int i = MapColor.Brightness.HIGH.modifier;

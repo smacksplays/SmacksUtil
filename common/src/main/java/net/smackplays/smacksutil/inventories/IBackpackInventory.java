@@ -200,8 +200,6 @@ public interface IBackpackInventory extends WorldlyContainer {
         return tag;
 
     }
-
-    //TODO fix
     default ItemStack stackOf(CompoundTag tag) {
         Item item = BuiltInRegistries.ITEM.get(ResourceLocation.parse(tag.getString("id")));
         ItemStack stack = new ItemStack(item);

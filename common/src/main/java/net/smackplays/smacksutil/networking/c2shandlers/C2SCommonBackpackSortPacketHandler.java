@@ -13,7 +13,7 @@ public class C2SCommonBackpackSortPacketHandler {
         AbstractContainerMenu screenHandler = player.containerMenu;
         ItemStack stack;
         if (slot == -1){
-            stack = Services.PLATFORM.getTrinketorCuriosStack(player, "back");
+            stack = Services.PLATFORM.getTrinketOrCuriosStack(player, "back");
         } else {
             stack = player.getInventory().getItem(slot);
         }

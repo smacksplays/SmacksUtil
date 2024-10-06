@@ -106,23 +106,8 @@ public class ForgePlatformHelper implements IPlatformHelper {
     }
 
     @Override
-    public ItemStack C2SCommonBackpackOpenPacketHandler(Player player, int slot) {
-        // TODO fix - CuriosAPI
-        //stack = CuriosApi.getCuriosHelper().findCurios(player, "back").get(0).stack();
+    public ItemStack getTrinketOrCuriosStack(Player player, String slot) {
         return ItemStack.EMPTY;
     }
 
-    @Override
-    public ItemStack C2SCommonToggleLightWandItemPacketHandler(Player player, int slot) {
-        // TODO fix - CuriosAPI
-        //stack = CuriosApi.getCuriosHelper().findCurios(player, "back").get(0).stack();
-        return ItemStack.EMPTY;
-    }
-
-    @Override
-    public ItemStack C2SCommonToggleMagnetItemPacketHandler(Player player, int slot) {
-        // TODO fix - CuriosAPI
-        //stack = CuriosApi.getCuriosHelper().findCurios(player, "back").get(0).stack();
-        return ItemStack.EMPTY;
-    }
 }

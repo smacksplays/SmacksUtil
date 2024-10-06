@@ -50,11 +50,5 @@ public interface IPlatformHelper {
 
     boolean isClient();
 
-    ItemStack C2SCommonBackpackOpenPacketHandler(Player player, int slot);
-
-    ItemStack C2SCommonToggleLightWandItemPacketHandler(Player player, int slot);
-
-    ItemStack C2SCommonToggleMagnetItemPacketHandler(Player player, int slot);
-
-    ItemStack getTrinketorCuriosStack(Player player, String slot);
+    ItemStack getTrinketOrCuriosStack(Player player, String slot);
 }

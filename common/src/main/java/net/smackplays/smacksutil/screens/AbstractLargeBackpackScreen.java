@@ -44,7 +44,6 @@ public class AbstractLargeBackpackScreen<T extends AbstractLargeBackpackMenu> ex
         //in 1.20 or above,this method is in DrawContext class.
     }
 
-    //TODO fix
     @Override
     public void render(@NotNull GuiGraphics context, int mouseX, int mouseY, float delta) {
         renderBackground(context, mouseX, mouseY, delta);

@@ -92,7 +92,6 @@ public class AbstractEnchantingToolScreen<T extends AbstractEnchantingToolMenu> 
         }
     }
 
-    //TODO fix
     public ArrayList<Holder<Enchantment>> getEnchantments(ItemStack stack) {
         ArrayList<Holder<Enchantment>> list = new ArrayList<>();
         ArrayList<Holder<Enchantment>> presentEnchantments = new ArrayList<>();

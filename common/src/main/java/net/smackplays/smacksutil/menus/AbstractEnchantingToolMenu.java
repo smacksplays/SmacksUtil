@@ -43,7 +43,6 @@ public abstract class AbstractEnchantingToolMenu extends AbstractContainerMenu {
         return this.inventory.stillValid(player);
     }
 
-    //TODO fix
     @Override
     public @NotNull ItemStack quickMoveStack(@NotNull Player player, int index) {
         ItemStack itemStack = ItemStack.EMPTY;

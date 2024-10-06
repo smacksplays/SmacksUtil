@@ -17,8 +17,7 @@ public class MinecraftClientMixin {
 
     @Inject(at = @At("HEAD"), method = "handleKeybinds")
     private void handleKeybinds(CallbackInfo info) {
-        // This code is injected into the start of MinecraftServer.loadWorld()V
-        if (Services.CONFIG != null && Services.CONFIG.isEnabledFastPlace()) {
+        if (Services.CONFIG != null && Services.CONFIG.isEnabledFastPlace() && rightClickDelay > 1) {
             rightClickDelay = 1;
         }
     }

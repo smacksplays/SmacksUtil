@@ -25,7 +25,7 @@ public abstract class GuiGraphicsMixin {
     @Final
     @Shadow
     private PoseStack pose;
-    @Inject(at = @At("HEAD"), method = "renderItemDecorations*", cancellable = true)
+    @Inject(at = @At("HEAD"), method = "renderItemDecorations(Lnet/minecraft/client/gui/Font;Lnet/minecraft/world/item/ItemStack;IILjava/lang/String;)V", cancellable = true)
     public void renderItemDecorations(Font font, ItemStack stack, int offsetX, int offsetY, String yellowString, CallbackInfo ci) {
         GuiGraphics thisObject = (GuiGraphics) (Object) this;
         if (!stack.isEmpty() && AbstractBackpackItem.class.isAssignableFrom(stack.getItem().getClass())) {

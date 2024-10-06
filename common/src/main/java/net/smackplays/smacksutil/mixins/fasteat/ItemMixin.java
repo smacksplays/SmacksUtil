@@ -16,8 +16,7 @@ public class ItemMixin {
 
     @Inject(at = @At("HEAD"), method = "getUseDuration", cancellable = true)
     private void getMaxUseTime(ItemStack stack, LivingEntity p_344979_, CallbackInfoReturnable<Integer> cir) {
-        Item i = stack.getItem();
-        FoodProperties foodproperties = (FoodProperties)stack.get(DataComponents.FOOD);
+        FoodProperties foodproperties = stack.get(DataComponents.FOOD);
         if (foodproperties != null && Services.CONFIG != null && Services.CONFIG.isEnabledFastEat()) {
             cir.setReturnValue(4);
         }

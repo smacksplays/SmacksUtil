@@ -107,28 +107,7 @@ public class NeoForgePlatformHelper implements IPlatformHelper {
     }
 
     @Override
-    public ItemStack C2SCommonBackpackOpenPacketHandler(Player player, int slot) {
-        // TODO fix - CuriosAPI
-        //stack = CuriosApi.getCuriosHelper().findCurios(player, "back").get(0).stack();
-        return ItemStack.EMPTY;
-    }
-
-    @Override
-    public ItemStack C2SCommonToggleLightWandItemPacketHandler(Player player, int slot) {
-        // TODO fix - CuriosAPI
-        //stack = CuriosApi.getCuriosHelper().findCurios(player, "back").get(0).stack();
-        return ItemStack.EMPTY;
-    }
-
-    @Override
-    public ItemStack C2SCommonToggleMagnetItemPacketHandler(Player player, int slot) {
-        // TODO fix - CuriosAPI
-        //stack = CuriosApi.getCuriosHelper().findCurios(player, "back").get(0).stack();
-        return ItemStack.EMPTY;
-    }
-
-    @Override
-    public ItemStack getTrinketorCuriosStack(Player player, String slot) {
+    public ItemStack getTrinketOrCuriosStack(Player player, String slot) {
         return CuriosApi.getCuriosHelper().findCurios(player, slot).getFirst().stack();
     }
 }
