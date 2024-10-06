@@ -76,7 +76,7 @@ dependencies {
     //compileOnly(fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}:api"))
     // Use the full Curios API jar at runtime
     //runtimeOnly(fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}"))
-    implementation "me.shedaniel.cloth:cloth-config-forge:15.0.130"
+    implementation "me.shedaniel.cloth:cloth-config-forge:${project.cloth_config_version}"
 }
 
 publishing {

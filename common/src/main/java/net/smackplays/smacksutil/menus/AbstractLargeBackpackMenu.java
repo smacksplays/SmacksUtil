@@ -2,7 +2,6 @@ package net.smackplays.smacksutil.menus;
 
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.Container;
-import net.minecraft.world.entity.SlotAccess;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -187,7 +186,7 @@ public abstract class AbstractLargeBackpackMenu extends AbstractContainerMenu {
     }
 
     @Override
-    public void clicked(int slot_num1, int slot_num2, ClickType clickType, Player player) {
+    public void clicked(int slot_num1, int slot_num2, @NotNull ClickType clickType, @NotNull Player player) {
         if (clickType == ClickType.SWAP){
             Slot slot1 = player.containerMenu.slots.get(slot_num1);
             ItemStack itemStack1 = slot1.getItem();

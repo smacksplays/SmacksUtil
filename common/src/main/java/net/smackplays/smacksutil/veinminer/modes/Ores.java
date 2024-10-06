@@ -50,7 +50,7 @@ public class Ores extends VeinMode {
     public void ores(BlockPos sourcePos, Level world, Player player, boolean isExactMatch, Block toMatch, TagKey<Block> tag) {
         toCheck.add(sourcePos);
         while (toBreak.size() <= 200 && !toCheck.isEmpty()) {
-            BlockPos currPos = toCheck.get(0);
+            BlockPos currPos = toCheck.getFirst();
             if (checkMatch(isExactMatch, currPos, world, player, toMatch, tag)) {
                 toBreak.add(currPos);
                 ArrayList<BlockPos> surrounding = getSurrounding(currPos, world, isExactMatch, toMatch, tag);

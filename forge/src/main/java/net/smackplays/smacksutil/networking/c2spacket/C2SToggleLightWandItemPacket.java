@@ -1,11 +1,7 @@
 package net.smackplays.smacksutil.networking.c2spacket;
 
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.network.CustomPayloadEvent;
-import net.smackplays.smacksutil.items.AutoLightWandItem;
-import net.smackplays.smacksutil.networking.c2shandlers.C2SCommonTeleportationPacketHandler;
 import net.smackplays.smacksutil.networking.c2shandlers.C2SCommonToggleLightWandItemPacketHandler;
 
 public class C2SToggleLightWandItemPacket {

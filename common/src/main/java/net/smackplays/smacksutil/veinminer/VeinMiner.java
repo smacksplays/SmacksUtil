@@ -1,10 +1,10 @@
-package net.smackplays.smacksutil.platform.services;
+package net.smackplays.smacksutil.veinminer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -12,7 +12,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TieredItem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.smackplays.smacksutil.platform.Services;
@@ -24,7 +23,7 @@ import java.util.List;
 
 import static net.smackplays.smacksutil.Constants.C_VEINMINER_UPDATE_RATE;
 
-public abstract class IVeinMiner {
+public class VeinMiner {
     public static int MAX_RADIUS = 6;
     public long lastUpdate = System.currentTimeMillis();
 
@@ -82,9 +81,27 @@ public abstract class IVeinMiner {
         });
     }
 
-    @SuppressWarnings("unused")
-    abstract public void drawOutline(PoseStack pose, double cameraX, double cameraY, double cameraZ, BlockPos pos,
-                                     Level world, Player player);
+    @SuppressWarnings("unchecked")
+    public void drawOutline(PoseStack pose, double cameraX, double cameraY, double cameraZ, BlockPos pos,
+                                     Level world){
+        if (isDrawing) return;
+        isDrawing = true;
+        int maxRenderBlocks = 150;
+        if (Services.CONFIG != null){
+            maxRenderBlocks = Services.CONFIG.getMaxRenderBlocks();
+        }
+        if (toBreak.size() > maxRenderBlocks) {
+            toBreak = new ArrayList<>(toBreak.subList(0, maxRenderBlocks));
+        }
+
+        VoxelShape shape = combine(world, pos, (ArrayList<BlockPos>) toBreak.clone());
+
+        VertexConsumer vertex = Minecraft.getInstance().renderBuffers().bufferSource().getBuffer(Services.PLATFORM.getRenderType());
+
+        drawCuboidShapeOutline(pose, vertex, shape,
+                (double) pos.getX() - cameraX, (double) pos.getY() - cameraY, (double) pos.getZ() - cameraZ);
+        isDrawing = false;
+    }
 
     @SuppressWarnings("unchecked")
     public ArrayList<BlockPos> getBlocks(Level worldIn, Player playerIn, BlockPos sourcePosIn) {
@@ -217,14 +234,14 @@ public abstract class IVeinMiner {
             }
 
         }
-        if (player != null && Services.KEY_HANDLER.isVeinKeyDown()) {
+        if (player != null && Services.KEY_HANDLER != null &&Services.KEY_HANDLER.isVeinKeyDown()) {
             if (player.isCrouching()) {
                 currMode += (int) vertical;
                 player.getInventory().selected = player.getInventory().selected + (int) vertical;
                 if (currMode > modeList.size() - 1) currMode = modeList.size() - 1;
                 else if (currMode < 0) currMode = 0;
                 player.displayClientMessage(Component.literal("Mode: " + modeList.get(currMode).getName()), true);
-                Services.VEIN_MINER.setMode();
+                setMode();
             } else {
                 radius += (int) vertical;
                 player.getInventory().selected = player.getInventory().selected + (int) vertical;
@@ -240,7 +257,7 @@ public abstract class IVeinMiner {
     }
 
     public boolean canRender(Level world, BlockPos pos){
-        return Services.VEIN_MINER.getMode(world, pos).doRender(Services.VEIN_MINER.getRadius());
+        return getMode(world, pos).doRender(getRadius());
     }
 
     public boolean isAcceptUpdate(BlockPos pos) {

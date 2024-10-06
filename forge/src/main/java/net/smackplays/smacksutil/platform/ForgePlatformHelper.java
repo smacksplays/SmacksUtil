@@ -1,5 +1,6 @@
 package net.smackplays.smacksutil.platform;
 
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -7,6 +8,7 @@ import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.FMLLoader;
 import net.smackplays.smacksutil.SmacksUtil;
 import net.smackplays.smacksutil.platform.services.IPlatformHelper;
+import net.smackplays.smacksutil.util.CustomRenderLayer;
 
 public class ForgePlatformHelper implements IPlatformHelper {
 
@@ -108,6 +110,10 @@ public class ForgePlatformHelper implements IPlatformHelper {
     @Override
     public ItemStack getTrinketOrCuriosStack(Player player, String slot) {
         return ItemStack.EMPTY;
+    }
+    @Override
+    public RenderType getRenderType() {
+        return CustomRenderLayer.LINES;
     }
 
 }

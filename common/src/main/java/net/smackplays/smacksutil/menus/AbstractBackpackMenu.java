@@ -189,7 +189,7 @@ public class AbstractBackpackMenu extends AbstractContainerMenu {
     }
 
     @Override
-    public void clicked(int slot_num1, int slot_num2, ClickType clickType, Player player) {
+    public void clicked(int slot_num1, int slot_num2, @NotNull ClickType clickType, @NotNull Player player) {
         if (clickType == ClickType.SWAP){
             Slot slot1 = player.containerMenu.slots.get(slot_num1);
             ItemStack itemStack1 = slot1.getItem();

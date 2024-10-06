@@ -9,7 +9,6 @@ public class Services {
 
     public static final IPlatformHelper PLATFORM = load(IPlatformHelper.class);
     public static final IModConfig CONFIG = load_1(IModConfig.class);
-    public static final IVeinMiner VEIN_MINER = load(IVeinMiner.class);
     public static final IKeyHandler KEY_HANDLER = load_1(IKeyHandler.class);
     public static final IClientPacketSender C2S_PACKET_SENDER = load_1(IClientPacketSender.class);
     public static final IServerPacketSender S2C_PACKET_SENDER = load(IServerPacketSender.class);

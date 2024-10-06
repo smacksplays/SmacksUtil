@@ -19,11 +19,10 @@ public class EnchantmentToolInventory implements IEnchantmentToolInventory {
         this.stack = stack;
         this.provider = provider;
         CustomData data = stack.get(DataComponents.CUSTOM_DATA);
+        assert data != null;
         CompoundTag tag = data.copyTag();
 
-        if (tag != null) {
-            ContainerHelper.loadAllItems(tag, items, provider);
-        }
+        ContainerHelper.loadAllItems(tag, items, provider);
     }
 
     @Override
@@ -34,6 +33,7 @@ public class EnchantmentToolInventory implements IEnchantmentToolInventory {
     @Override
     public void setChanged() {
         CustomData data = stack.get(DataComponents.CUSTOM_DATA);
+        assert data != null;
         CompoundTag tag = data.copyTag().getCompound("enchantment_tool");
         tag = ContainerHelper.saveAllItems(tag, items, provider);
         stack.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));

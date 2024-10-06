@@ -8,6 +8,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.smackplays.smacksutil.CommonClass;
 import net.smackplays.smacksutil.Constants;
 import net.smackplays.smacksutil.platform.Services;
 import org.lwjgl.glfw.GLFW;
@@ -40,9 +41,9 @@ public interface IKeyHandler {
 
     default void veinPreviewConsume(KeyMapping key, Player player) {
         if (key.consumeClick()) {
-            Services.VEIN_MINER.togglePreview();
-            String str = Services.VEIN_MINER.renderPreview ? "Active" : "Inactive";
-            int color = Services.VEIN_MINER.renderPreview ? Constants.GREEN : Constants.RED;
+            CommonClass.veinMiner.togglePreview();
+            String str = CommonClass.veinMiner.renderPreview ? "Active" : "Inactive";
+            int color = CommonClass.veinMiner.renderPreview ? Constants.GREEN : Constants.RED;
             player.displayClientMessage(Component
                     .literal("Veinminer Preview: " + str).withColor(color), true);
             if (Services.CONFIG != null && Services.CONFIG.isEnabledKeyPressSound()){
@@ -66,9 +67,9 @@ public interface IKeyHandler {
 
     default void exactMatchConsume(KeyMapping key, Player player) {
         if (key.consumeClick()) {
-            Services.VEIN_MINER.toggleExactMatch();
-            String str = Services.VEIN_MINER.isExactMatch() ? "Active" : "Inactive";
-            int color = Services.VEIN_MINER.isExactMatch() ? Constants.GREEN : Constants.RED;
+            CommonClass.veinMiner.toggleExactMatch();
+            String str = CommonClass.veinMiner.isExactMatch() ? "Active" : "Inactive";
+            int color = CommonClass.veinMiner.isExactMatch() ? Constants.GREEN : Constants.RED;
             player.displayClientMessage(Component
                     .literal("Exact Match: " + str).withColor(color), true);
             if (Services.CONFIG != null && Services.CONFIG.isEnabledKeyPressSound()){

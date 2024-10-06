@@ -7,7 +7,7 @@ import net.smackplays.smacksutil.platform.Services;
 
 public class C2SCommonToggleLightWandItemPacketHandler {
     public static void handle(ServerPlayer player, int slot) {
-        ItemStack stack = null;
+        ItemStack stack;
         if (slot == -1){
             stack = Services.PLATFORM.getTrinketOrCuriosStack(player, "hands");
         } else {

@@ -1,8 +1,6 @@
 package net.smackplays.smacksutil;
 
 
-import me.shedaniel.autoconfig.AutoConfig;
-import me.shedaniel.clothconfig.ClothConfigForgeDemo;
 import net.minecraft.core.cauldron.CauldronInteraction;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
@@ -20,7 +18,6 @@ import net.neoforged.fml.InterModComms;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.event.lifecycle.InterModEnqueueEvent;
@@ -45,7 +42,6 @@ import net.smackplays.smacksutil.menus.TeleportationTabletMenu;
 import net.smackplays.smacksutil.networking.c2spacket.*;
 import net.smackplays.smacksutil.networking.s2cpacket.S2CBlockBreakPacket;
 import net.smackplays.smacksutil.networking.s2cpacket.S2CBlockBreakPacketHandler;
-import net.smackplays.smacksutil.platform.NeoForgeModConfig;
 import net.smackplays.smacksutil.platform.Services;
 import net.smackplays.smacksutil.screens.AbstractBackpackScreen;
 import net.smackplays.smacksutil.screens.AbstractEnchantingToolScreen;

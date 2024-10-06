@@ -4,7 +4,6 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.network.CustomPayloadEvent;
 import net.smackplays.smacksutil.networking.c2shandlers.C2SCommonTeleportationNBTPacketHandler;
-import net.smackplays.smacksutil.networking.c2shandlers.C2SCommonTeleportationPacketHandler;
 
 import java.nio.charset.StandardCharsets;
 

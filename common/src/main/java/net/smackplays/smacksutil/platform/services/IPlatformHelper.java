@@ -1,5 +1,6 @@
 package net.smackplays.smacksutil.platform.services;
 
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -47,8 +48,7 @@ public interface IPlatformHelper {
     Item getUpgrade1Item();
     Item getUpgrade2Item();
     Item getUpgrade3Item();
-
     boolean isClient();
-
     ItemStack getTrinketOrCuriosStack(Player player, String slot);
+    RenderType getRenderType();
 }

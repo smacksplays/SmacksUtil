@@ -147,6 +147,7 @@ public class NeoForgeKeyHandler implements IKeyHandler {
         @SubscribeEvent
         public static void onKeyInput(InputEvent.Key event) {
             Player player = Minecraft.getInstance().player;
+            assert Services.KEY_HANDLER != null;
             Services.KEY_HANDLER.veinPreviewConsume(veinPreviewKey, player);
             Services.KEY_HANDLER.fastPlaceConsume(fastPlaceKey, player);
             Services.KEY_HANDLER.exactMatchConsume(exactMatchKey, player);

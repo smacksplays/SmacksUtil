@@ -1,5 +1,6 @@
 package net.smackplays.smacksutil.platform;
 
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -7,6 +8,7 @@ import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.FMLLoader;
 import net.smackplays.smacksutil.SmacksUtil;
 import net.smackplays.smacksutil.platform.services.IPlatformHelper;
+import net.smackplays.smacksutil.util.CustomRenderLayer;
 import top.theillusivec4.curios.api.CuriosApi;
 
 public class NeoForgePlatformHelper implements IPlatformHelper {
@@ -109,5 +111,9 @@ public class NeoForgePlatformHelper implements IPlatformHelper {
     @Override
     public ItemStack getTrinketOrCuriosStack(Player player, String slot) {
         return CuriosApi.getCuriosHelper().findCurios(player, slot).getFirst().stack();
+    }
+    @Override
+    public RenderType getRenderType() {
+        return CustomRenderLayer.LINES;
     }
 }

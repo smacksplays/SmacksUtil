@@ -2,7 +2,7 @@ package net.smackplays.smacksutil.mixins.veinminer;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.MouseHandler;
-import net.smackplays.smacksutil.platform.Services;
+import net.smackplays.smacksutil.CommonClass;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -18,6 +18,6 @@ public class MouseScroll {
     private Minecraft minecraft;
     @Inject(at = @At("HEAD"), method = "onScroll")
     private void onScroll(long window, double horizontal, double vertical, CallbackInfo ci) {
-        Services.VEIN_MINER.scroll(vertical, minecraft.player);
+        CommonClass.veinMiner.scroll(vertical, minecraft.player);
     }
 }

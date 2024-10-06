@@ -11,12 +11,12 @@ import net.smackplays.smacksutil.items.MagnetItem;
 public class SmacksTrinket implements Trinket {
     @Override
     public void tick(ItemStack stack, SlotReference slot, LivingEntity entity) {
-        if (stack.getItem() instanceof MagnetItem magnet){
-            magnet.inventoryTick(stack, entity.level(), entity, 0, true);
-        } else if (stack.getItem() instanceof AdvancedMagnetItem magnet){
-            magnet.inventoryTick(stack, entity.level(), entity, 0, true);
-        } else if (stack.getItem() instanceof AutoLightWandItem lightWandItem){
-            lightWandItem.inventoryTick(stack, entity.level(), entity, 0, true);
+        switch (stack.getItem()) {
+            case AdvancedMagnetItem magnet -> magnet.inventoryTick(stack, entity.level(), entity, 0, true);
+            case MagnetItem magnet -> magnet.inventoryTick(stack, entity.level(), entity, 0, true);
+            case AutoLightWandItem lightWandItem -> lightWandItem.inventoryTick(stack, entity.level(), entity, 0, true);
+            default -> {
+            }
         }
     }
 }

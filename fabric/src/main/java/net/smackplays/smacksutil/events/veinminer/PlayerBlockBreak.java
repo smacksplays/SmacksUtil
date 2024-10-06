@@ -14,6 +14,7 @@ public class PlayerBlockBreak implements PlayerBlockBreakEvents.Before {
 
     @Override
     public boolean beforeBlockBreak(Level world, Player player, BlockPos pos, BlockState state, @Nullable BlockEntity blockEntity) {
+        assert Services.KEY_HANDLER != null;
         if (Services.KEY_HANDLER.isVeinKeyDown()){
             Services.S2C_PACKET_SENDER.sendToPlayerBlockBreakPacket((ServerPlayer) player, pos);
             return false;

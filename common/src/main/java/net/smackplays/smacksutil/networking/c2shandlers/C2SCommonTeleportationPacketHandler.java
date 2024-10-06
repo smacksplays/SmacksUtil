@@ -23,6 +23,7 @@ public class C2SCommonTeleportationPacketHandler {
         if (tempKey != null){
             ResourceKey<Level> resourceKey = ResourceKey.create(Registries.DIMENSION, tempKey.location());
             MinecraftServer server = level.getServer();
+            assert server != null;
             ServerLevel serverLevel = server.getLevel(resourceKey);
             //player.teleportTo(pos.x, pos.y, pos.z);
             if (serverLevel != null) {

@@ -1,9 +1,6 @@
 package net.smackplays.smacksutil.networking.c2spacket;
 
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import net.smackplays.smacksutil.items.AbstractBackpackItem;
 import net.smackplays.smacksutil.networking.c2shandlers.C2SCommonBackpackOpenPacketHandler;
 
 public class C2SBackpackOpenPacketHandler {

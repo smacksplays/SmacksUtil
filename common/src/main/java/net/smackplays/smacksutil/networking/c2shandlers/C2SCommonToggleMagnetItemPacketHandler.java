@@ -8,10 +8,9 @@ import net.smackplays.smacksutil.platform.Services;
 
 public class C2SCommonToggleMagnetItemPacketHandler {
     public static void handle(ServerPlayer player, int slot) {
-        ItemStack stack = null;
+        ItemStack stack;
         if (slot == -1){
-            // TODO fix use Curios or Trinkets API
-            //stack = CuriosApi.getCuriosHelper().findCurios(player, "charm").getFirst().stack();
+            // For Curios the Items are in a separate inventory. Trinkets extend the player inventory
             stack = Services.PLATFORM.getTrinketOrCuriosStack(player, "charm");
         } else {
             stack = player.containerMenu.slots.get(slot).getItem();

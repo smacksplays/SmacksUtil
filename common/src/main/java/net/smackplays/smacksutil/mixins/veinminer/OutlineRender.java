@@ -7,6 +7,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.state.BlockState;
+import net.smackplays.smacksutil.CommonClass;
 import net.smackplays.smacksutil.platform.Services;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -19,13 +20,14 @@ public abstract class OutlineRender {
     private void drawBlockOutline(PoseStack matrices, VertexConsumer vertexConsumer,
                                   Entity entity, double cameraX, double cameraY,
                                   double cameraZ, BlockPos pos, BlockState state, CallbackInfo ci) {
+        assert Services.KEY_HANDLER != null;
         if (Services.KEY_HANDLER.isVeinKeyDown()){
-            if (Services.VEIN_MINER.isAcceptUpdate(pos)){
-                Services.VEIN_MINER.updateBlocks(entity.level(), (Player) entity, pos);
+            if (CommonClass.veinMiner.isAcceptUpdate(pos)){
+                CommonClass.veinMiner.updateBlocks(entity.level(), (Player) entity, pos);
             }
-            if (Services.VEIN_MINER.isRenderPreview() && Services.VEIN_MINER.canRender(entity.level(), pos)){
-                Services.VEIN_MINER.drawOutline(matrices, cameraX, cameraY,
-                        cameraZ, pos, entity.level(), (Player) entity);
+            if (CommonClass.veinMiner.isRenderPreview() && CommonClass.veinMiner.canRender(entity.level(), pos)){
+                CommonClass.veinMiner.drawOutline(matrices, cameraX, cameraY,
+                        cameraZ, pos, entity.level());
             }
             ci.cancel();
         }

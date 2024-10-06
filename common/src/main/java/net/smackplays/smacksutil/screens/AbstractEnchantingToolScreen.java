@@ -216,14 +216,7 @@ public class AbstractEnchantingToolScreen<T extends AbstractEnchantingToolMenu> 
                 boolean b3 = y + 14 + 19 * i < mouseY;
                 boolean b4 = y + 33 + 19 * i >= mouseY;
                 if (b1 && b2 && b3 && b4) {
-                    //Holder<Enchantment> enchantmentHolder = list.get(i);
                     Enchantment enchantment = list.get(i).value();
-                    /*if (this.addRemove) {
-                        stack.enchant(enchantmentHolder, enchantment.getMaxLevel());
-                    } else {
-                        EnchantmentHelper.updateEnchantments(stack, p -> p.set(enchantmentHolder, 0));
-                    }*/
-
                     if (Services.C2S_PACKET_SENDER != null) {
                         Services.C2S_PACKET_SENDER.EnchantPacket(enchantment, addRemove);
                     }

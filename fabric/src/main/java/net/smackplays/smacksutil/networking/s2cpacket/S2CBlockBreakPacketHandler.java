@@ -2,9 +2,7 @@ package net.smackplays.smacksutil.networking.s2cpacket;
 
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.entity.player.Player;
 import net.smackplays.smacksutil.networking.s2chandlers.S2CCommonBlockBreakPacketHandler;
-import net.smackplays.smacksutil.platform.Services;
 
 public class S2CBlockBreakPacketHandler {
 

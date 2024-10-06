@@ -53,7 +53,7 @@ public class Shapeless extends VeinMode {
     private void shapeless(BlockPos sourcePos, Level world, Player player, int radius, boolean isExactMatch, Block toMatch, TagKey<Block> tag) {
         toCheck.add(sourcePos);
         while (!toCheck.isEmpty()) {
-            BlockPos currPos = toCheck.get(0);
+            BlockPos currPos = toCheck.getFirst();
             if (checkMatch(isExactMatch, currPos, world, player, toMatch, tag)) {
                 toBreak.add(currPos);
                 ArrayList<BlockPos> surrounding = getSurrounding(currPos, world, isExactMatch, toMatch, tag);

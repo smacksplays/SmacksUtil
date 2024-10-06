@@ -1,13 +1,14 @@
 package net.smackplays.smacksutil.platform;
 
-import dev.emi.trinkets.api.TrinketsApi;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.smackplays.smacksutil.SmacksUtil;
 import net.smackplays.smacksutil.platform.services.IPlatformHelper;
+import net.smackplays.smacksutil.util.CustomRenderLayer;
 
 public class FabricPlatformHelper implements IPlatformHelper {
 
@@ -79,9 +80,14 @@ public class FabricPlatformHelper implements IPlatformHelper {
         return t.name().equals("CLIENT");
     }
 
+    // Trinkets extend player inventory, thus this function is never used but has to be implemented.
     @Override
     public ItemStack getTrinketOrCuriosStack(Player player, String slot) {
-        var t = TrinketsApi.getTrinketComponent(player);
         return ItemStack.EMPTY;
+    }
+
+    @Override
+    public RenderType getRenderType() {
+        return CustomRenderLayer.LINES;
     }
 }

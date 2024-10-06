@@ -1,11 +1,7 @@
 package net.smackplays.smacksutil.networking.c2spacket;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
-import net.smackplays.smacksutil.networking.c2shandlers.C2SCommonInteractEntityPacketHandler;
 import net.smackplays.smacksutil.networking.c2shandlers.C2SCommonSetBlockAirPacketHandler;
 
 public class C2SSetBlockAirPacketHandler {

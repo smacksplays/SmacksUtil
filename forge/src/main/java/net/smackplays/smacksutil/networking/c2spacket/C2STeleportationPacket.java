@@ -1,18 +1,9 @@
 package net.smackplays.smacksutil.networking.c2spacket;
 
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.network.CustomPayloadEvent;
-import net.smackplays.smacksutil.networking.c2shandlers.C2SCommonTeleportationNBTPacketHandler;
 import net.smackplays.smacksutil.networking.c2shandlers.C2SCommonTeleportationPacketHandler;
-
-import java.util.Set;
 
 public class C2STeleportationPacket {
     private final String levelKey;
