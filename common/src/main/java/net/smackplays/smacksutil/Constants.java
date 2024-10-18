@@ -80,6 +80,9 @@ public class Constants {
     public static final ResourceLocation C_TELEPORT_REQUEST_RL = ResourceLocation.fromNamespaceAndPath(MOD_ID, C_TELEPORT_REQUEST);
     public static final String C_TELEPORT_NBT_REQUEST = "teleport-nbt-request";
     public static final ResourceLocation C_TELEPORT_NBT_REQUEST_RL = ResourceLocation.fromNamespaceAndPath(MOD_ID, C_TELEPORT_NBT_REQUEST);
+    // --------------------------------- EFFECT TOTEM
+    public static final String C_EFFECT_TOTEM_ITEM = "effect_totem_item";
+    public static final ResourceLocation  C_EFFECT_TOTEM_ITEM_RL = ResourceLocation.fromNamespaceAndPath(MOD_ID, C_EFFECT_TOTEM_ITEM);
     // --------------------------------- SPRITES
     public static final String C_ENCHANTING_SLOT_HIGHLIGHTED_SPRITE_LOCATION = "textures/gui/sprites/enchanting_slot_highlighted.png";
     public static final ResourceLocation C_ENCHANTING_SLOT_HIGHLIGHTED_SPRITE_LOCATION_RL = ResourceLocation.fromNamespaceAndPath(MOD_ID, C_ENCHANTING_SLOT_HIGHLIGHTED_SPRITE_LOCATION);

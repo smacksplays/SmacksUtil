@@ -42,6 +42,7 @@ public class SmacksUtil implements ModInitializer {
     public static final Item ADVANCED_MOB_CATCHER_ITEM = new AdvancedMobCatcherItem();
     public static final Item ENCHANTING_TOOL_ITEM = new FabricEnchantingToolItem();
     public static final Item TELEPORTATION_TABLET_ITEM = new TeleportationTablet();
+    public static final Item EFFECT_TOTEM = new EffectTotem();
     public static final MenuType<BackpackMenu> BACKPACK_MENU = new ExtendedScreenHandlerType<>(BackpackMenu::createGeneric9x6, ByteBufCodecs.VECTOR3F);
     public static final MenuType<LargeBackpackMenu> LARGE_BACKPACK_MENU = new ExtendedScreenHandlerType<>(LargeBackpackMenu::createGeneric13x9, ByteBufCodecs.VECTOR3F);
     public static final MenuType<EnchantingToolMenu> ENCHANTING_TOOL_MENU = new ExtendedScreenHandlerType<>(EnchantingToolMenu::create, ByteBufCodecs.VECTOR3F);
@@ -77,6 +78,7 @@ public class SmacksUtil implements ModInitializer {
         registerItem(C_MOB_CATCHER_ITEM_RL, MOB_CATCHER_ITEM);
         registerItem(C_ADVANCED_MOB_CATCHER_ITEM_RL, ADVANCED_MOB_CATCHER_ITEM);
         registerItem(C_TELEPORTATION_TABLET_ITEM_RL, TELEPORTATION_TABLET_ITEM);
+        registerItem(C_EFFECT_TOTEM_ITEM_RL, EFFECT_TOTEM);
 
         PayloadTypeRegistry.playC2S().register(C2SEnchantPacket.TYPE, C2SEnchantPacket.STREAM_CODEC);
         ServerPlayNetworking.registerGlobalReceiver(C2SEnchantPacket.TYPE, C2SEnchantPacketHandler::handle);
