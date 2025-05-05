@@ -16,7 +16,7 @@ import java.util.Set;
 
 public class C2SCommonEnchantPacketHandler {
     public static void handle(ServerPlayer player, String enchantment, int level, boolean addRemove) {
-        Optional<HolderSet.Named<Enchantment>> optional = player.registryAccess().registryOrThrow(Registries.ENCHANTMENT).getTag(EnchantmentTags.TOOLTIP_ORDER);
+        Optional<HolderSet.Named<Enchantment>> optional = player.registryAccess().lookupOrThrow(Registries.ENCHANTMENT).get(EnchantmentTags.TOOLTIP_ORDER);
         if (optional.isPresent()){
             var l = optional.get().stream().toList();
             for (Holder<Enchantment> entry : l){

@@ -1,10 +1,9 @@
 package net.smackplays.smacksutil.screens;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -22,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Optional;
 
-import static net.smackplays.smacksutil.Constants.C_LARGE_BACKPACK_SCREEN_LOCATION_RL;
+import static net.smackplays.smacksutil.Constants.Backpack.C_LARGE_BACKPACK_SCREEN_LOCATION_RL;
 
 
 public class AbstractLargeBackpackScreen<T extends AbstractLargeBackpackMenu> extends AbstractContainerScreen<T> {
@@ -35,13 +34,10 @@ public class AbstractLargeBackpackScreen<T extends AbstractLargeBackpackMenu> ex
 
     @Override
     protected void renderBg(GuiGraphics context, float delta, int mouseX, int mouseY) {
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 0.0F);
-        RenderSystem.setShaderTexture(0, C_LARGE_BACKPACK_SCREEN_LOCATION_RL);
         int x = (width - backgroundWidth) / 2;
         int y = (height - backgroundHeight) / 2;
-        context.blit(C_LARGE_BACKPACK_SCREEN_LOCATION_RL, x, y, 0, 0, backgroundWidth, backgroundHeight, 512, 512);
-        //in 1.20 or above,this method is in DrawContext class.
+        context.blit(RenderType::guiTextured, C_LARGE_BACKPACK_SCREEN_LOCATION_RL,
+                x, y, 0.0F, 0.0F, 512, 512, 512, 512);
     }
 
     @Override

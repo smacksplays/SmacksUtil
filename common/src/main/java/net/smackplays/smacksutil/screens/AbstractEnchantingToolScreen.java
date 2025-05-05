@@ -1,21 +1,23 @@
 package net.smackplays.smacksutil.screens;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.EnchantmentTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
@@ -49,18 +51,16 @@ public class AbstractEnchantingToolScreen<T extends AbstractEnchantingToolMenu> 
     @Override
     protected void renderBg(GuiGraphics context, float delta, int mouseX, int mouseY) {
         labelList.clear();
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 0.0F);
-        RenderSystem.setShaderTexture(0, C_ENCHANTING_TOOL_SCREEN_LOCATION_RL);
         int x = (width - backgroundWidth) / 2;
         int y = (height - backgroundHeight) / 2;
-        context.blit(C_ENCHANTING_TOOL_SCREEN_LOCATION_RL, x, y, 0, 0, backgroundWidth, backgroundHeight);
+        context.blit(RenderType::guiTextured, C_ENCHANTING_TOOL_SCREEN_LOCATION_RL,
+                x, y, 0.0F, 0.0F, 256, 256, 256, 256);
 
         Slot enchantSlot = this.menu.slots.getFirst();
         ItemStack stack = enchantSlot.getItem();
         ArrayList<Holder<Enchantment>> list = getEnchantments(stack);
         ResourceLocation scroller = list.size() > 6 ? C_SCROLLER_SPRITE_LOCATION_RL : C_SCROLLER_DISABLED_SPRITE_LOCATION_RL;
-        context.blitSprite(scroller, x + 137, (y + 15) + (int) this.scrollOffs, 12, 15);
+        context.blitSprite(RenderType::guiTextured, scroller, x + 137, (y + 15) + (int) this.scrollOffs, 12, 15);
         if (this.scrollOffs > 0 && enchantSlot.hasItem() && list.size() > 6) {
             int slice = list.size() - 6;
             float steps = (float) 99 / slice;
@@ -80,14 +80,17 @@ public class AbstractEnchantingToolScreen<T extends AbstractEnchantingToolMenu> 
                 boolean b3 = y + 13 + 19 * i < mouseY;
                 boolean b4 = y + 32 + 19 * i >= mouseY;
                 if (b1 && b2 && b3 && b4) {
-                    context.blit(C_ENCHANTING_SLOT_HIGHLIGHTED_SPRITE_LOCATION_RL, x + 8, y + 15 + 19 * i, 0, 0, 126, 19, 126, 19);
+                    context.blit(RenderType::guiTextured, C_ENCHANTING_SLOT_HIGHLIGHTED_SPRITE_LOCATION_RL,
+                            x + 8, y + 15 + 19 * i, 0, 0, 126, 19, 126, 19);
                 } else {
-                    context.blit(C_ENCHANTING_SLOT_SPRITE_LOCATION_RL, x + 8, y + 15 + 19 * i, 0, 0, 126, 19, 126, 19);
+                    context.blit(RenderType::guiTextured, C_ENCHANTING_SLOT_SPRITE_LOCATION_RL,
+                            x + 8, y + 15 + 19 * i, 0, 0, 126,19, 126, 19);
                 }
                 Component enchantString = ench.description();
                 labelList.add(new Label(enchantString, 10, 20 + 19 * i, false));
             } else {
-                context.blit(C_ENCHANTING_SLOT_DISABLED_SPRITE_LOCATION_RL, x + 8, y + 15 + 19 * i, 0, 0, 126, 19, 126, 19);
+                context.blit(RenderType::guiTextured, C_ENCHANTING_SLOT_DISABLED_SPRITE_LOCATION_RL,
+                        x + 8, y + 15 + 19 * i, 0, 0, 126, 19, 126, 19);
             }
         }
     }
@@ -102,7 +105,7 @@ public class AbstractEnchantingToolScreen<T extends AbstractEnchantingToolMenu> 
             presentEnchantments.add(entry.getKey());
         }
         if(!addRemove) return presentEnchantments;
-        Optional<HolderSet.Named<Enchantment>> optional = registryAccess.registryOrThrow(Registries.ENCHANTMENT).getTag(EnchantmentTags.TOOLTIP_ORDER);
+        Optional<HolderSet.Named<Enchantment>> optional = registryAccess.lookupOrThrow(Registries.ENCHANTMENT).get(EnchantmentTags.TOOLTIP_ORDER);
         if (optional.isPresent()){
             var l = optional.get().stream().toList();
             for (Holder<Enchantment> entry : l){
@@ -251,4 +254,5 @@ public class AbstractEnchantingToolScreen<T extends AbstractEnchantingToolMenu> 
     @SuppressWarnings("SameParameterValue")
     private record Label(Component component, int x, int y, boolean shadow) {
     }
+
 }

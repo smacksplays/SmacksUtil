@@ -2,13 +2,8 @@ package net.smackplays.smacksutil;
 
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.minecraft.client.gui.screens.MenuScreens;
-import net.minecraft.core.component.DataComponents;
-import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.component.DyedItemColor;
-import net.smackplays.smacksutil.items.AbstractBackpackItem;
 import net.smackplays.smacksutil.menus.BackpackMenu;
 import net.smackplays.smacksutil.menus.EnchantingToolMenu;
 import net.smackplays.smacksutil.menus.LargeBackpackMenu;
@@ -16,10 +11,7 @@ import net.smackplays.smacksutil.menus.TeleportationTabletMenu;
 import net.smackplays.smacksutil.networking.s2cpacket.S2CBlockBreakPacket;
 import net.smackplays.smacksutil.networking.s2cpacket.S2CBlockBreakPacketHandler;
 import net.smackplays.smacksutil.platform.Services;
-import net.smackplays.smacksutil.screens.AbstractBackpackScreen;
-import net.smackplays.smacksutil.screens.AbstractEnchantingToolScreen;
-import net.smackplays.smacksutil.screens.AbstractLargeBackpackScreen;
-import net.smackplays.smacksutil.screens.AbstractTeleportationTabletScreen;
+import net.smackplays.smacksutil.screens.*;
 
 import static net.smackplays.smacksutil.SmacksUtil.*;
 
@@ -36,19 +28,20 @@ public class ModClient implements ClientModInitializer {
         MenuScreens.register(ENCHANTING_TOOL_MENU, AbstractEnchantingToolScreen<EnchantingToolMenu>::new);
         MenuScreens.register(TELEPORTATION_TABLET_MENU, AbstractTeleportationTabletScreen<TeleportationTabletMenu>::new);
 
-        ColorProviderRegistry.ITEM.register((backpack, layer) -> {
-            if (layer > 1 || !(backpack.getItem() instanceof AbstractBackpackItem)) {
-                return -1;
-            }
-            if (layer == 0) {
-                DyedItemColor data = backpack.get(DataComponents.DYED_COLOR);
-                if (data != null){
-                    return -16777216 | data.rgb();
-                }
-                return -16777216 | DyeColor.WHITE.getMapColor().col;
-            }
-            return -1;
-        }, BACKPACK_ITEM, LARGE_BACKPACK_ITEM);
+
+        //ColorProviderRegistry.BLOCK.register((backpack, layer) -> {
+        //    if (layer > 1 || !(backpack.getBlock().asItem() instanceof AbstractBackpackItem)) {
+        //        return -1;
+        //    }
+        //    if (layer == 0) {
+        //        DyedItemColor data = backpack.get(DataComponents.DYED_COLOR);
+        //        if (data != null){
+        //           return -16777216 | data.rgb();
+        //        }
+        //        return -16777216 | DyeColor.WHITE.getMapColor().col;
+        //    }
+        //    return -1;
+        //}, BACKPACK_ITEM, LARGE_BACKPACK_ITEM);
 
         PayloadTypeRegistry.playS2C().register(S2CBlockBreakPacket.TYPE, S2CBlockBreakPacket.STREAM_CODEC);
         ClientPlayNetworking.registerGlobalReceiver(S2CBlockBreakPacket.TYPE, S2CBlockBreakPacketHandler::handle);

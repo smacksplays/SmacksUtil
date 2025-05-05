@@ -1,0 +1,6 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "smacksutil:item/effect_totem_item"
+  }
+}

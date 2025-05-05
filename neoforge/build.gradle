@@ -8,12 +8,12 @@ neoForge {
     // Automatically enable neoforge AccessTransformers if the file exists
     def at = project(':common').file('src/main/resources/META-INF/accesstransformer.cfg')
     if (at.exists()) {
-        accessTransformers.add(at.absolutePath)
+        accessTransformers.from(at.absolutePath)
     }
-    //parchment {
-    //    minecraftVersion = parchment_minecraft
-    //    mappingsVersion = parchment_version
-    //}
+    parchment {
+        minecraftVersion = parchment_minecraft
+        mappingsVersion = parchment_version
+    }
     runs {
         configureEach {
             systemProperty('neoforge.enabledGameTestNamespaces', mod_id)
@@ -23,7 +23,7 @@ neoForge {
             client()
         }
         data {
-            data()
+            clientData()
         }
         server {
             server()
@@ -37,18 +37,10 @@ neoForge {
 }
 
 dependencies{
-    implementation "me.shedaniel.cloth:cloth-config-neoforge:${project.cloth_config_version}"
-    runtimeOnly "curse.maven:adorned-1036809:5684431"
-    compileOnly "curse.maven:adorned-1036809:5684431"
-    implementation "curse.maven:adorned-1036809:5684431"
+    //implementation "me.shedaniel.cloth:cloth-config-neoforge:${project.cloth_config_version}"
+    //runtimeOnly "curse.maven:adorned-1036809:5684431"
+    //compileOnly "curse.maven:adorned-1036809:5684431"
+    //implementation "curse.maven:adorned-1036809:5684431"
     }
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
-
-// IDEA no longer automatically downloads sources/javadoc jars for dependencies, so we need to explicitly enable the behavior.
-idea {
-    module {
-        downloadSources = true
-        downloadJavadoc = true
-    }
-}

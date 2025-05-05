@@ -19,7 +19,7 @@ public class BackpackMenu extends AbstractBackpackMenu {
 
     @SuppressWarnings("unused")
     public static BackpackMenu createGeneric9x6(int syncId, Inventory playerInventory, Vector3f vec) {
-        ItemStack backpack = playerInventory.getSelected();
+        ItemStack backpack = playerInventory.getSelectedItem();
 
         NonNullList<Slot> slots = playerInventory.player.inventoryMenu.slots;
         for (int i = slots.size() - 1; i >= 0; i--){

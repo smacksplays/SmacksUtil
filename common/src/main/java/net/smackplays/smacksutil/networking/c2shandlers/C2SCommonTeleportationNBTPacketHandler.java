@@ -29,12 +29,12 @@ public class C2SCommonTeleportationNBTPacketHandler {
                 for (int i = 0; i < posTag.size(); i++){
                     CompoundTag t = (CompoundTag) posTag.get(i);
                     if (t.contains("name")){
-                        String n = t.getString("name");
+                        String n = t.getString("name").orElse("");
                         if (n.equals(name)){
                             posTag.remove(i);
                             tag.put("Positions", posTag);
                             stack.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
-                            player.getInventory().setItem(player.getInventory().selected, stack);
+                            player.getInventory().setItem(player.getInventory().getSelectedSlot(), stack);
                             player.inventoryMenu.broadcastChanges();
                             return;
                         }
@@ -45,7 +45,7 @@ public class C2SCommonTeleportationNBTPacketHandler {
             }
             tag.put("Positions", posTag);
             stack.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
-            player.getInventory().setItem(player.getInventory().selected, stack);
+            player.getInventory().setItem(player.getInventory().getSelectedSlot(), stack);
             player.inventoryMenu.broadcastChanges();
         }
     }

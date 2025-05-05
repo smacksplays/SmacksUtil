@@ -3,58 +3,57 @@ package net.smackplays.smacksutil.items;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 public class MagnetItem extends Item {
 
     private static final int GREEN = 65280;
     private static final int RED = 16711680;
 
-    public MagnetItem(Properties props) {
-        super(props);
-    }
-
-    public MagnetItem() {
-        super(new Item.Properties().rarity(Rarity.EPIC).stacksTo(1).component(DataComponents.CUSTOM_DATA, CustomData.of(new CompoundTag())));
+    public MagnetItem(Properties properties) {
+        super(properties);
     }
 
     @Override
-    public @NotNull InteractionResultHolder<ItemStack> use(Level world, @NotNull Player player, @NotNull InteractionHand interactionHand) {
+    public @NotNull InteractionResult use(Level world, @NotNull Player player, @NotNull InteractionHand interactionHand) {
         ItemStack stack = player.getItemInHand(interactionHand);
-        if (world.isClientSide) return InteractionResultHolder.success(stack);
+        if (world.isClientSide) return InteractionResult.SUCCESS;
         if (!player.isCrouching()) {
             toggle(stack, player);
-            return InteractionResultHolder.success(stack);
+            return InteractionResult.SUCCESS;
         }
         return super.use(world, player, interactionHand);
     }
 
     @Override
-    public void inventoryTick(@NotNull ItemStack stack, @NotNull Level world, @NotNull Entity entity, int $$3, boolean $$4) {
+    public void inventoryTick(ItemStack stack, @NotNull ServerLevel world, @NotNull Entity entity, EquipmentSlot equipmentSlot) {
         CustomData customData = stack.get(DataComponents.CUSTOM_DATA);
         if(customData != null){
             CompoundTag tag = customData.copyTag();
-            if (!world.isClientSide && tag.getBoolean("enabled")){
+            if (tag.getBoolean("enabled").isEmpty()) return;
+            if (!world.isClientSide && tag.getBoolean("enabled").get()){
                 attract(entity, world, getRange());
             }
         }
-        super.inventoryTick(stack, world, entity, $$3, $$4);
+        super.inventoryTick(stack, world, entity, equipmentSlot);
     }
 
     public void attract(Entity entity, Level world, int range){
@@ -77,7 +76,7 @@ public class MagnetItem extends Item {
         CustomData customData = stack.get(DataComponents.CUSTOM_DATA);
         if(customData != null){
             CompoundTag tag = customData.copyTag();
-            boolean state = tag.getBoolean("enabled");
+            boolean state = tag.getBoolean("enabled").orElse(false);
             tag.putBoolean("enabled", !state);
             String msg = !state ? "Active" : "Inactive";
             int color = !state ? GREEN : RED;
@@ -91,26 +90,26 @@ public class MagnetItem extends Item {
     }
 
     @Override
-    public boolean isEnchantable(@NotNull ItemStack stack) {
-        return false;
-    }
-
-    @Override
     public boolean isFoil(@NotNull ItemStack stack) {
         CustomData customData = stack.get(DataComponents.CUSTOM_DATA);
         if(customData != null){
             CompoundTag tag = customData.copyTag();
-            return tag.getBoolean("enabled");
+            return tag.getBoolean("enabled").orElse(false);
         }
         return false;
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable TooltipContext context, @NotNull List<Component> componentList, @NotNull TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, @NotNull TooltipContext context, @NotNull TooltipDisplay display,
+                                @NotNull Consumer<Component> consumer, @NotNull TooltipFlag flag) {
         CustomData customData = stack.get(DataComponents.CUSTOM_DATA);
         if(customData != null){
             CompoundTag tag = customData.copyTag();
-            componentList.add(1, Component.literal("Enabled: " + tag.getBoolean("enabled")));
+            if (tag.getBoolean("enabled").orElse(false)) {
+                consumer.accept(Component.literal("Active").withColor(GREEN));
+            } else {
+                consumer.accept(Component.literal("Inactive").withColor(RED));
+            }
         }
     }
 

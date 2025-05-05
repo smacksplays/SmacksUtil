@@ -10,6 +10,11 @@ mixin {
     config("${mod_id}.mixins.json")
     config("${mod_id}.forge.mixins.json")
 }
+jar {
+    manifest {
+        attributes["MixinConfigs"] = "${mod_id}.mixins.json,${mod_id}.forge.mixins.json"
+    }
+}
 
 minecraft {
     mappings channel: 'official', version: minecraft_version
@@ -70,13 +75,15 @@ dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     annotationProcessor("org.spongepowered:mixin:0.8.5-SNAPSHOT:processor")
 
-    // Hack fix for now, force jopt-simple to be exactly 5.0.4 because Mojang ships that version, but some transitive dependencies request 6.0+
+    // Forge's hack fix
     implementation('net.sf.jopt-simple:jopt-simple:5.0.4') { version { strictly '5.0.4' } }
+
+
     // Compile against only the API artifact
     //compileOnly(fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}:api"))
     // Use the full Curios API jar at runtime
     //runtimeOnly(fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}"))
-    implementation "me.shedaniel.cloth:cloth-config-forge:${project.cloth_config_version}"
+    //implementation "me.shedaniel.cloth:cloth-config-forge:${project.cloth_config_version}"
 }
 
 publishing {

@@ -7,7 +7,6 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.item.ArmorMaterials;
 import net.minecraft.world.item.ItemStack;
 import net.smackplays.smacksutil.SmacksUtil;
 import net.smackplays.smacksutil.inventories.BackpackInventory;
@@ -18,8 +17,8 @@ import org.joml.Vector3f;
 @SuppressWarnings("unused")
 public class BackpackItem extends AbstractBackpackItem {
 
-    public BackpackItem() {
-        super(ArmorMaterials.LEATHER);
+    public BackpackItem(Properties properties) {
+        super(properties);
     }
 
     @Override

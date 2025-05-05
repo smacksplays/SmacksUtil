@@ -1,12 +1,11 @@
 package net.smackplays.smacksutil.screens;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.StringWidget;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -56,18 +55,17 @@ public class AbstractTeleportationTabletScreen<T extends AbstractTeleportationTa
     @Override
     protected void renderBg(GuiGraphics context, float delta, int mouseX, int mouseY) {
         labelList.clear();
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 0.0F);
-        //in 1.20 or above,this method is in DrawContext class.
-        RenderSystem.setShaderTexture(0, C_TELEPORTATION_TABLET_SCREEN_LOCATION_RL);
+
         int x = (width - backgroundWidth) / 2;
         int y = (height - backgroundHeight) / 2;
-        context.blit(C_TELEPORTATION_TABLET_SCREEN_LOCATION_RL, x, y, 0, 0, backgroundWidth, backgroundHeight, 512, 512);
+        context.blit(RenderType::guiTextured, C_TELEPORTATION_TABLET_SCREEN_LOCATION_RL,
+                x, y, 0.0F, 0.0F, 512, 512, 512, 512);
+
         Player player = this.menu.playerInventory.player;
-        ItemStack telTool = player.getInventory().getSelected();
+        ItemStack telTool = player.getInventory().getSelectedItem();
         Map<String, TeleportationData> posMap = getTeleportationList(telTool);
         ResourceLocation scroller = posMap.size() > 10 ? C_SCROLLER_SPRITE_LOCATION_RL : C_SCROLLER_DISABLED_SPRITE_LOCATION_RL;
-        context.blitSprite(scroller, x + 137, (y + 15) + (int) this.scrollOffs, 12, 15);
+        context.blitSprite(RenderType::guiTextured, scroller, x + 137, (y + 15) + (int) this.scrollOffs, 12, 15);
         List<String> keyList = new ArrayList<>(posMap.keySet().stream().toList());
 
         if (this.scrollOffs > 0 && posMap.size() > 10) {
@@ -90,13 +88,16 @@ public class AbstractTeleportationTabletScreen<T extends AbstractTeleportationTa
                 boolean b3 = y + 13 + 19 * i < mouseY;
                 boolean b4 = y + 32 + 19 * i >= mouseY;
                 if (b1 && b2 && b3 && b4) {
-                    context.blit(C_ENCHANTING_SLOT_HIGHLIGHTED_SPRITE_LOCATION_RL, x + 8, y + 15 + 19 * i, 0, 0, 126, 19, 126, 19);
+                    context.blit(RenderType::guiTextured, C_ENCHANTING_SLOT_HIGHLIGHTED_SPRITE_LOCATION_RL,
+                            x + 8, y + 15 + 19 * i, 0, 0, 126, 19, 126, 19);
                 } else {
-                    context.blit(C_ENCHANTING_SLOT_SPRITE_LOCATION_RL, x + 8, y + 15 + 19 * i, 0, 0, 126, 19, 126, 19);
+                    context.blit(RenderType::guiTextured, C_ENCHANTING_SLOT_SPRITE_LOCATION_RL,
+                            x + 8, y + 15 + 19 * i, 0, 0, 126, 19, 126, 19);
                 }
                 labelList.add(new Label(Component.literal(name), 10, 20 + 19 * i, 0x404040, false));
             } else {
-                context.blit(C_ENCHANTING_SLOT_DISABLED_SPRITE_LOCATION_RL, x + 8, y + 15 + 19 * i, 0, 0, 126, 19, 126, 19);
+                context.blit(RenderType::guiTextured, C_ENCHANTING_SLOT_DISABLED_SPRITE_LOCATION_RL,
+                        x + 8, y + 15 + 19 * i, 0, 0, 126, 19, 126, 19);
             }
         }
     }
@@ -196,13 +197,13 @@ public class AbstractTeleportationTabletScreen<T extends AbstractTeleportationTa
                 if (listTag != null){
                     for (Tag value : listTag) {
                         CompoundTag p = (CompoundTag) value;
-                        double x = p.getDouble("x_pos");
-                        double y = p.getDouble("y_pos");
-                        double z = p.getDouble("z_pos");
-                        float xRot = p.getFloat("x_rot");
-                        float yRot = p.getFloat("y_rot");
-                        String name = p.getString("name");
-                        String dim = p.getString("dim");
+                        double x = p.getDouble("x_pos").orElseThrow();
+                        double y = p.getDouble("y_pos").orElseThrow();
+                        double z = p.getDouble("z_pos").orElseThrow();
+                        float xRot = p.getFloat("x_rot").orElseThrow();
+                        float yRot = p.getFloat("y_rot").orElseThrow();
+                        String name = p.getString("name").orElseThrow();
+                        String dim = p.getString("dim").orElseThrow();
                         ResourceKey<Level> levelKey = Level.OVERWORLD;
                         if (dim.equals("the_nether")){
                             levelKey = Level.NETHER;
@@ -243,7 +244,7 @@ public class AbstractTeleportationTabletScreen<T extends AbstractTeleportationTa
     public boolean mouseClicked(double mouseX, double mouseY, int lrClick) {
         int x = (width - this.backgroundWidth) / 2;
         int y = (height - this.backgroundHeight) / 2;
-        ItemStack stack = this.menu.playerInventory.player.getInventory().getSelected();
+        ItemStack stack = this.menu.playerInventory.player.getInventory().getSelectedItem();
         if (lrClick == 0){
             if (!stack.isEmpty()) {
                 Map<String, TeleportationData> posMap = getTeleportationList(stack);
@@ -298,7 +299,7 @@ public class AbstractTeleportationTabletScreen<T extends AbstractTeleportationTa
     public boolean mouseScrolled(double mouseX, double mouseY, double $$2, double scroll_delta) {
         if (!this.scrolling) {
             Player player = this.menu.playerInventory.player;
-            ItemStack telTool = player.getInventory().getSelected();
+            ItemStack telTool = player.getInventory().getSelectedItem();
             Map<String, TeleportationData> posMap = getTeleportationList(telTool);
             if (posMap.size() > 10) {
                 int slice = posMap.size() - 10;

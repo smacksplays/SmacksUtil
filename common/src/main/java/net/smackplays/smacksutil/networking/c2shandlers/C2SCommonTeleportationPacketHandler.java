@@ -14,7 +14,7 @@ public class C2SCommonTeleportationPacketHandler {
     public static void handle(ServerPlayer player, Level level, String levelKey, Vec3 pos, float xRot, float yRot) {
         ResourceKey<?> tempKey = null;
 
-        Set<ResourceKey<Level>> levelSet = player.registryAccess().registryOrThrow(Registries.DIMENSION).registryKeySet();
+        Set<ResourceKey<Level>> levelSet = player.registryAccess().lookupOrThrow(Registries.DIMENSION).registryKeySet();
         for (ResourceKey<Level> key : levelSet){
             if (key.toString().equals(levelKey)){
                 tempKey = key;
@@ -27,7 +27,7 @@ public class C2SCommonTeleportationPacketHandler {
             ServerLevel serverLevel = server.getLevel(resourceKey);
             //player.teleportTo(pos.x, pos.y, pos.z);
             if (serverLevel != null) {
-                player.teleportTo(serverLevel, pos.x, pos.y, pos.z, Set.of(), yRot, xRot);
+                player.teleportTo(serverLevel, pos.x, pos.y, pos.z, Set.of(), yRot, xRot, true);
             }
         }
     }

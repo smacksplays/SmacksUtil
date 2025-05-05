@@ -34,9 +34,15 @@ public class BackpackInventory implements IBackpackInventory {
     @Override
     public void setChanged() {
         CustomData data = stack.get(DataComponents.CUSTOM_DATA);
-        if (data != null) {
-            CompoundTag tag = data.copyTag().getCompound("enchantment_tool");
+        if (data != null && data.copyTag().getCompound("items").isPresent()) {
+            CompoundTag tag = data.copyTag().getCompound("items").get();
             tag = saveAllItems(tag, items);
+            stack.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
+        } else if (data != null) {
+            CompoundTag tag = new CompoundTag();
+            CompoundTag item_tag = new CompoundTag();
+            item_tag = saveAllItems(item_tag, items);
+            tag.put("items", item_tag);
             stack.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
         }
     }
@@ -51,12 +57,16 @@ public class BackpackInventory implements IBackpackInventory {
 
     @Override
     public void loadAllItems(CompoundTag tag, NonNullList<ItemStack> items) {
-        CompoundTag itemTag = tag.getCompound("Items");
+        if (tag.getCompound("Items").isEmpty()) return;
+        CompoundTag itemTag = tag.getCompound("Items").get();
         ContainerHelper.loadAllItems(itemTag, items, registryAccess);
-        ListTag countList = tag.getList("counts", 10);
+        if (tag.getList("counts").isEmpty()) return;
+        ListTag countList = tag.getList("counts").get();
         for (int i = 0; i < countList.size(); i++) {
-            CompoundTag countTag = countList.getCompound(i);
-            int count = countTag.getInt("count");
+            if (countList.getCompound(i).isEmpty()) return;
+            CompoundTag countTag = countList.getCompound(i).get();
+            if (countTag.getInt("count").isEmpty()) return;
+            int count = countTag.getInt("count").get();
             ItemStack stack = items.get(i);
             stack.setCount(count);
             items.set(i, stack);

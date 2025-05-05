@@ -3,13 +3,12 @@ package net.smackplays.smacksutil.veinminer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TieredItem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -96,7 +95,7 @@ public class VeinMiner {
 
         VoxelShape shape = combine(world, pos, (ArrayList<BlockPos>) toBreak.clone());
 
-        VertexConsumer vertex = Minecraft.getInstance().renderBuffers().bufferSource().getBuffer(Services.PLATFORM.getRenderType());
+        VertexConsumer vertex = Minecraft.getInstance().renderBuffers().bufferSource().getBuffer(RenderType.lines());
 
         drawCuboidShapeOutline(pose, vertex, shape,
                 (double) pos.getX() - cameraX, (double) pos.getY() - cameraY, (double) pos.getZ() - cameraZ);
@@ -129,8 +128,7 @@ public class VeinMiner {
         if (sourcePos.equals(old_lastBlockPos)) toBreak = old_toBreak;
 
         ItemStack mainHandStack = player.getMainHandItem();
-        Item mainHand = player.getMainHandItem().getItem();
-        boolean mainHandIsTool = TieredItem.class.isAssignableFrom(mainHand.getClass());
+        boolean mainHandIsTool = mainHandStack.isCorrectToolForDrops(world.getBlockState(sourcePos)) && !mainHandStack.isEmpty();
 
         int maxDMG = mainHandStack.getMaxDamage();
 
@@ -237,14 +235,21 @@ public class VeinMiner {
         if (player != null && Services.KEY_HANDLER != null &&Services.KEY_HANDLER.isVeinKeyDown()) {
             if (player.isCrouching()) {
                 currMode += (int) vertical;
-                player.getInventory().selected = player.getInventory().selected + (int) vertical;
+                player.getInventory().setSelectedSlot(player.getInventory().getSelectedSlot() + (int) vertical);
                 if (currMode > modeList.size() - 1) currMode = modeList.size() - 1;
                 else if (currMode < 0) currMode = 0;
                 player.displayClientMessage(Component.literal("Mode: " + modeList.get(currMode).getName()), true);
                 setMode();
             } else {
                 radius += (int) vertical;
-                player.getInventory().selected = player.getInventory().selected + (int) vertical;
+                int slot = player.getInventory().getSelectedSlot() + (int) vertical;
+                if (slot >= 0 && slot < 9) {
+                    player.getInventory().setSelectedSlot(slot);
+                } else if (slot < 0){
+                    player.getInventory().setSelectedSlot(8);
+                } else {
+                    player.getInventory().setSelectedSlot(0);
+                }
                 if (radius > MAX_RADIUS) radius = MAX_RADIUS;
                 else if (radius < 1) radius = 1;
                 player.displayClientMessage(Component.literal("Radius: " + radius), true);

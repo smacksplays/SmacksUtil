@@ -15,8 +15,8 @@ import org.joml.Vector3f;
 
 @SuppressWarnings("unused")
 public class FabricEnchantingToolItem extends AbstractEnchantingToolItem {
-    public FabricEnchantingToolItem() {
-        super();
+    public FabricEnchantingToolItem(Properties properties) {
+        super(properties);
     }
 
     @Override

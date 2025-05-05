@@ -9,11 +9,13 @@ import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
 import net.minecraft.core.Registry;
 import net.minecraft.core.cauldron.CauldronInteraction;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.smackplays.smacksutil.events.veinminer.PlayerBlockBreak;
 import net.smackplays.smacksutil.items.*;
 import net.smackplays.smacksutil.menus.BackpackMenu;
@@ -21,28 +23,27 @@ import net.smackplays.smacksutil.menus.EnchantingToolMenu;
 import net.smackplays.smacksutil.menus.LargeBackpackMenu;
 import net.smackplays.smacksutil.menus.TeleportationTabletMenu;
 import net.smackplays.smacksutil.networking.c2spacket.*;
-import net.smackplays.smacksutil.platform.Services;
-import net.smackplays.smacksutil.trinkets.Trinkets;
 
+import static net.smackplays.smacksutil.Constants.Backpack.*;
 import static net.smackplays.smacksutil.Constants.*;
+
 
 @SuppressWarnings("unused")
 public class SmacksUtil implements ModInitializer {
-
-    public static final Item BACKPACK_ITEM = new BackpackItem();
-    public static final Item LARGE_BACKPACK_ITEM = new LargeBackpackItem();
-    public static final Item BACKPACK_UPGRADE_TIER1_ITEM = new BackpackUpgradeItem(4);
-    public static final Item BACKPACK_UPGRADE_TIER2_ITEM = new BackpackUpgradeItem(8);
-    public static final Item BACKPACK_UPGRADE_TIER3_ITEM = new BackpackUpgradeItem(16);
-    public static final Item LIGHT_WAND_ITEM = new LightWandItem();
-    public static final Item AUTO_LIGHT_WAND_ITEM = new AutoLightWandItem();
-    public static final Item MAGNET_ITEM = new MagnetItem();
-    public static final Item ADVANCED_MAGNET_ITEM = new AdvancedMagnetItem();
-    public static final Item MOB_CATCHER_ITEM = new MobCatcherItem();
-    public static final Item ADVANCED_MOB_CATCHER_ITEM = new AdvancedMobCatcherItem();
-    public static final Item ENCHANTING_TOOL_ITEM = new FabricEnchantingToolItem();
-    public static final Item TELEPORTATION_TABLET_ITEM = new TeleportationTablet();
-    public static final Item EFFECT_TOTEM = new EffectTotem();
+    public static final Item BACKPACK_ITEM = new BackpackItem(BACKPACK_PROPERTIES);
+    public static final Item LARGE_BACKPACK_ITEM = new LargeBackpackItem(LARGE_BACKPACK_PROPERTIES);
+    public static final Item BACKPACK_UPGRADE_TIER1_ITEM = new BackpackUpgradeItem(C_BACKPACK_UPGRADE_TIER1_ITEM,4);
+    public static final Item BACKPACK_UPGRADE_TIER2_ITEM = new BackpackUpgradeItem(C_BACKPACK_UPGRADE_TIER2_ITEM,8);
+    public static final Item BACKPACK_UPGRADE_TIER3_ITEM = new BackpackUpgradeItem(C_BACKPACK_UPGRADE_TIER3_ITEM,16);
+    public static final Item LIGHT_WAND_ITEM = new LightWandItem(C_LIGHT_WAND_PROPERTIES);;
+    public static final Item AUTO_LIGHT_WAND_ITEM = new AutoLightWandItem(C_AUTO_LIGHT_WAND_PROPERTIES);
+    public static final Item MAGNET_ITEM = new MagnetItem(Constants.C_MAGNET_PROPERTIES);
+    public static final Item ADVANCED_MAGNET_ITEM = new AdvancedMagnetItem(C_ADVANCED_MAGNET_PROPERTIES);
+    public static final Item MOB_CATCHER_ITEM = new MobCatcherItem(C_MOB_CATCHER_PROPERTIES);
+    public static final Item ADVANCED_MOB_CATCHER_ITEM = new AdvancedMobCatcherItem(C_ADVANCED_MOB_CATCHER_PROPERTIES);
+    public static final Item ENCHANTING_TOOL_ITEM = new FabricEnchantingToolItem(C_ENCHANTING_TOOL_PROPERTIES);
+    public static final Item TELEPORTATION_TABLET_ITEM = new TeleportationTablet(C_TELEPORTATION_TABLET_PROPERTIES);
+    public static final Item EFFECT_TOTEM = new EffectTotem(C_EFFECT_TOTEM_PROPERTIES);
     public static final MenuType<BackpackMenu> BACKPACK_MENU = new ExtendedScreenHandlerType<>(BackpackMenu::createGeneric9x6, ByteBufCodecs.VECTOR3F);
     public static final MenuType<LargeBackpackMenu> LARGE_BACKPACK_MENU = new ExtendedScreenHandlerType<>(LargeBackpackMenu::createGeneric13x9, ByteBufCodecs.VECTOR3F);
     public static final MenuType<EnchantingToolMenu> ENCHANTING_TOOL_MENU = new ExtendedScreenHandlerType<>(EnchantingToolMenu::create, ByteBufCodecs.VECTOR3F);
@@ -52,6 +53,7 @@ public class SmacksUtil implements ModInitializer {
     public void onInitialize() {
         LOG.info("Hello Fabric world!");
         CommonClass.init();
+        //initItems();
         PlayerBlockBreakEvents.BEFORE.register(new PlayerBlockBreak());
 
         Registry.register(BuiltInRegistries.MENU, C_LARGE_BACKPACK_MENU_RL, LARGE_BACKPACK_MENU);
@@ -60,10 +62,11 @@ public class SmacksUtil implements ModInitializer {
         Registry.register(BuiltInRegistries.MENU, C_TELEPORTATION_TABLET_MENU_RL, TELEPORTATION_TABLET_MENU);
 
         registerItem(C_BACKPACK_ITEM_RL, BACKPACK_ITEM);
-        CauldronInteraction.WATER.map().putIfAbsent(BACKPACK_ITEM, CauldronInteraction.SHULKER_BOX);
+
+        CauldronInteraction.WATER.map().putIfAbsent(BACKPACK_ITEM, CauldronInteraction.WATER.map().get(Items.LEATHER_BOOTS));
 
         registerItem(C_LARGE_BACKPACK_ITEM_RL, LARGE_BACKPACK_ITEM);
-        CauldronInteraction.WATER.map().putIfAbsent(LARGE_BACKPACK_ITEM, CauldronInteraction.SHULKER_BOX);
+        CauldronInteraction.WATER.map().putIfAbsent(LARGE_BACKPACK_ITEM, CauldronInteraction.WATER.map().get(Items.LEATHER_BOOTS));
 
         registerItem(C_BACKPACK_UPGRADE_TIER1_ITEM_RL, BACKPACK_UPGRADE_TIER1_ITEM);
         registerItem(C_BACKPACK_UPGRADE_TIER2_ITEM_RL, BACKPACK_UPGRADE_TIER2_ITEM);
@@ -101,16 +104,36 @@ public class SmacksUtil implements ModInitializer {
         PayloadTypeRegistry.playC2S().register(C2SToggleLightWandItemPacket.TYPE, C2SToggleLightWandItemPacket.STREAM_CODEC);
         ServerPlayNetworking.registerGlobalReceiver(C2SToggleLightWandItemPacket.TYPE, C2SToggleLightWandItemPacketHandler::handle);
 
-
-        if (Services.PLATFORM.isModLoaded("trinkets")){
-            Trinkets.init();
-        }
+//        if (Services.PLATFORM.isModLoaded("trinkets")){
+//            Trinkets.init();
+//        }
 
     }
 
-    private void registerItem(ResourceLocation resourceLocation, Item item) {
+    private static void registerItem(String name, Item item) {
+        Registry.register(BuiltInRegistries.ITEM, name, item);
+        ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.TOOLS_AND_UTILITIES).register(itemGroup -> itemGroup.accept(item));
+    }
+
+    private static void registerItem(ResourceLocation resourceLocation, Item item) {
         Registry.register(BuiltInRegistries.ITEM, resourceLocation, item);
         ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.TOOLS_AND_UTILITIES).register(itemGroup -> itemGroup.accept(item));
     }
-    
+
+    private void initItems(){
+        CompoundTag initialData_AutoLightWand = new CompoundTag();
+        initialData_AutoLightWand.putBoolean("enabled", false);
+
+        CompoundTag initialData_Magnet = new CompoundTag();
+        initialData_Magnet.putBoolean("enabled", false);
+
+        CompoundTag initialData_AdvancedMagnet = new CompoundTag();
+        initialData_AdvancedMagnet.putBoolean("enabled", false);
+
+        CompoundTag initialData_MobCatcher = new CompoundTag();
+        initialData_MobCatcher.putBoolean("is_Holding", false);
+
+        CompoundTag initialData_AdvancedMobCatcher = new CompoundTag();
+        initialData_AdvancedMobCatcher.putBoolean("is_Holding", false);
+    }
 }

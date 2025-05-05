@@ -34,7 +34,8 @@ public class EnchantmentToolInventory implements IEnchantmentToolInventory {
     public void setChanged() {
         CustomData data = stack.get(DataComponents.CUSTOM_DATA);
         assert data != null;
-        CompoundTag tag = data.copyTag().getCompound("enchantment_tool");
+        if (data.copyTag().getCompound("enchantment_tool").isEmpty()) return;
+        CompoundTag tag = data.copyTag().getCompound("enchantment_tool").get();
         tag = ContainerHelper.saveAllItems(tag, items, provider);
         stack.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
     }

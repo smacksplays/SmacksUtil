@@ -7,8 +7,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
@@ -17,12 +15,8 @@ import org.jetbrains.annotations.NotNull;
 
 public class LightWandItem extends Item {
 
-    public LightWandItem() {
-        super(new Item.Properties().rarity(Rarity.EPIC).durability(200));
-    }
-
-    public LightWandItem(Item.Properties props) {
-        super(props);
+    public LightWandItem(Properties properties) {
+        super(properties);
     }
 
     @Override
@@ -43,10 +37,4 @@ public class LightWandItem extends Item {
         }
         return super.useOn(context);
     }
-
-    @Override
-    public boolean isEnchantable(@NotNull ItemStack stack) {
-        return false;
-    }
-
 }

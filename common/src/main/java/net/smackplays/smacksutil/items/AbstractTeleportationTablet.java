@@ -2,9 +2,9 @@ package net.smackplays.smacksutil.items;
 
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -17,21 +17,25 @@ import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("unused")
 public abstract class AbstractTeleportationTablet extends Item {
-    public AbstractTeleportationTablet(Properties $$0) {
-        super($$0);
+    public AbstractTeleportationTablet(Properties properties) {
+        super(properties);
     }
-    public AbstractTeleportationTablet() {
-        super(new Item.Properties().rarity(Rarity.EPIC).stacksTo(1).component(DataComponents.CUSTOM_DATA, CustomData.of(new CompoundTag())));
+    public AbstractTeleportationTablet(ResourceKey<Item> nameKey) {
+        super(new Item.Properties()
+                .setId(nameKey)
+                .rarity(Rarity.EPIC)
+                .stacksTo(1)
+                .component(DataComponents.CUSTOM_DATA, CustomData.of(new CompoundTag())));
     }
     @Override
-    public @NotNull InteractionResultHolder<ItemStack> use(Level world, Player player, @NotNull InteractionHand hand) {
+    public @NotNull InteractionResult use(Level world, Player player, @NotNull InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
-        if (world.isClientSide) return InteractionResultHolder.pass(stack);
-        if (player.isCrouching()) return InteractionResultHolder.pass(stack);
-        if (hand.equals(InteractionHand.OFF_HAND)) return InteractionResultHolder.pass(stack);
+        if (world.isClientSide) return InteractionResult.PASS;
+        if (player.isCrouching()) return InteractionResult.PASS;
+        if (hand.equals(InteractionHand.OFF_HAND)) return InteractionResult.PASS;
         player.openMenu(createScreenHandlerFactory(player.getMainHandItem()));
 
-        return InteractionResultHolder.pass(stack);
+        return InteractionResult.PASS;
     }
 
     @Override

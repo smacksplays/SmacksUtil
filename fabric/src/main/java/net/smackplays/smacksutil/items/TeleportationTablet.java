@@ -15,8 +15,8 @@ import org.joml.Vector3f;
 
 @SuppressWarnings("unused")
 public class TeleportationTablet extends AbstractTeleportationTablet{
-    public TeleportationTablet() {
-        super();
+    public TeleportationTablet(Properties properties) {
+        super(properties);
     }
 
     @Override

@@ -186,6 +186,7 @@ public class AbstractBackpackMenu extends AbstractContainerMenu {
             items.set(i + 4, temp.get(i));
             this.slots.get(i).set(impInv.getItem(i));
         }
+        impInv.setChanged();
     }
 
     @Override
