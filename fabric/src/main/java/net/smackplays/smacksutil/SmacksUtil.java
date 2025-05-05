@@ -103,11 +103,6 @@ public class SmacksUtil implements ModInitializer {
         ServerPlayNetworking.registerGlobalReceiver(C2SToggleMagnetItemPacket.TYPE, C2SToggleMagnetItemPacketHandler::handle);
         PayloadTypeRegistry.playC2S().register(C2SToggleLightWandItemPacket.TYPE, C2SToggleLightWandItemPacket.STREAM_CODEC);
         ServerPlayNetworking.registerGlobalReceiver(C2SToggleLightWandItemPacket.TYPE, C2SToggleLightWandItemPacketHandler::handle);
-
-//        if (Services.PLATFORM.isModLoaded("trinkets")){
-//            Trinkets.init();
-//        }
-
     }
 
     private static void registerItem(String name, Item item) {
@@ -118,22 +113,5 @@ public class SmacksUtil implements ModInitializer {
     private static void registerItem(ResourceLocation resourceLocation, Item item) {
         Registry.register(BuiltInRegistries.ITEM, resourceLocation, item);
         ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.TOOLS_AND_UTILITIES).register(itemGroup -> itemGroup.accept(item));
-    }
-
-    private void initItems(){
-        CompoundTag initialData_AutoLightWand = new CompoundTag();
-        initialData_AutoLightWand.putBoolean("enabled", false);
-
-        CompoundTag initialData_Magnet = new CompoundTag();
-        initialData_Magnet.putBoolean("enabled", false);
-
-        CompoundTag initialData_AdvancedMagnet = new CompoundTag();
-        initialData_AdvancedMagnet.putBoolean("enabled", false);
-
-        CompoundTag initialData_MobCatcher = new CompoundTag();
-        initialData_MobCatcher.putBoolean("is_Holding", false);
-
-        CompoundTag initialData_AdvancedMobCatcher = new CompoundTag();
-        initialData_AdvancedMobCatcher.putBoolean("is_Holding", false);
     }
 }
