@@ -36,6 +36,11 @@ public class BackpackInventory extends AInventoryBase{
         return baseStackSize;
     }
 
+    @Override
+    public int getMaxStackSize(ItemStack stack) {
+        return getMaxStackSize() / (64 / stack.getMaxStackSize());
+    }
+
     public boolean checkRemoveUpgrade(int corrCount) {
         for (int i = 0; i < getItems().size(); i++){
             if (getItems().get(i).getCount() > corrCount){

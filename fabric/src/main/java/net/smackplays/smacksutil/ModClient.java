@@ -7,10 +7,7 @@ import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
-import net.smackplays.smacksutil.menus.BackpackMenu;
-import net.smackplays.smacksutil.menus.EnchantingToolMenu;
-import net.smackplays.smacksutil.menus.LargeBackpackMenu;
-import net.smackplays.smacksutil.menus.TeleportationTabletMenu;
+import net.smackplays.smacksutil.menus.*;
 import net.smackplays.smacksutil.networking.s2cpacket.S2CBlockBreakPacket;
 import net.smackplays.smacksutil.networking.s2cpacket.S2CBlockBreakPacketHandler;
 import net.smackplays.smacksutil.platform.Services;
@@ -30,6 +27,7 @@ public class ModClient implements ClientModInitializer {
         MenuScreens.register(LARGE_BACKPACK_MENU, AbstractLargeBackpackScreen<LargeBackpackMenu>::new);
         MenuScreens.register(ENCHANTING_TOOL_MENU, AbstractEnchantingToolScreen<EnchantingToolMenu>::new);
         MenuScreens.register(TELEPORTATION_TABLET_MENU, AbstractTeleportationTabletScreen<TeleportationTabletMenu>::new);
+        MenuScreens.register(EFFECT_TOTEM_MENU, AbstractEffectTotemScreen<EffectTotemMenu>::new);
 
 //        ColorProviderRegistry.BLOCK.register((backpack, layer) -> {
 //            if (layer > 1 || !(backpack.getBlock().asItem() instanceof AbstractBackpackItem)) {

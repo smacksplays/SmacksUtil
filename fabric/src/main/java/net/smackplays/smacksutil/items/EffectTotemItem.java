@@ -8,19 +8,18 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
-import net.smackplays.smacksutil.inventories.EnchantmentToolInventory;
-import net.smackplays.smacksutil.menus.EnchantingToolMenu;
+import net.smackplays.smacksutil.SmacksUtil;
+import net.smackplays.smacksutil.menus.EffectTotemMenu;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3f;
 
-@SuppressWarnings("unused")
-public class FabricEnchantingToolItem extends AbstractEnchantingToolItem {
-    public FabricEnchantingToolItem(Properties properties) {
+public class EffectTotemItem extends AbstractEffectTotemItem {
+    public EffectTotemItem(Properties properties) {
         super(properties);
     }
 
     @Override
-    MenuProvider createScreenHandlerFactory(ItemStack stack) {
+    public MenuProvider createScreenHandlerFactory(ItemStack stack) {
         return new ExtendedScreenHandlerFactory<>() {
             @Override
             public Vector3f getScreenOpeningData(ServerPlayer player) {
@@ -34,8 +33,7 @@ public class FabricEnchantingToolItem extends AbstractEnchantingToolItem {
 
             @Override
             public AbstractContainerMenu createMenu(int syncId, @NotNull Inventory playerInventory, @NotNull Player player) {
-                return new EnchantingToolMenu(syncId, playerInventory,
-                        new EnchantmentToolInventory(stack, player.registryAccess(), 1));
+                return new EffectTotemMenu(SmacksUtil.EFFECT_TOTEM_MENU, syncId, playerInventory);
             }
         };
     }

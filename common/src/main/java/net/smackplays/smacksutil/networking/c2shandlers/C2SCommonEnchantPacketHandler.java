@@ -20,14 +20,13 @@ public class C2SCommonEnchantPacketHandler {
         Optional<HolderSet.Named<Enchantment>> optional = player.registryAccess().lookupOrThrow(Registries.ENCHANTMENT).get(EnchantmentTags.TOOLTIP_ORDER);
         if (optional.isPresent()){
             var l = optional.get().stream().toList();
+            AbstractEnchantingToolMenu containerMenu = (AbstractEnchantingToolMenu) player.containerMenu;
             for (Holder<Enchantment> entry : l){
                 Enchantment e = entry.value();
                 if(e.description().getString().equals(enchantment)){
-                    AbstractEnchantingToolMenu containerMenu = (AbstractEnchantingToolMenu) player.containerMenu;
                     ItemStack stack = containerMenu.slots.getFirst().getItem();
                     if (addRemove){
                         stack.enchant(entry, level);
-                        ((EnchantmentToolInventory)containerMenu.inventory).setChanged();
                     }else{
                         ItemEnchantments ench = stack.getEnchantments();
                         Set<Holder<Enchantment>> set = ench.keySet();
@@ -42,13 +41,13 @@ public class C2SCommonEnchantPacketHandler {
                             for (Holder<Enchantment> en : set) {
                                 if (!en.value().description().getString().equals(toRemove.value().description().getString())){
                                     stack.enchant(en, en.value().getMaxLevel());
-                                    containerMenu.inventory.setChanged();
                                 }
                             }
                         }
                     }
                 }
             }
+            containerMenu.inventory.setChanged();
         }
     }
 }

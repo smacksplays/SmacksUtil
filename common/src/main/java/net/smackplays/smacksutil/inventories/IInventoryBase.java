@@ -65,8 +65,22 @@ public interface IInventoryBase extends WorldlyContainer {
 
     @Override
     default @NotNull ItemStack removeItem(int slot, int count) {
-        if (count > 64) count = 64;
-        if (!getItem(slot).isStackable()) count = 1;
+        ItemStack stack = getItem(slot);
+        if (count > stack.getMaxStackSize()) {
+            if (stack.getMaxStackSize() < 64){
+                if (count == Math.round((float) stack.getCount() / 2)) {
+                    count = Math.round((float) stack.getMaxStackSize() / 2);
+                } else {
+                    count = stack.getMaxStackSize();
+                }
+            } else {
+                if (count == Math.round((float) stack.getCount() / 2)) {
+                    count = Math.round((float) stack.getMaxStackSize() / 2);
+                } else {
+                    count = 64;
+                }
+            }
+        }
         ItemStack result = ContainerHelper.removeItem(getItems(), slot, count);
         if (!result.isEmpty()) {
             setChanged();

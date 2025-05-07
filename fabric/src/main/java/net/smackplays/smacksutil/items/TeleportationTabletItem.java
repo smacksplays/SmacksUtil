@@ -14,8 +14,8 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3f;
 
 @SuppressWarnings("unused")
-public class TeleportationTablet extends AbstractTeleportationTablet{
-    public TeleportationTablet(Properties properties) {
+public class TeleportationTabletItem extends AbstractTeleportationTablet{
+    public TeleportationTabletItem(Properties properties) {
         super(properties);
     }
 

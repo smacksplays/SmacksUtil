@@ -17,10 +17,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.smackplays.smacksutil.events.veinminer.PlayerBlockBreak;
 import net.smackplays.smacksutil.items.*;
-import net.smackplays.smacksutil.menus.BackpackMenu;
-import net.smackplays.smacksutil.menus.EnchantingToolMenu;
-import net.smackplays.smacksutil.menus.LargeBackpackMenu;
-import net.smackplays.smacksutil.menus.TeleportationTabletMenu;
+import net.smackplays.smacksutil.menus.*;
 import net.smackplays.smacksutil.networking.c2spacket.*;
 
 import static net.smackplays.smacksutil.Constants.Backpack.*;
@@ -40,12 +37,13 @@ public class SmacksUtil implements ModInitializer {
     public static final Item MOB_CATCHER_ITEM = new MobCatcherItem(C_MOB_CATCHER_PROPERTIES);
     public static final Item ADVANCED_MOB_CATCHER_ITEM = new AdvancedMobCatcherItem(C_ADVANCED_MOB_CATCHER_PROPERTIES);
     public static final Item ENCHANTING_TOOL_ITEM = new FabricEnchantingToolItem(C_ENCHANTING_TOOL_PROPERTIES);
-    public static final Item TELEPORTATION_TABLET_ITEM = new TeleportationTablet(C_TELEPORTATION_TABLET_PROPERTIES);
-    public static final Item EFFECT_TOTEM = new EffectTotem(C_EFFECT_TOTEM_PROPERTIES);
+    public static final Item TELEPORTATION_TABLET_ITEM = new TeleportationTabletItem(C_TELEPORTATION_TABLET_PROPERTIES);
+    public static final Item EFFECT_TOTEM = new EffectTotemItem(C_EFFECT_TOTEM_PROPERTIES);
     public static final MenuType<BackpackMenu> BACKPACK_MENU = new ExtendedScreenHandlerType<>(BackpackMenu::createGeneric9x6, ByteBufCodecs.VECTOR3F);
     public static final MenuType<LargeBackpackMenu> LARGE_BACKPACK_MENU = new ExtendedScreenHandlerType<>(LargeBackpackMenu::createGeneric13x9, ByteBufCodecs.VECTOR3F);
     public static final MenuType<EnchantingToolMenu> ENCHANTING_TOOL_MENU = new ExtendedScreenHandlerType<>(EnchantingToolMenu::create, ByteBufCodecs.VECTOR3F);
     public static final MenuType<TeleportationTabletMenu> TELEPORTATION_TABLET_MENU = new ExtendedScreenHandlerType<>(TeleportationTabletMenu::create, ByteBufCodecs.VECTOR3F);
+    public static final MenuType<EffectTotemMenu> EFFECT_TOTEM_MENU = new ExtendedScreenHandlerType<>(EffectTotemMenu::create, ByteBufCodecs.VECTOR3F);
 
     @Override
     public void onInitialize() {
@@ -58,6 +56,7 @@ public class SmacksUtil implements ModInitializer {
         Registry.register(BuiltInRegistries.MENU, C_BACKPACK_MENU_RL, BACKPACK_MENU);
         Registry.register(BuiltInRegistries.MENU, C_ENCHANTING_TOOL_MENU_RL, ENCHANTING_TOOL_MENU);
         Registry.register(BuiltInRegistries.MENU, C_TELEPORTATION_TABLET_MENU_RL, TELEPORTATION_TABLET_MENU);
+        Registry.register(BuiltInRegistries.MENU, C_EFFECT_TOTEM_MENU_RL, EFFECT_TOTEM_MENU);
 
         registerItem(C_BACKPACK_ITEM_RL, BACKPACK_ITEM);
         registerItem(C_LARGE_BACKPACK_ITEM_RL, LARGE_BACKPACK_ITEM);

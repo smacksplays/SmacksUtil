@@ -61,12 +61,14 @@ public class AbstractBackpackMenuBase extends AbstractContainerMenu {
 
 
     protected boolean moveItemStack(ItemStack stack, int min, int max, boolean backwards, int maxStackSize) {
+        if (min == 4){
+            maxStackSize = this.inventory.getMaxStackSize(stack);
+        }
         boolean bl1 = false;
         int counter = min;
         if (backwards) {
             counter = max - 1;
         }
-
         if (stack.isStackable()) {
             while(!stack.isEmpty() && (backwards ? counter >= min : counter < max)) {
                 Slot slot = this.slots.get(counter);
@@ -85,7 +87,6 @@ public class AbstractBackpackMenuBase extends AbstractContainerMenu {
                         bl1 = true;
                     }
                 }
-
                 if (backwards) {
                     --counter;
                 } else {
@@ -93,14 +94,12 @@ public class AbstractBackpackMenuBase extends AbstractContainerMenu {
                 }
             }
         }
-
         if (!stack.isEmpty()) {
             if (backwards) {
                 counter = max - 1;
             } else {
                 counter = min;
             }
-
             while(backwards ? counter >= min : counter < max) {
                 Slot slot = this.slots.get(counter);
                 ItemStack stack1 = slot.getItem();
@@ -113,7 +112,6 @@ public class AbstractBackpackMenuBase extends AbstractContainerMenu {
                     }else {
                         slot.setByPlayer(stack.split(stack.getCount()));
                     }
-
                     slot.setChanged();
                     bl1 = true;
                     break;
@@ -121,7 +119,6 @@ public class AbstractBackpackMenuBase extends AbstractContainerMenu {
                     stack1.grow(stack.getCount());
                     stack.setCount(0);
                 }
-
                 if (backwards) {
                     --counter;
                 } else {
@@ -140,21 +137,58 @@ public class AbstractBackpackMenuBase extends AbstractContainerMenu {
         BackpackInventory impInv = (BackpackInventory) inventory;
         NonNullList<ItemStack> items = impInv.getItems();
         List<ItemStack> temp = items.subList(4, rows * cols + 4);
-
         int maxStackSize = impInv.getMaxStackSize();
-
         for (int i = 0; i < temp.size(); i++){
             for(int j = 0; j < temp.size(); j++){
                 if (i != j){
                     ItemStack stack1 = temp.get(i);
                     ItemStack stack2 = temp.get(j);
-                    if (ItemStack.isSameItemSameComponents(stack1, stack2)
-                            && ((stack1.isStackable() && stack2.isStackable() && stack1.getCount() + stack2.getCount() <= maxStackSize)
-                                || (!stack1.isStackable() && !stack2.isStackable() && stack1.getCount() + stack2.getCount() <= maxStackSize/64))) {
-                        stack1.setCount(stack1.getCount() + stack2.getCount());
-                        temp.set(i, stack1);
-                        temp.set(j, Items.AIR.getDefaultInstance());
+                    if (ItemStack.isSameItemSameComponents(stack1, stack2)) {
+                        if (stack1.isStackable() && stack2.isStackable()) {
+                            if (stack1.getMaxStackSize() == 64) {
+                                if (stack1.getCount() + stack2.getCount() <= maxStackSize) {
+                                    stack1.setCount(stack1.getCount() + stack2.getCount());
+                                    temp.set(i, stack1);
+                                    temp.set(j, Items.AIR.getDefaultInstance());
+                                }
+                            } else if (stack1.getMaxStackSize() < 64) {
+                                var actualMaxStackSize = maxStackSize / (64 / stack1.getMaxStackSize());
+                                if (stack1.getCount() + stack2.getCount() <= actualMaxStackSize) {
+                                    stack1.setCount(stack1.getCount() + stack2.getCount());
+                                    temp.set(i, stack1);
+                                    temp.set(j, Items.AIR.getDefaultInstance());
+                                } else if (stack1.getCount() < stack1.getMaxStackSize() && stack1.getCount() + stack2.getCount() > actualMaxStackSize){
+                                    int remainder = stack1.getCount() + stack2.getCount() - actualMaxStackSize;
+                                    stack1.setCount(actualMaxStackSize);
+                                    stack2.setCount(remainder);
+                                    temp.set(i, stack1);
+                                    temp.set(j, stack2);
+                                } else if (stack1.getCount() < actualMaxStackSize && stack2.getCount() < actualMaxStackSize){
+                                    int remainder = stack1.getCount() + stack2.getCount() - actualMaxStackSize;
+                                    stack1.setCount(actualMaxStackSize);
+                                    stack2.setCount(remainder);
+                                    temp.set(i, stack1);
+                                    temp.set(j, stack2);
+                                }
+                            }
+                        } else {
+                            if (stack1.getCount() + stack2.getCount() <= maxStackSize / 64){
+                                stack1.setCount(stack1.getCount() + stack2.getCount());
+                                temp.set(i, stack1);
+                                temp.set(j, Items.AIR.getDefaultInstance());
+                            }
+                        }
                     }
+//                    if (ItemStack.isSameItemSameComponents(stack1, stack2)
+//                            && ((stack1.isStackable() && stack2.isStackable() && stack1.getCount() + stack2.getCount() <= maxStackSize)
+//                            || (!stack1.isStackable() && !stack2.isStackable() && stack1.getCount() + stack2.getCount() <= maxStackSize/64))) {
+//                            //    && stack1.getCount() + stack2.getCount() <= maxStackSize / (64 / stack1.getMaxStackSize()))
+//                            //|| (!stack1.isStackable() && !stack2.isStackable()
+//                            //    && stack1.getCount() + stack2.getCount() <= maxStackSize / 64))) {
+//                        stack1.setCount(stack1.getCount() + stack2.getCount());
+//                        temp.set(i, stack1);
+//                        temp.set(j, Items.AIR.getDefaultInstance());
+//                    }
                 }
             }
         }

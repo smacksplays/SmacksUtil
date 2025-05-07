@@ -6,6 +6,7 @@ import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 import org.jetbrains.annotations.NotNull;
 
 public class EnchantingToolSlot extends Slot {
@@ -20,7 +21,9 @@ public class EnchantingToolSlot extends Slot {
 
     @Override
     public boolean mayPlace(ItemStack stack) {
-        return stack.isEnchantable() || stack.get(DataComponents.ENCHANTMENTS) != null;
+        ItemEnchantments data = stack.get(DataComponents.ENCHANTMENTS);
+        if (data == null) return false;
+        return stack.isEnchantable() || !data.isEmpty();
     }
 
     @Override

@@ -48,6 +48,8 @@
     "minecraft:hanging_roots",
     "minecraft:seagrass",
     "minecraft:sea_pickle",
-    "minecraft:kelp"
+    "minecraft:kelp",
+    "minecraft:dry_grass",
+    "minecraft:tall_dry_grass"
   ]
 }

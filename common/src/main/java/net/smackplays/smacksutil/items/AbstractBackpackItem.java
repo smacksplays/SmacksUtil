@@ -31,7 +31,6 @@ public abstract class AbstractBackpackItem extends Item{
         if (player.isCrouching()) return InteractionResult.PASS;
         if (hand.equals(InteractionHand.OFF_HAND)) return InteractionResult.PASS;
         player.openMenu(createScreenHandlerFactory(player.getMainHandItem()));
-
         return InteractionResult.SUCCESS;
     }
 
