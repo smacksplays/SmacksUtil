@@ -10,13 +10,14 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
-import net.smackplays.smacksutil.inventories.BackpackInventory;
+import net.smackplays.smacksutil.inventories.NewBackpackInventory;
 import net.smackplays.smacksutil.menus.AbstractBackpackMenu;
 import org.jetbrains.annotations.NotNull;
 
+import static net.smackplays.smacksutil.Constants.Backpack.*;
+
 
 /**
- * @author smack_plays
  * Test
  */
 public abstract class AbstractBackpackItem extends Item{
@@ -25,9 +26,7 @@ public abstract class AbstractBackpackItem extends Item{
     }
 
     @Override
-    public @NotNull InteractionResult use(Level world, Player player, @NotNull InteractionHand hand) {
-        ItemStack stack = player.getItemInHand(hand);
-
+    public @NotNull InteractionResult use(Level world, @NotNull Player player, @NotNull InteractionHand hand) {
         if (world.isClientSide) return InteractionResult.PASS;
         if (player.isCrouching()) return InteractionResult.PASS;
         if (hand.equals(InteractionHand.OFF_HAND)) return InteractionResult.PASS;
@@ -46,6 +45,6 @@ public abstract class AbstractBackpackItem extends Item{
 
     public MenuProvider createScreenHandlerFactory(ItemStack stack) {
         return new SimpleMenuProvider((i, playerInventory, playerEntity) ->
-                new AbstractBackpackMenu(MenuType.GENERIC_9x6, i, playerInventory, new BackpackInventory(stack, playerInventory.player.registryAccess())), stack.getHoverName());
+                new AbstractBackpackMenu(MenuType.GENERIC_9x6, i, playerInventory, new NewBackpackInventory(stack, playerInventory.player.registryAccess(), C_BACKPACK_ROW_NUM * C_BACKPACK_COL_NUM + 4)), stack.getHoverName());
     }
 }

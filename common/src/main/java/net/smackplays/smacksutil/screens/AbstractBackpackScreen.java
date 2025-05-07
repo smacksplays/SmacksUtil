@@ -12,7 +12,7 @@ import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
 import net.smackplays.smacksutil.Constants;
-import net.smackplays.smacksutil.inventories.BackpackInventory;
+import net.smackplays.smacksutil.inventories.NewBackpackInventory;
 import net.smackplays.smacksutil.menus.AbstractBackpackMenu;
 import net.smackplays.smacksutil.platform.Services;
 import net.smackplays.smacksutil.slots.BackpackSlot;
@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static net.smackplays.smacksutil.Constants.Backpack.C_BACKPACK_SCREEN_LOCATION_RL;
-
 
 public class AbstractBackpackScreen<T extends AbstractBackpackMenu> extends AbstractContainerScreen<T> {
     protected final int backgroundWidth = 196;
@@ -44,7 +43,7 @@ public class AbstractBackpackScreen<T extends AbstractBackpackMenu> extends Abst
     public void render(@NotNull GuiGraphics context, int mouseX, int mouseY, float delta) {
         renderBackground(context, mouseX, mouseY, delta);
 
-        BackpackInventory inv = (BackpackInventory) this.menu.inventory;
+        NewBackpackInventory inv = (NewBackpackInventory) this.menu.inventory;
         ItemStack backpack = inv.stack;
         CustomData customData = backpack.get(DataComponents.CUSTOM_DATA);
         if (customData != null){
@@ -58,10 +57,10 @@ public class AbstractBackpackScreen<T extends AbstractBackpackMenu> extends Abst
 
     @Override
     protected void renderTooltip(@NotNull GuiGraphics context, int mouseX, int mouseY) {
-        if (this.menu.getCarried().isEmpty() && this.hoveredSlot != null && this.hoveredSlot.hasItem() && this.hoveredSlot instanceof BackpackSlot) {
+        if (this.menu.getCarried().isEmpty() && this.hoveredSlot != null && this.hoveredSlot.hasItem() && this.hoveredSlot instanceof BackpackSlot backpackSlot) {
             ItemStack hoveredStack = this.hoveredSlot.getItem();
             List<Component> list = this.getTooltipFromContainerItem(hoveredStack);
-            list.add(1, Component.literal("Count: " + hoveredStack.getCount() + "/" + this.menu.inventory.getMaxStackSize())
+            list.add(1, Component.literal("Count: " + hoveredStack.getCount() + "/" + backpackSlot.getMaxStackSize(hoveredStack))
                     .withColor(Constants.DARK_GRAY));
             Optional<TooltipComponent> optional = hoveredStack.getTooltipImage();
             context.renderTooltip(this.font, list, optional, mouseX, mouseY);
@@ -88,10 +87,8 @@ public class AbstractBackpackScreen<T extends AbstractBackpackMenu> extends Abst
     }
 
     public void onButtonWidgetPressed() {
-        ItemStack backpack = ((BackpackInventory)this.menu.inventory).stack;
         if (Services.C2S_PACKET_SENDER != null) {
             Services.C2S_PACKET_SENDER.BackpackSortPacket(this.menu.playerInventory.getSelectedSlot());
-            //Services.C2S_PACKET_SENDER.BackpackSortPacket(this.menu.playerInventory.findSlotMatchingItem(backpack));
         }
     }
 
@@ -101,5 +98,10 @@ public class AbstractBackpackScreen<T extends AbstractBackpackMenu> extends Abst
                 || mouseX > (double) (width + backgroundWidth) / 2 + 10
                 || mouseY < (double) (height - backgroundHeight) / 2 - 10
                 || mouseY > (double) (height + backgroundHeight) / 2 + 10;
+    }
+
+    @Override
+    public void onClose() {
+        super.onClose();
     }
 }

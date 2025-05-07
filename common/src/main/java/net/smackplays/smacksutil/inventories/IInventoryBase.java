@@ -2,23 +2,21 @@ package net.smackplays.smacksutil.inventories;
 
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.smackplays.smacksutil.platform.Services;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-
-public interface IBackpackInventory extends WorldlyContainer {
-    static IBackpackInventory of(NonNullList<ItemStack> items) {
+public interface IInventoryBase extends WorldlyContainer {
+    static IInventoryBase of(NonNullList<ItemStack> items) {
         return () -> items;
     }
 
-    static IBackpackInventory ofSize(int size) {
+    static IInventoryBase ofSize(int size) {
         return of(NonNullList.withSize(size, ItemStack.EMPTY));
     }
 
@@ -56,6 +54,7 @@ public interface IBackpackInventory extends WorldlyContainer {
                 return false;
             }
         }
+
         return true;
     }
 
@@ -102,46 +101,37 @@ public interface IBackpackInventory extends WorldlyContainer {
         return true;
     }
 
+    default void loadAllItems(CompoundTag tag, NonNullList<ItemStack> items, RegistryAccess registryAccess) {
+        if (tag.getCompound("Items").isEmpty()) return;
+        CompoundTag itemTag = tag.getCompound("Items").get();
+        ContainerHelper.loadAllItems(itemTag, items, registryAccess);
+        if (tag.getList("counts").isEmpty()) return;
+        ListTag countList = tag.getList("counts").get();
+        for (int i = 0; i < countList.size(); i++) {
+            if (countList.getCompound(i).isEmpty()) return;
+            CompoundTag countTag = countList.getCompound(i).get();
+            if (countTag.getInt("count").isEmpty()) return;
+            int count = countTag.getInt("count").get();
+            ItemStack stack = items.get(i);
+            stack.setCount(count);
+            items.set(i, stack);
+        }
+    }
 
-    @Override
-    default int getMaxStackSize() {
-        int baseStackSize = 64;
-        ArrayList<ItemStack> upgrades = new ArrayList<>(){{
-            add(getItem(0));
-            add(getItem(1));
-            add(getItem(2));
-            add(getItem(3));
-        }};
-        for (int i = 0; i < 4; i++){
-            ItemStack upgrade = upgrades.get(i);
-            if (!upgrade.isEmpty()){
-                Item upgradeItem = upgrade.getItem();
-                if (upgradeItem.equals(Services.PLATFORM.getUpgrade1Item())) {
-                    baseStackSize *= 4;
-                } else if (upgradeItem.equals(Services.PLATFORM.getUpgrade2Item())) {
-                    baseStackSize *= 8;
-                } else if (upgradeItem.equals(Services.PLATFORM.getUpgrade3Item())){
-                    baseStackSize *= 16;
-                }
+    default CompoundTag saveAllItems(CompoundTag tag, NonNullList<ItemStack> items, RegistryAccess registryAccess) {
+        ListTag countList = new ListTag();
+        for (var item : items) {
+            CompoundTag t = new CompoundTag();
+            t.putInt("count", item.getCount());
+            countList.add(t);
+            if (item.getCount() > 1){
+                item.setCount(1);
             }
         }
-        return baseStackSize;
-    }
-
-    default boolean checkRemoveUpgrade(int corrCount) {
-        for (int i = 0; i < getItems().size(); i++){
-            if (getItems().get(i).getCount() > corrCount){
-                return false;
-            }
-        }
-        return true;
-    }
-
-
-    default void loadAllItems(CompoundTag tag, NonNullList<ItemStack> items) {
-    }
-
-    default CompoundTag saveAllItems(CompoundTag tag, NonNullList<ItemStack> items) {
+        tag.put("counts", countList);
+        CompoundTag itemTag = ContainerHelper.saveAllItems(new CompoundTag(), items, registryAccess);
+        tag.put("Items", itemTag);
+        loadAllItems(tag, items, registryAccess);
         return tag;
     }
 

@@ -9,10 +9,12 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.smackplays.smacksutil.SmacksUtil;
-import net.smackplays.smacksutil.inventories.BackpackInventory;
+import net.smackplays.smacksutil.inventories.NewBackpackInventory;
 import net.smackplays.smacksutil.menus.BackpackMenu;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3f;
+
+import static net.smackplays.smacksutil.Constants.Backpack.*;
 
 @SuppressWarnings("unused")
 public class BackpackItem extends AbstractBackpackItem {
@@ -36,7 +38,7 @@ public class BackpackItem extends AbstractBackpackItem {
 
             @Override
             public AbstractContainerMenu createMenu(int syncId, @NotNull Inventory playerInventory, @NotNull Player player) {
-                return new BackpackMenu(SmacksUtil.BACKPACK_MENU, syncId, playerInventory, new BackpackInventory(stack, player.registryAccess()));
+                return new BackpackMenu(SmacksUtil.BACKPACK_MENU, syncId, playerInventory, new NewBackpackInventory(stack, player.registryAccess(),C_BACKPACK_ROW_NUM * C_BACKPACK_COL_NUM + 4));
             }
         };
     }

@@ -1,8 +1,7 @@
 package net.smackplays.smacksutil.inventories;
 
-
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -11,19 +10,19 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
 import org.jetbrains.annotations.NotNull;
 
-public class EnchantmentToolInventory implements IEnchantmentToolInventory {
-    public final ItemStack stack;
-    private final HolderLookup.Provider provider;
-    private final NonNullList<ItemStack> items = NonNullList.withSize(1, ItemStack.EMPTY);
-
-    public EnchantmentToolInventory(ItemStack stack, HolderLookup.Provider provider) {
+public abstract class AbstractBackpackInventoryBase implements IBackpackInventory{
+    public ItemStack stack;
+    public RegistryAccess registryAccess;
+    public NonNullList<ItemStack> items;
+    public AbstractBackpackInventoryBase(ItemStack stack, RegistryAccess registryAccess, int inventorySize){
         this.stack = stack;
-        this.provider = provider;
+        this.registryAccess = registryAccess;
+        this.items = NonNullList.withSize(inventorySize, ItemStack.EMPTY);
         CustomData data = stack.get(DataComponents.CUSTOM_DATA);
-        assert data != null;
-        CompoundTag tag = data.copyTag();
-
-        ContainerHelper.loadAllItems(tag, items, provider);
+        if (data != null) {
+            CompoundTag tag = data.copyTag();
+            loadAllItems(tag, items);
+        }
     }
 
     @Override
@@ -48,48 +47,6 @@ public class EnchantmentToolInventory implements IEnchantmentToolInventory {
             stack.set(DataComponents.CUSTOM_DATA, CustomData.EMPTY);
         }
     }
-    /*
-
-        CustomData data = stack.get(DataComponents.CUSTOM_DATA);
-        if (data != null){
-            if (data.copyTag().getCompound("enchantment_tool").isEmpty()){
-                CompoundTag tag = new CompoundTag();
-                CompoundTag itemTag = new CompoundTag();
-                itemTag = saveAllItems(itemTag, items);
-                tag.put("enchantment_tool", itemTag);
-                stack.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
-            } else {
-                CompoundTag tag = data.copyTag().getCompound("enchantment_tool").get();
-                tag = ContainerHelper.saveAllItems(tag, items, provider);
-                stack.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
-            }
-        } else {
-            stack.set(DataComponents.CUSTOM_DATA, CustomData.EMPTY);
-        }
-     */
-    /*
-    public void setChanged() {
-        CustomData data = stack.get(DataComponents.CUSTOM_DATA);
-        if (data != null && data.copyTag().getCompound("Items").isPresent()) {
-            CompoundTag tag = data.copyTag().getCompound("Items").get();
-            tag = ContainerHelper.saveAllItems(tag, items, provider);
-            stack.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
-        } else if (data != null) {
-            CompoundTag tag = new CompoundTag();
-            CompoundTag item_tag = new CompoundTag();
-            item_tag = ContainerHelper.saveAllItems(item_tag, items, provider);
-            tag.put("Items", item_tag);
-            stack.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
-        } else {
-            stack.set(DataComponents.CUSTOM_DATA, CustomData.EMPTY);
-        }
-    }
-     */
-
-    @Override
-    public @NotNull ItemStack getItem(int slot) {
-        return IEnchantmentToolInventory.super.getItem(slot);
-    }
 
     @Override
     public void setItem(int slot, @NotNull ItemStack stack) {
@@ -99,10 +56,11 @@ public class EnchantmentToolInventory implements IEnchantmentToolInventory {
         }
     }
 
+    @Override
     public void loadAllItems(CompoundTag tag, NonNullList<ItemStack> items) {
         if (tag.getCompound("Items").isEmpty()) return;
         CompoundTag itemTag = tag.getCompound("Items").get();
-        ContainerHelper.loadAllItems(itemTag, items, provider);
+        ContainerHelper.loadAllItems(itemTag, items, registryAccess);
         if (tag.getList("counts").isEmpty()) return;
         ListTag countList = tag.getList("counts").get();
         for (int i = 0; i < countList.size(); i++) {
@@ -116,6 +74,7 @@ public class EnchantmentToolInventory implements IEnchantmentToolInventory {
         }
     }
 
+    @Override
     public CompoundTag saveAllItems(CompoundTag tag, NonNullList<ItemStack> items) {
         ListTag countList = new ListTag();
         for (var item : items) {
@@ -127,9 +86,10 @@ public class EnchantmentToolInventory implements IEnchantmentToolInventory {
             }
         }
         tag.put("counts", countList);
-        CompoundTag itemTag = ContainerHelper.saveAllItems(new CompoundTag(), items, provider);
+        CompoundTag itemTag = ContainerHelper.saveAllItems(new CompoundTag(), items, registryAccess);
         tag.put("Items", itemTag);
         loadAllItems(tag, items);
         return tag;
     }
+
 }

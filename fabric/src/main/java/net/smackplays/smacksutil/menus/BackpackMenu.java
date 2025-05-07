@@ -7,9 +7,11 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.smackplays.smacksutil.SmacksUtil;
-import net.smackplays.smacksutil.inventories.BackpackInventory;
+import net.smackplays.smacksutil.inventories.NewBackpackInventory;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
+
+import static net.smackplays.smacksutil.Constants.Backpack.*;
 
 public class BackpackMenu extends AbstractBackpackMenu {
 
@@ -28,6 +30,7 @@ public class BackpackMenu extends AbstractBackpackMenu {
                 break;
             }
         }
-        return new BackpackMenu(SmacksUtil.BACKPACK_MENU, syncId, playerInventory, new BackpackInventory(backpack, playerInventory.player.registryAccess()));
+        return new BackpackMenu(SmacksUtil.BACKPACK_MENU, syncId, playerInventory, new NewBackpackInventory(backpack, playerInventory.player.registryAccess(), C_BACKPACK_ROW_NUM * C_BACKPACK_COL_NUM + 4));
     }
+
 }

@@ -22,7 +22,7 @@ public class BackpackItem extends AbstractBackpackItem {
 
     public BackpackItem() {
         super(ArmorMaterials.LEATHER, ResourceKey.create(
-                Registries.ITEM, ResourceLocation.fromNamespaceAndPath(MOD_ID, Constants.C_BACKPACK_ITEM)));
+                Registries.ITEM, ResourceLocation.fromNamespaceAndPath(MOD_ID, Constants.Backpack.C_BACKPACK_ITEM)));
     }
 
     @Override

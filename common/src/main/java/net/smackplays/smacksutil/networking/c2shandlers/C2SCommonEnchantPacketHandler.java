@@ -6,10 +6,11 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.EnchantmentTags;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
+import net.smackplays.smacksutil.inventories.EnchantmentToolInventory;
+import net.smackplays.smacksutil.menus.AbstractEnchantingToolMenu;
 
 import java.util.Optional;
 import java.util.Set;
@@ -22,10 +23,11 @@ public class C2SCommonEnchantPacketHandler {
             for (Holder<Enchantment> entry : l){
                 Enchantment e = entry.value();
                 if(e.description().getString().equals(enchantment)){
-                    AbstractContainerMenu containerMenu = player.containerMenu;
+                    AbstractEnchantingToolMenu containerMenu = (AbstractEnchantingToolMenu) player.containerMenu;
                     ItemStack stack = containerMenu.slots.getFirst().getItem();
                     if (addRemove){
                         stack.enchant(entry, level);
+                        ((EnchantmentToolInventory)containerMenu.inventory).setChanged();
                     }else{
                         ItemEnchantments ench = stack.getEnchantments();
                         Set<Holder<Enchantment>> set = ench.keySet();
@@ -40,6 +42,7 @@ public class C2SCommonEnchantPacketHandler {
                             for (Holder<Enchantment> en : set) {
                                 if (!en.value().description().getString().equals(toRemove.value().description().getString())){
                                     stack.enchant(en, en.value().getMaxLevel());
+                                    containerMenu.inventory.setChanged();
                                 }
                             }
                         }

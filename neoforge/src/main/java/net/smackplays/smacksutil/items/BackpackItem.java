@@ -8,7 +8,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ArmorMaterials;
 import net.minecraft.world.item.ItemStack;
 import net.smackplays.smacksutil.SmacksUtil;
-import net.smackplays.smacksutil.inventories.BackpackInventory;
+import net.smackplays.smacksutil.inventories.NewBackpackInventory;
 import net.smackplays.smacksutil.menus.BackpackMenu;
 import org.jetbrains.annotations.NotNull;
 
@@ -23,7 +23,7 @@ public class BackpackItem extends AbstractBackpackItem {
         return new MenuProvider() {
             @Override
             public @NotNull AbstractContainerMenu createMenu(int syncId, @NotNull Inventory playerInventory, @NotNull Player player) {
-                return new BackpackMenu(SmacksUtil.BACKPACK_MENU.get(), syncId, playerInventory, new BackpackInventory(stack, player.registryAccess()));
+                return new BackpackMenu(SmacksUtil.BACKPACK_MENU.get(), syncId, playerInventory, new NewBackpackInventory(stack, player.registryAccess()));
             }
 
             @Override

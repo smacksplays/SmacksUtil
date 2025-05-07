@@ -7,21 +7,22 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.EnchantmentTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.smackplays.smacksutil.Constants;
+import net.smackplays.smacksutil.inventories.EnchantmentToolInventory;
 import net.smackplays.smacksutil.menus.AbstractEnchantingToolMenu;
 import net.smackplays.smacksutil.platform.Services;
 import org.jetbrains.annotations.NotNull;
@@ -126,6 +127,14 @@ public class AbstractEnchantingToolScreen<T extends AbstractEnchantingToolMenu> 
         renderBackground(context, mouseX, mouseY, delta);
         super.render(context, mouseX, mouseY, delta);
         renderTooltip(context, mouseX, mouseY);
+
+        EnchantmentToolInventory inv = (EnchantmentToolInventory) this.menu.inventory;
+        ItemStack itemStack = inv.stack;
+        CustomData customData = itemStack.get(DataComponents.CUSTOM_DATA);
+        if (customData != null){
+            CompoundTag tag = customData.copyTag();
+            inv.loadAllItems(tag, inv.getItems());
+        }
     }
 
     @Override
@@ -254,5 +263,4 @@ public class AbstractEnchantingToolScreen<T extends AbstractEnchantingToolMenu> 
     @SuppressWarnings("SameParameterValue")
     private record Label(Component component, int x, int y, boolean shadow) {
     }
-
 }

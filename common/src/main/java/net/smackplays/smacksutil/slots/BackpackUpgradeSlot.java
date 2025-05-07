@@ -5,8 +5,7 @@ import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.smackplays.smacksutil.inventories.BackpackInventory;
-import net.smackplays.smacksutil.inventories.IBackpackInventory;
+import net.smackplays.smacksutil.inventories.NewBackpackInventory;
 import net.smackplays.smacksutil.items.BackpackUpgradeItem;
 import org.jetbrains.annotations.NotNull;
 
@@ -30,12 +29,12 @@ public class BackpackUpgradeSlot extends Slot {
             offset /= carriedMultiplier;
         }
         if (offset != 1){
-            if (container instanceof BackpackInventory inv){
+            if (container instanceof NewBackpackInventory inv){
                 return inv.checkRemoveUpgrade(inv.getMaxStackSize() / offset);
             }
-            if (container instanceof IBackpackInventory inv){
-                return inv.checkRemoveUpgrade(inv.getMaxStackSize() / offset);
-            }
+//            if (container instanceof IBackpackInventory inv){
+//                return inv.checkRemoveUpgrade(inv.getMaxStackSize() / offset);
+//            }
         }
         return super.mayPickup(player);
     }

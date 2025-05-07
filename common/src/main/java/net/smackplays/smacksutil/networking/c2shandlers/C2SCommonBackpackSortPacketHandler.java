@@ -26,5 +26,6 @@ public class C2SCommonBackpackSortPacketHandler {
                 BackpackMenu.sort();
             }
         }
+
     }
 }

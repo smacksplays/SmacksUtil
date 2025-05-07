@@ -9,7 +9,6 @@ import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
 import net.minecraft.core.Registry;
 import net.minecraft.core.cauldron.CauldronInteraction;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.MenuType;
@@ -27,15 +26,14 @@ import net.smackplays.smacksutil.networking.c2spacket.*;
 import static net.smackplays.smacksutil.Constants.Backpack.*;
 import static net.smackplays.smacksutil.Constants.*;
 
-
 @SuppressWarnings("unused")
 public class SmacksUtil implements ModInitializer {
     public static final Item BACKPACK_ITEM = new BackpackItem(BACKPACK_PROPERTIES);
     public static final Item LARGE_BACKPACK_ITEM = new LargeBackpackItem(LARGE_BACKPACK_PROPERTIES);
-    public static final Item BACKPACK_UPGRADE_TIER1_ITEM = new BackpackUpgradeItem(C_BACKPACK_UPGRADE_TIER1_ITEM,4);
-    public static final Item BACKPACK_UPGRADE_TIER2_ITEM = new BackpackUpgradeItem(C_BACKPACK_UPGRADE_TIER2_ITEM,8);
-    public static final Item BACKPACK_UPGRADE_TIER3_ITEM = new BackpackUpgradeItem(C_BACKPACK_UPGRADE_TIER3_ITEM,16);
-    public static final Item LIGHT_WAND_ITEM = new LightWandItem(C_LIGHT_WAND_PROPERTIES);;
+    public static final Item BACKPACK_UPGRADE_TIER1_ITEM = new BackpackUpgradeItem(BACKPACK_UPGRADE_TIER1_PROPERTIES,4);
+    public static final Item BACKPACK_UPGRADE_TIER2_ITEM = new BackpackUpgradeItem(BACKPACK_UPGRADE_TIER2_PROPERTIES,8);
+    public static final Item BACKPACK_UPGRADE_TIER3_ITEM = new BackpackUpgradeItem(BACKPACK_UPGRADE_TIER3_PROPERTIES,16);
+    public static final Item LIGHT_WAND_ITEM = new LightWandItem(C_LIGHT_WAND_PROPERTIES);
     public static final Item AUTO_LIGHT_WAND_ITEM = new AutoLightWandItem(C_AUTO_LIGHT_WAND_PROPERTIES);
     public static final Item MAGNET_ITEM = new MagnetItem(Constants.C_MAGNET_PROPERTIES);
     public static final Item ADVANCED_MAGNET_ITEM = new AdvancedMagnetItem(C_ADVANCED_MAGNET_PROPERTIES);
@@ -62,10 +60,8 @@ public class SmacksUtil implements ModInitializer {
         Registry.register(BuiltInRegistries.MENU, C_TELEPORTATION_TABLET_MENU_RL, TELEPORTATION_TABLET_MENU);
 
         registerItem(C_BACKPACK_ITEM_RL, BACKPACK_ITEM);
-
-        CauldronInteraction.WATER.map().putIfAbsent(BACKPACK_ITEM, CauldronInteraction.WATER.map().get(Items.LEATHER_BOOTS));
-
         registerItem(C_LARGE_BACKPACK_ITEM_RL, LARGE_BACKPACK_ITEM);
+        CauldronInteraction.WATER.map().putIfAbsent(BACKPACK_ITEM, CauldronInteraction.WATER.map().get(Items.LEATHER_BOOTS));
         CauldronInteraction.WATER.map().putIfAbsent(LARGE_BACKPACK_ITEM, CauldronInteraction.WATER.map().get(Items.LEATHER_BOOTS));
 
         registerItem(C_BACKPACK_UPGRADE_TIER1_ITEM_RL, BACKPACK_UPGRADE_TIER1_ITEM);
@@ -103,11 +99,6 @@ public class SmacksUtil implements ModInitializer {
         ServerPlayNetworking.registerGlobalReceiver(C2SToggleMagnetItemPacket.TYPE, C2SToggleMagnetItemPacketHandler::handle);
         PayloadTypeRegistry.playC2S().register(C2SToggleLightWandItemPacket.TYPE, C2SToggleLightWandItemPacket.STREAM_CODEC);
         ServerPlayNetworking.registerGlobalReceiver(C2SToggleLightWandItemPacket.TYPE, C2SToggleLightWandItemPacketHandler::handle);
-    }
-
-    private static void registerItem(String name, Item item) {
-        Registry.register(BuiltInRegistries.ITEM, name, item);
-        ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.TOOLS_AND_UTILITIES).register(itemGroup -> itemGroup.accept(item));
     }
 
     private static void registerItem(ResourceLocation resourceLocation, Item item) {
