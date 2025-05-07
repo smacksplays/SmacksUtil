@@ -12,7 +12,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.equipment.ArmorMaterials;
 import net.smackplays.smacksutil.Constants;
 import net.smackplays.smacksutil.SmacksUtil;
-import net.smackplays.smacksutil.inventories.BackpackInventory;
 import net.smackplays.smacksutil.menus.BackpackMenu;
 import org.jetbrains.annotations.NotNull;
 

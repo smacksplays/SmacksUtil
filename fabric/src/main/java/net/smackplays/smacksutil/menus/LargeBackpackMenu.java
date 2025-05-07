@@ -7,9 +7,12 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.smackplays.smacksutil.SmacksUtil;
-import net.smackplays.smacksutil.inventories.LargeBackpackInventory;
+import net.smackplays.smacksutil.inventories.BackpackInventory;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
+
+import static net.smackplays.smacksutil.Constants.Backpack.C_LARGE_BACKPACK_COL_NUM;
+import static net.smackplays.smacksutil.Constants.Backpack.C_LARGE_BACKPACK_ROW_NUM;
 
 public class LargeBackpackMenu extends AbstractLargeBackpackMenu {
 
@@ -28,6 +31,7 @@ public class LargeBackpackMenu extends AbstractLargeBackpackMenu {
                 break;
             }
         }
-        return new LargeBackpackMenu(SmacksUtil.LARGE_BACKPACK_MENU, syncId, playerInventory, new LargeBackpackInventory(backpack, playerInventory.player.registryAccess()));
+        return new LargeBackpackMenu(SmacksUtil.LARGE_BACKPACK_MENU, syncId, playerInventory,
+                new BackpackInventory(backpack, playerInventory.player.registryAccess(), C_LARGE_BACKPACK_ROW_NUM * C_LARGE_BACKPACK_COL_NUM + 4));
     }
 }

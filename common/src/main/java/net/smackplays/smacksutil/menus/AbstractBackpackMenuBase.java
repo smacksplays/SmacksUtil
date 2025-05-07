@@ -10,8 +10,7 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.smackplays.smacksutil.inventories.IBackpackInventory;
-import net.smackplays.smacksutil.inventories.NewBackpackInventory;
+import net.smackplays.smacksutil.inventories.BackpackInventory;
 import net.smackplays.smacksutil.slots.BackpackSlot;
 import net.smackplays.smacksutil.util.SortComparator;
 import org.jetbrains.annotations.NotNull;
@@ -138,7 +137,7 @@ public class AbstractBackpackMenuBase extends AbstractContainerMenu {
     }
 
     public void sort() {
-        NewBackpackInventory impInv = (NewBackpackInventory) inventory;
+        BackpackInventory impInv = (BackpackInventory) inventory;
         NonNullList<ItemStack> items = impInv.getItems();
         List<ItemStack> temp = items.subList(4, rows * cols + 4);
 

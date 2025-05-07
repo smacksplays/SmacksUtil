@@ -12,7 +12,7 @@ import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
 import net.smackplays.smacksutil.Constants;
-import net.smackplays.smacksutil.inventories.NewBackpackInventory;
+import net.smackplays.smacksutil.inventories.BackpackInventory;
 import net.smackplays.smacksutil.menus.AbstractBackpackMenu;
 import net.smackplays.smacksutil.platform.Services;
 import net.smackplays.smacksutil.slots.BackpackSlot;
@@ -43,7 +43,7 @@ public class AbstractBackpackScreen<T extends AbstractBackpackMenu> extends Abst
     public void render(@NotNull GuiGraphics context, int mouseX, int mouseY, float delta) {
         renderBackground(context, mouseX, mouseY, delta);
 
-        NewBackpackInventory inv = (NewBackpackInventory) this.menu.inventory;
+        BackpackInventory inv = (BackpackInventory) this.menu.inventory;
         ItemStack backpack = inv.stack;
         CustomData customData = backpack.get(DataComponents.CUSTOM_DATA);
         if (customData != null){
