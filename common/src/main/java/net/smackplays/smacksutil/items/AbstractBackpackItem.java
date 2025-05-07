@@ -14,7 +14,8 @@ import net.smackplays.smacksutil.inventories.BackpackInventory;
 import net.smackplays.smacksutil.menus.AbstractBackpackMenu;
 import org.jetbrains.annotations.NotNull;
 
-import static net.smackplays.smacksutil.Constants.Backpack.*;
+import static net.smackplays.smacksutil.Constants.Backpack.C_BACKPACK_COL_NUM;
+import static net.smackplays.smacksutil.Constants.Backpack.C_BACKPACK_ROW_NUM;
 
 
 /**

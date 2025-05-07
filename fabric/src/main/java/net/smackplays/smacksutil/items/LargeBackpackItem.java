@@ -14,7 +14,8 @@ import net.smackplays.smacksutil.menus.LargeBackpackMenu;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3f;
 
-import static net.smackplays.smacksutil.Constants.Backpack.*;
+import static net.smackplays.smacksutil.Constants.Backpack.C_LARGE_BACKPACK_COL_NUM;
+import static net.smackplays.smacksutil.Constants.Backpack.C_LARGE_BACKPACK_ROW_NUM;
 
 @SuppressWarnings("unused")
 public class LargeBackpackItem extends AbstractBackpackItem {

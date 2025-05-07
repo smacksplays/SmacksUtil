@@ -12,7 +12,8 @@ import org.joml.Vector3f;
 
 import java.util.UUID;
 
-import static net.smackplays.smacksutil.Constants.Backpack.*;
+import static net.smackplays.smacksutil.Constants.Backpack.C_BACKPACK_OPEN_REQUEST_RL;
+import static net.smackplays.smacksutil.Constants.Backpack.C_BACKPACK_SORT_REQUEST_RL;
 import static net.smackplays.smacksutil.Constants.*;
 
 public class FabricClientPacketSender implements IClientPacketSender {

@@ -22,8 +22,6 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
-
 public abstract class AbstractEffectTotemItem extends Item {
     private static int counter = 0;
     private static final String LIST_NAME = "effect_list";

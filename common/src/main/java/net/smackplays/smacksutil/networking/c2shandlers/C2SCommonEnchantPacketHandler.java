@@ -9,7 +9,6 @@ import net.minecraft.tags.EnchantmentTags;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
-import net.smackplays.smacksutil.inventories.EnchantmentToolInventory;
 import net.smackplays.smacksutil.menus.AbstractEnchantingToolMenu;
 
 import java.util.Optional;

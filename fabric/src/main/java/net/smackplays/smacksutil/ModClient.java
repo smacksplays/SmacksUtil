@@ -2,11 +2,8 @@ package net.smackplays.smacksutil;
 
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.minecraft.client.gui.screens.MenuScreens;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.level.block.Blocks;
 import net.smackplays.smacksutil.menus.*;
 import net.smackplays.smacksutil.networking.s2cpacket.S2CBlockBreakPacket;
 import net.smackplays.smacksutil.networking.s2cpacket.S2CBlockBreakPacketHandler;
