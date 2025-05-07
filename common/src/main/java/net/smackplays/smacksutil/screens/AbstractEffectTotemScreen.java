@@ -22,7 +22,8 @@ import java.util.*;
 import static net.smackplays.smacksutil.Constants.*;
 
 public class AbstractEffectTotemScreen<T extends AbstractEffectTotemMenu> extends AbstractContainerScreen<T> {
-    private final int scrollbarHeight = 232;
+    private final int scrollbarHeight_left = 232;
+    private final int scrollbarHeight_right = 232;
     public boolean scrolling_left;
     public boolean scrolling_right;
     private float scrollOffs_left;
@@ -61,7 +62,7 @@ public class AbstractEffectTotemScreen<T extends AbstractEffectTotemMenu> extend
 
         if (this.scrollOffs_left > 0 && currentEffectList.size() > 13) {
             int slice = currentEffectList.size() - 13;
-            float steps = (float) scrollbarHeight / slice;
+            float steps = (float) scrollbarHeight_left / slice;
             float offset = steps - 1;
             while (this.scrollOffs_left > offset) {
                 currentEffectList.remove(currentkeyList.getFirst());
@@ -111,7 +112,7 @@ public class AbstractEffectTotemScreen<T extends AbstractEffectTotemMenu> extend
 
         if (this.scrollOffs_right > 0 && availableEffectList.size() > 13) {
             int slice = availableEffectList.size() - 13;
-            float steps = (float) scrollbarHeight / slice;
+            float steps = (float) scrollbarHeight_right / slice;
             float offset = steps - 1;
             while (this.scrollOffs_right > offset) {
                 availableEffectList.remove(availableKeyList.getFirst());
@@ -215,7 +216,7 @@ public class AbstractEffectTotemScreen<T extends AbstractEffectTotemMenu> extend
                 int list_offset_left = 0;
                 if (this.scrollOffs_left > 0 && keyList_left.size() > 13) {
                     int slice = keyList_left.size() - 13;
-                    float steps = (float) scrollbarHeight / slice;
+                    float steps = (float) scrollbarHeight_left / slice;
                     float offset = steps - 1;
                     while (this.scrollOffs_left > offset) {
                         offset += steps;
@@ -225,7 +226,7 @@ public class AbstractEffectTotemScreen<T extends AbstractEffectTotemMenu> extend
                 int list_offset_right = 0;
                 if (this.scrollOffs_right > 0 && keyList_right.size() > 13) {
                     int slice = keyList_right.size() - 13;
-                    float steps = (float) scrollbarHeight / slice;
+                    float steps = (float) scrollbarHeight_right / slice;
                     float offset = steps - 1;
                     while (this.scrollOffs_right > offset) {
                         offset += steps;
@@ -301,11 +302,11 @@ public class AbstractEffectTotemScreen<T extends AbstractEffectTotemMenu> extend
         int y = (height - backgroundHeight) / 2;
         if (this.scrolling_left) {
             this.scrollOffs_left = (float) mouseY - y - 22;
-            this.scrollOffs_left = Mth.clamp(this.scrollOffs_left, 0.0F, scrollbarHeight);
+            this.scrollOffs_left = Mth.clamp(this.scrollOffs_left, 0.0F, scrollbarHeight_left);
             return true;
         } else if (this.scrolling_right) {
             this.scrollOffs_right = (float) mouseY - y - 22;
-            this.scrollOffs_right = Mth.clamp(this.scrollOffs_right, 0.0F, scrollbarHeight);
+            this.scrollOffs_right = Mth.clamp(this.scrollOffs_right, 0.0F, scrollbarHeight_right);
             return true;
         } else {
             return super.mouseDragged(mouseX, mouseY, $$2, scrollX, scrollY);
@@ -350,6 +351,7 @@ public class AbstractEffectTotemScreen<T extends AbstractEffectTotemMenu> extend
         boolean b4 = y + 205 >= mouseY;
         return b1 && b2 && b3 && b4;
     }
+
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double $$2, double scroll_delta) {
         int x = (width - this.backgroundWidth) / 2;
@@ -362,11 +364,10 @@ public class AbstractEffectTotemScreen<T extends AbstractEffectTotemMenu> extend
             Map<String, Integer> posMap = getCurrentEffectList(effectTotem);
             if (posMap.size() > 13) {
                 int slice = posMap.size() - 13;
-                float steps = (float) scrollbarHeight / slice;
-
+                float steps = (float) scrollbarHeight_left / slice;
                 this.scrollOffs_left -= (float) scroll_delta * steps;
                 if (this.scrollOffs_left < 0) this.scrollOffs_left = 0;
-                else if (this.scrollOffs_left > scrollbarHeight) this.scrollOffs_left = scrollbarHeight;
+                else if (this.scrollOffs_left > scrollbarHeight_left) this.scrollOffs_left = scrollbarHeight_left;
             }
         }
         if (!this.scrolling_right && scroll_right) {
@@ -383,11 +384,11 @@ public class AbstractEffectTotemScreen<T extends AbstractEffectTotemMenu> extend
 
             if (availableEffectList.size() > 13) {
                 int slice = availableEffectList.size() - 13;
-                float steps = (float) scrollbarHeight / slice;
+                float steps = (float) scrollbarHeight_right / slice;
 
                 this.scrollOffs_right -= (float) scroll_delta * steps;
                 if (this.scrollOffs_right < 0) this.scrollOffs_right = 0;
-                else if (this.scrollOffs_right > scrollbarHeight) this.scrollOffs_right = scrollbarHeight;
+                else if (this.scrollOffs_right > scrollbarHeight_right) this.scrollOffs_right = scrollbarHeight_right;
             }
         }
         return super.mouseScrolled(mouseX, mouseY, $$2, scroll_delta);
