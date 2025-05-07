@@ -16,10 +16,6 @@ public interface IInventoryBase extends WorldlyContainer {
         return () -> items;
     }
 
-    static IInventoryBase ofSize(int size) {
-        return of(NonNullList.withSize(size, ItemStack.EMPTY));
-    }
-
     NonNullList<ItemStack> getItems();
 
     @Override

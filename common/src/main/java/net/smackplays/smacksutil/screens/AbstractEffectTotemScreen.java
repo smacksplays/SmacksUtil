@@ -249,7 +249,7 @@ public class AbstractEffectTotemScreen<T extends AbstractEffectTotemMenu> extend
                             if (listTag != null){
                                 listTag.remove(enchantment);
                                 tag.put("effect_list", listTag);
-                            };
+                            }
                             stack.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
                         }
                         return true;
@@ -272,7 +272,7 @@ public class AbstractEffectTotemScreen<T extends AbstractEffectTotemMenu> extend
                             if (listTag != null && !listTag.contains(enchantment)){
                                 listTag.add(enchantment);
                                 tag.put("effect_list", listTag);
-                            };
+                            }
                             stack.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
                         }
                     }
