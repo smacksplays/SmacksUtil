@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "BU2",
+  "key": {
+    "L": "minecraft:leather",
+    "C": "minecraft:chest",
+    "I": "minecraft:iron_ingot"
+  },
+  "pattern": [
+    "LIL",
+    "ICI",
+    "LIL"
+  ],
+  "result": {
+    "id": "smacksutil:backpack_upgrade_tier2_item"
+  }
+}

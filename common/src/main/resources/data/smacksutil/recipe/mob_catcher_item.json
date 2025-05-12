@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "MT",
+  "pattern": [
+    "IPI",
+    "PEP",
+    "IPI"
+  ],
+  "key": {
+    "E": "minecraft:ender_chest",
+    "I": "minecraft:iron_ingot",
+    "P": "minecraft:ender_pearl"
+  },
+  "result": {
+    "id": "smacksutil:mob_catcher_item"
+  }
+}

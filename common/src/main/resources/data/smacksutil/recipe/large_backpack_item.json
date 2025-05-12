@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "LB",
+  "key": {
+    "W": "#minecraft:wool",
+    "L": "minecraft:leather",
+    "C": "minecraft:chest",
+    "S": "minecraft:string",
+    "D": "minecraft:diamond"
+  },
+  "pattern": [
+    "WLS",
+    "CDC",
+    "WLS"
+  ],
+  "result": {
+    "id": "smacksutil:large_backpack_item"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "B",
+  "pattern": [
+    "WLS",
+    "LCL",
+    "WLS"
+  ],
+  "key": {
+    "W": "#minecraft:wool",
+    "L": "minecraft:leather",
+    "C": "minecraft:chest",
+    "S": "minecraft:string"
+  },
+  "result": {
+    "id": "smacksutil:backpack_item"
+  }
+}

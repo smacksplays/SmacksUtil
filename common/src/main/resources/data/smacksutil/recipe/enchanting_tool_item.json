@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "AM",
+  "pattern": [
+    "DBD",
+    "BNB",
+    "DBD"
+  ],
+  "key": {
+    "D": "minecraft:diamond_block",
+    "N": "minecraft:nether_star",
+    "B": "minecraft:book"
+  },
+  "result": {
+    "id": "smacksutil:enchanting_tool_item"
+  }
+}

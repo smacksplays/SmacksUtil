@@ -25,11 +25,11 @@ import static net.smackplays.smacksutil.Constants.*;
 
 @SuppressWarnings("unused")
 public class SmacksUtil implements ModInitializer {
-    public static final Item BACKPACK_ITEM = new BackpackItem(BACKPACK_PROPERTIES);
-    public static final Item LARGE_BACKPACK_ITEM = new LargeBackpackItem(LARGE_BACKPACK_PROPERTIES);
-    public static final Item BACKPACK_UPGRADE_TIER1_ITEM = new BackpackUpgradeItem(BACKPACK_UPGRADE_TIER1_PROPERTIES,4);
-    public static final Item BACKPACK_UPGRADE_TIER2_ITEM = new BackpackUpgradeItem(BACKPACK_UPGRADE_TIER2_PROPERTIES,8);
-    public static final Item BACKPACK_UPGRADE_TIER3_ITEM = new BackpackUpgradeItem(BACKPACK_UPGRADE_TIER3_PROPERTIES,16);
+    public static final Item BACKPACK_ITEM = new BackpackItem(C_BACKPACK_PROPERTIES);
+    public static final Item LARGE_BACKPACK_ITEM = new LargeBackpackItem(C_LARGE_BACKPACK_PROPERTIES);
+    public static final Item BACKPACK_UPGRADE_TIER1_ITEM = new BackpackUpgradeItem(C_BACKPACK_UPGRADE_TIER1_PROPERTIES,4);
+    public static final Item BACKPACK_UPGRADE_TIER2_ITEM = new BackpackUpgradeItem(C_BACKPACK_UPGRADE_TIER2_PROPERTIES,8);
+    public static final Item BACKPACK_UPGRADE_TIER3_ITEM = new BackpackUpgradeItem(C_BACKPACK_UPGRADE_TIER3_PROPERTIES,16);
     public static final Item LIGHT_WAND_ITEM = new LightWandItem(C_LIGHT_WAND_PROPERTIES);
     public static final Item AUTO_LIGHT_WAND_ITEM = new AutoLightWandItem(C_AUTO_LIGHT_WAND_PROPERTIES);
     public static final Item MAGNET_ITEM = new MagnetItem(Constants.C_MAGNET_PROPERTIES);
@@ -47,9 +47,8 @@ public class SmacksUtil implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        LOG.info("Hello Fabric world!");
         CommonClass.init();
-        //initItems();
+
         PlayerBlockBreakEvents.BEFORE.register(new PlayerBlockBreak());
 
         Registry.register(BuiltInRegistries.MENU, C_LARGE_BACKPACK_MENU_RL, LARGE_BACKPACK_MENU);

@@ -3,12 +3,10 @@
   "category": "misc",
   "group": "AM",
   "ingredients": [
-    {
-      "tag": "wool"
-    }
+    "#minecraft:wool"
   ],
   "result": {
-    "item": "minecraft:string",
+    "id": "minecraft:string",
     "count": 4
   }
 }

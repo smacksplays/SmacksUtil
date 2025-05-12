@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "AMT",
+  "pattern": [
+    "IPI",
+    "PEP",
+    "IPI"
+  ],
+  "key": {
+    "E": "minecraft:ender_chest",
+    "I": "minecraft:gold_ingot",
+    "P": "minecraft:ender_pearl"
+  },
+  "result": {
+    "id": "smacksutil:advanced_mob_catcher_item"
+  }
+}

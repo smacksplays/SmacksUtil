@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "ALW",
+  "pattern": [
+    "TDT",
+    "TLT",
+    "TST"
+  ],
+  "key": {
+    "L": "smacksutil:light_wand_item",
+    "D": "minecraft:diamond_block",
+    "T": "minecraft:torch",
+    "S": "minecraft:stick"
+  },
+  "result": {
+    "id": "smacksutil:auto_light_wand_item"
+  }
+}

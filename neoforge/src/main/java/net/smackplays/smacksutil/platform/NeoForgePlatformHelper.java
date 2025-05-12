@@ -9,7 +9,6 @@ import net.neoforged.fml.loading.FMLLoader;
 import net.smackplays.smacksutil.SmacksUtil;
 import net.smackplays.smacksutil.platform.services.IPlatformHelper;
 import net.smackplays.smacksutil.util.CustomRenderLayer;
-import top.theillusivec4.curios.api.CuriosApi;
 
 public class NeoForgePlatformHelper implements IPlatformHelper {
 
@@ -110,7 +109,8 @@ public class NeoForgePlatformHelper implements IPlatformHelper {
 
     @Override
     public ItemStack getTrinketOrCuriosStack(Player player, String slot) {
-        return CuriosApi.getCuriosHelper().findCurios(player, slot).getFirst().stack();
+        //return CuriosApi.getCuriosHelper().findCurios(player, slot).getFirst().stack();
+        return ItemStack.EMPTY;
     }
     @Override
     public RenderType getRenderType() {

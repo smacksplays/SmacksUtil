@@ -78,12 +78,11 @@ dependencies {
     // Forge's hack fix
     implementation('net.sf.jopt-simple:jopt-simple:5.0.4') { version { strictly '5.0.4' } }
 
-
     // Compile against only the API artifact
     //compileOnly(fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}:api"))
     // Use the full Curios API jar at runtime
     //runtimeOnly(fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}"))
-    //implementation "me.shedaniel.cloth:cloth-config-forge:${project.cloth_config_version}"
+    //api(fg.deobf("me.shedaniel.cloth:cloth-config-forge:${project.cloth_config_version}"))
 }
 
 publishing {

@@ -26,9 +26,7 @@ public class CustomRenderLayer extends RenderType {
     }
 
     @Override
-    public void draw(MeshData meshData) {
-
-    }
+    public void draw(MeshData meshData) {}
 
     @Override
     public RenderTarget getRenderTarget() {

@@ -11,8 +11,8 @@ import net.smackplays.smacksutil.menus.EnchantingToolMenu;
 import org.jetbrains.annotations.NotNull;
 
 public class EnchantingToolItem extends AbstractEnchantingToolItem {
-    public EnchantingToolItem() {
-        super();
+    public EnchantingToolItem(Properties properties) {
+        super(properties);
     }
 
     @Override
@@ -25,7 +25,8 @@ public class EnchantingToolItem extends AbstractEnchantingToolItem {
 
             @Override
             public AbstractContainerMenu createMenu(int syncId, @NotNull Inventory playerInventory, @NotNull Player player) {
-                return new EnchantingToolMenu(syncId, playerInventory, new EnchantmentToolInventory(stack, player.registryAccess()));
+                return new EnchantingToolMenu(syncId, playerInventory,
+                        new EnchantmentToolInventory(stack, player.registryAccess(), 1));
             }
         };
     }

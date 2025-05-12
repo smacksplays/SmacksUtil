@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "M",
+  "pattern": [
+    "LER",
+    "IEI",
+    "III"
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "L": "minecraft:lapis_lazuli",
+    "R": "minecraft:redstone",
+    "E": "minecraft:ender_pearl"
+  },
+  "result": {
+    "id": "smacksutil:magnet_item"
+  }
+}

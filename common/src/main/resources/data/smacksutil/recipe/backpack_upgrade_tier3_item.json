@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "BU3",
+  "key": {
+    "L": "minecraft:leather",
+    "C": "minecraft:chest",
+    "D": "minecraft:diamond"
+  },
+  "pattern": [
+    "LDL",
+    "DCD",
+    "LDL"
+  ],
+  "result": {
+    "id": "smacksutil:backpack_upgrade_tier3_item"
+  }
+}

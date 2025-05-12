@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "ET",
+  "key": {
+    "G": "minecraft:gold_ingot",
+    "R": "minecraft:potion",
+    "D": "minecraft:diamond_block"
+  },
+  "pattern": [
+    "GRG",
+    "RDR",
+    "GRG"
+  ],
+  "result": {
+    "id": "smacksutil:effect_totem_item"
+  }
+}

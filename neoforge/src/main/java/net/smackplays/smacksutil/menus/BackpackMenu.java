@@ -5,12 +5,12 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
 import net.smackplays.smacksutil.SmacksUtil;
+import net.smackplays.smacksutil.inventories.BackpackInventory;
 import net.smackplays.smacksutil.platform.Services;
 import org.jetbrains.annotations.Nullable;
-import top.theillusivec4.curios.api.CuriosApi;
-import top.theillusivec4.curios.api.SlotResult;
 
-import java.util.List;
+
+import static net.smackplays.smacksutil.Constants.Backpack.*;
 
 public class BackpackMenu extends AbstractBackpackMenu {
 
@@ -20,14 +20,14 @@ public class BackpackMenu extends AbstractBackpackMenu {
 
     @SuppressWarnings("unused")
     public static BackpackMenu createGeneric9x6(int syncId, Inventory playerInventory) {
-        ItemStack backpack = playerInventory.getSelected();
+        ItemStack backpack = playerInventory.getSelectedItem();
         if (!backpack.is(SmacksUtil.BACKPACK_ITEM.get())){
             if (Services.PLATFORM.isModLoaded("curios")){
-                List<SlotResult> slotResults = CuriosApi.getCuriosHelper().findCurios(playerInventory.player, "back");
-                if (!slotResults.isEmpty()){
-                    backpack = slotResults.getFirst().stack();
-                    return new BackpackMenu(SmacksUtil.BACKPACK_MENU.get(), syncId, playerInventory, new BackpackInventory(backpack,playerInventory.player.registryAccess()));
-                }
+//                List<SlotResult> slotResults = CuriosApi.getCuriosHelper().findCurios(playerInventory.player, "back");
+//                if (!slotResults.isEmpty()){
+//                    backpack = slotResults.getFirst().stack();
+//                    return new BackpackMenu(SmacksUtil.BACKPACK_MENU.get(), syncId, playerInventory, new BackpackInventory(backpack,playerInventory.player.registryAccess()));
+//                }
             }
             for (int i = playerInventory.getContainerSize(); i >= 0; i--){
                 if (playerInventory.getItem(i).is(SmacksUtil.BACKPACK_ITEM.get())){
@@ -36,6 +36,7 @@ public class BackpackMenu extends AbstractBackpackMenu {
                 }
             }
         }
-        return new BackpackMenu(SmacksUtil.BACKPACK_MENU.get(), syncId, playerInventory, new BackpackInventory(backpack, playerInventory.player.registryAccess()));
+        return new BackpackMenu(SmacksUtil.BACKPACK_MENU.get(), syncId, playerInventory,
+                new BackpackInventory(backpack, playerInventory.player.registryAccess(), C_BACKPACK_ROW_NUM * C_BACKPACK_COL_NUM + 4));
     }
 }

@@ -1,16 +1,22 @@
 package net.smackplays.smacksutil;
 
 import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.cauldron.CauldronInteraction;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.stats.Stats;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.CreativeModeTabs;
-import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.component.DyedItemColor;
-import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.LayeredCauldronBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
@@ -21,7 +27,6 @@ import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -39,6 +44,7 @@ import net.smackplays.smacksutil.screens.AbstractLargeBackpackScreen;
 import net.smackplays.smacksutil.screens.AbstractTeleportationTabletScreen;
 
 import static net.smackplays.smacksutil.Constants.*;
+import static net.smackplays.smacksutil.Constants.Backpack.*;
 
 
 @SuppressWarnings({"unused", "EmptyMethod"})
@@ -46,19 +52,32 @@ import static net.smackplays.smacksutil.Constants.*;
 public class SmacksUtil {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MOD_ID);
     public static final DeferredRegister<MenuType<?>> MENUS = DeferredRegister.create(ForgeRegistries.MENU_TYPES, MOD_ID);
-    public static final RegistryObject<Item> BACKPACK_ITEM = ITEMS.register(Backpack.C_BACKPACK_ITEM, new BackpackItem());
-    public static final RegistryObject<Item> LARGE_BACKPACK_ITEM = ITEMS.register(Backpack.C_LARGE_BACKPACK_ITEM, LargeBackpackItem::new);
-    public static final RegistryObject<Item> BACKPACK_UPGRADE_TIER1_ITEM = ITEMS.register(Backpack.C_BACKPACK_UPGRADE_TIER1_ITEM, () -> new BackpackUpgradeItem(4));
-    public static final RegistryObject<Item> BACKPACK_UPGRADE_TIER2_ITEM = ITEMS.register(Backpack.C_BACKPACK_UPGRADE_TIER2_ITEM, () -> new BackpackUpgradeItem(8));
-    public static final RegistryObject<Item> BACKPACK_UPGRADE_TIER3_ITEM = ITEMS.register(Backpack.C_BACKPACK_UPGRADE_TIER3_ITEM, () -> new BackpackUpgradeItem(16));
-    public static final RegistryObject<Item> LIGHT_WAND_ITEM = ITEMS.register(C_LIGHT_WAND_ITEM, LightWandItem::new);
-    public static final RegistryObject<Item> AUTO_LIGHT_WAND_ITEM = ITEMS.register(C_AUTO_LIGHT_WAND_ITEM, AutoLightWandItem::new);
-    public static final RegistryObject<Item> MAGNET_ITEM = ITEMS.register(C_MAGNET_ITEM, MagnetItem::new);
-    public static final RegistryObject<Item> ADVANCED_MAGNET_ITEM = ITEMS.register(C_ADVANCED_MAGNET_ITEM, AdvancedMagnetItem::new);
-    public static final RegistryObject<Item> MOB_CATCHER_ITEM = ITEMS.register(C_MOB_CATCHER_ITEM, MobCatcherItem::new);
-    public static final RegistryObject<Item> ADVANCED_MOB_CATCHER_ITEM = ITEMS.register(C_ADVANCED_MOB_CATCHER_ITEM, AdvancedMobCatcherItem::new);
-    public static final RegistryObject<Item> ENCHANTING_TOOL_ITEM = ITEMS.register(C_ENCHANTING_TOOL_ITEM, ForgeEnchantingToolItem::new);
-    public static final RegistryObject<Item> TELEPORTATION_TABLET_ITEM = ITEMS.register(C_TELEPORTATION_TABLET_ITEM, TeleportationTablet::new);
+    public static final RegistryObject<Item> BACKPACK_ITEM = ITEMS.register(C_BACKPACK_ITEM,
+            () -> new BackpackItem(C_BACKPACK_PROPERTIES));
+    public static final RegistryObject<Item> LARGE_BACKPACK_ITEM = ITEMS.register(C_LARGE_BACKPACK_ITEM,
+            () -> new LargeBackpackItem(C_LARGE_BACKPACK_PROPERTIES));
+    public static final RegistryObject<Item> BACKPACK_UPGRADE_TIER1_ITEM = ITEMS.register(C_BACKPACK_UPGRADE_TIER1_ITEM,
+            () -> new BackpackUpgradeItem(C_BACKPACK_UPGRADE_TIER1_PROPERTIES, 2));
+    public static final RegistryObject<Item> BACKPACK_UPGRADE_TIER2_ITEM = ITEMS.register(C_BACKPACK_UPGRADE_TIER2_ITEM,
+            () -> new BackpackUpgradeItem(C_BACKPACK_UPGRADE_TIER2_PROPERTIES, 8));
+    public static final RegistryObject<Item> BACKPACK_UPGRADE_TIER3_ITEM = ITEMS.register(C_BACKPACK_UPGRADE_TIER3_ITEM,
+            () -> new BackpackUpgradeItem(C_BACKPACK_UPGRADE_TIER3_PROPERTIES, 16));
+    public static final RegistryObject<Item> LIGHT_WAND_ITEM = ITEMS.register(C_LIGHT_WAND_ITEM,
+            () -> new LightWandItem(C_LIGHT_WAND_PROPERTIES));
+    public static final RegistryObject<Item> AUTO_LIGHT_WAND_ITEM = ITEMS.register(C_AUTO_LIGHT_WAND_ITEM,
+            () -> new AutoLightWandItem(C_AUTO_LIGHT_WAND_PROPERTIES));
+    public static final RegistryObject<Item> MAGNET_ITEM = ITEMS.register(C_MAGNET_ITEM,
+            () -> new MagnetItem(C_MAGNET_PROPERTIES));
+    public static final RegistryObject<Item> ADVANCED_MAGNET_ITEM = ITEMS.register(C_ADVANCED_MAGNET_ITEM,
+            () -> new AdvancedMagnetItem(C_ADVANCED_MAGNET_PROPERTIES));
+    public static final RegistryObject<Item> MOB_CATCHER_ITEM = ITEMS.register(C_MOB_CATCHER_ITEM,
+            () -> new MobCatcherItem(C_MOB_CATCHER_PROPERTIES));
+    public static final RegistryObject<Item> ADVANCED_MOB_CATCHER_ITEM = ITEMS.register(C_ADVANCED_MOB_CATCHER_ITEM,
+            () -> new AdvancedMobCatcherItem(C_ADVANCED_MOB_CATCHER_PROPERTIES));
+    public static final RegistryObject<Item> ENCHANTING_TOOL_ITEM = ITEMS.register(C_ENCHANTING_TOOL_ITEM,
+            () ->  new ForgeEnchantingToolItem(C_ENCHANTING_TOOL_PROPERTIES));
+    public static final RegistryObject<Item> TELEPORTATION_TABLET_ITEM = ITEMS.register(C_TELEPORTATION_TABLET_ITEM,
+            () -> new TeleportationTablet(C_TELEPORTATION_TABLET_PROPERTIES));
     public static final RegistryObject<MenuType<EnchantingToolMenu>> ENCHANTING_TOOL_MENU =
             MENUS.register(C_ENCHANTING_TOOL_MENU, () -> IForgeMenuType.create(EnchantingToolMenu::create));
     public static final RegistryObject<MenuType<BackpackMenu>> BACKPACK_MENU =
@@ -72,12 +91,10 @@ public class SmacksUtil {
 
 
     public SmacksUtil(FMLJavaModLoadingContext context) {
-        Constants.LOG.info("Hello Forge world!");
         CommonClass.init();
 
         IEventBus modEventBus = context.getModEventBus();
 
-        modEventBus.addListener(this::interModEnqueue);
         modEventBus.addListener(this::commonSetup);
 
         MENUS.register(modEventBus);
@@ -88,14 +105,6 @@ public class SmacksUtil {
 
         modEventBus.addListener(this::addCreative);
         config = context;
-    }
-
-    public void interModEnqueue(InterModEnqueueEvent e){
-        //if (Services.PLATFORM.isModLoaded("curios")){
-            //InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE, () -> new SlotTypeMessage.Builder("charm").size(1).build());
-            //InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE, () -> new SlotTypeMessage.Builder("back").size(1).build());
-            //InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE, () -> new SlotTypeMessage.Builder("hands").size(1).build());
-        //}
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
@@ -133,29 +142,26 @@ public class SmacksUtil {
             MenuScreens.register(SmacksUtil.LARGE_BACKPACK_MENU.get(), AbstractLargeBackpackScreen<LargeBackpackMenu>::new);
             MenuScreens.register(SmacksUtil.ENCHANTING_TOOL_MENU.get(), AbstractEnchantingToolScreen<EnchantingToolMenu>::new);
             MenuScreens.register(SmacksUtil.TELEPORTATION_TABLET_MENU.get(), AbstractTeleportationTabletScreen<TeleportationTabletMenu>::new);
-            CauldronInteraction.WATER.map().putIfAbsent(BACKPACK_ITEM.get(), CauldronInteraction.DYED_ITEM);
-            CauldronInteraction.WATER.map().putIfAbsent(LARGE_BACKPACK_ITEM.get(), CauldronInteraction.DYED_ITEM);
+            CauldronInteraction.WATER.map().putIfAbsent(BACKPACK_ITEM.get(), SmacksUtil::dyedItemIteration);
+            CauldronInteraction.WATER.map().putIfAbsent(LARGE_BACKPACK_ITEM.get(), SmacksUtil::dyedItemIteration);
         }
+    }
 
-        @SubscribeEvent
-        public static void colors(RegisterColorHandlersEvent.Item event) {
-            event.register((backpack, layer) -> {
-                if (layer > 1 || !(backpack.getItem() instanceof AbstractBackpackItem)) {
-                    return -1;
-                }
-                if (layer == 0) {
-                    DyedItemColor data = backpack.get(DataComponents.DYED_COLOR);
-                    if (data != null){
-                        return calcColor(data.rgb());
-                    }
-                    return calcColor(DyeColor.WHITE.getMapColor().col);
-                }
-                return -1;
-            }, BACKPACK_ITEM.get(), LARGE_BACKPACK_ITEM.get());
-        }
-        private static int calcColor(int col){
-            int i = MapColor.Brightness.HIGH.modifier;
-            return -16777216 | col;
+    private static InteractionResult dyedItemIteration(
+            BlockState p_367064_, Level p_365282_, BlockPos p_365414_, Player p_364718_, InteractionHand p_362544_, ItemStack p_368695_
+    ) {
+        if (!p_368695_.is(ItemTags.DYEABLE)) {
+            return InteractionResult.TRY_WITH_EMPTY_HAND;
+        } else if (!p_368695_.has(DataComponents.DYED_COLOR)) {
+            return InteractionResult.TRY_WITH_EMPTY_HAND;
+        } else {
+            if (!p_365282_.isClientSide) {
+                p_368695_.remove(DataComponents.DYED_COLOR);
+                p_364718_.awardStat(Stats.CLEAN_ARMOR);
+                LayeredCauldronBlock.lowerFillLevel(p_367064_, p_365282_, p_365414_);
+            }
+
+            return InteractionResult.SUCCESS;
         }
     }
 }

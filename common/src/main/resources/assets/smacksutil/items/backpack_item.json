@@ -1,6 +1,12 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "smacksutil:item/backpack_item"
+    "model": "smacksutil:item/backpack_item",
+    "tints": [
+      {
+        "type": "minecraft:dye",
+        "default": -6265536
+      }
+    ]
   }
 }

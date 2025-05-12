@@ -4,11 +4,9 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.component.CustomData;
-import net.minecraft.world.item.component.DyedItemColor;
 import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.world.item.equipment.ArmorMaterials;
 import net.minecraft.world.item.equipment.ArmorType;
@@ -27,6 +25,7 @@ public class Constants {
     public static final int DARK_GRAY = 3487284;
     public static final int C_VEINMINER_UPDATE_RATE = 128;
     public static class Backpack {
+        public static final int C_BACKPACK_DEFAULT_COLOR = -6265536;
         public static final String C_BACKPACK_ITEM = "backpack_item";
         public static final String C_LARGE_BACKPACK_ITEM = "large_backpack_item";
         public static final String C_BACKPACK_MENU = "backpack_menu";
@@ -39,20 +38,18 @@ public class Constants {
         public static final ResourceLocation  C_LARGE_BACKPACK_ITEM_RL = ResourceLocation.fromNamespaceAndPath(MOD_ID, C_LARGE_BACKPACK_ITEM);
         public static final ResourceLocation  C_BACKPACK_MENU_RL = ResourceLocation.fromNamespaceAndPath(MOD_ID, C_BACKPACK_MENU);
         public static final ResourceLocation  C_LARGE_BACKPACK_MENU_RL = ResourceLocation.fromNamespaceAndPath(MOD_ID, C_LARGE_BACKPACK_MENU);
-        public static final Item.Properties BACKPACK_PROPERTIES = new Item.Properties()
+        public static final Item.Properties C_BACKPACK_PROPERTIES = new Item.Properties()
                 .setId(ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(MOD_ID, C_BACKPACK_ITEM)))
                 .humanoidArmor(ArmorMaterials.LEATHER, ArmorType.CHESTPLATE)
                 .stacksTo(1)
                 .rarity(Rarity.EPIC)
-                .component(DataComponents.DYED_COLOR, new DyedItemColor(DyeColor.WHITE.getMapColor().col))
                 .component(DataComponents.CONTAINER, ItemContainerContents.EMPTY);
-        public static final Item.Properties LARGE_BACKPACK_PROPERTIES = new Item.Properties()
+        public static final Item.Properties C_LARGE_BACKPACK_PROPERTIES = new Item.Properties()
                 .setId(ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(MOD_ID, C_LARGE_BACKPACK_ITEM)))
                 .humanoidArmor(ArmorMaterials.LEATHER, ArmorType.CHESTPLATE)
                 .stacksTo(1)
                 .rarity(Rarity.EPIC)
-                .component(DataComponents.CUSTOM_DATA, CustomData.EMPTY)
-                .component(DataComponents.DYED_COLOR, new DyedItemColor(DyeColor.WHITE.getMapColor().col));
+                .component(DataComponents.CUSTOM_DATA, CustomData.EMPTY);
 
         public static final String C_BACKPACK_SCREEN_LOCATION = "textures/gui/container/backpack_screen.png";
         public static final ResourceLocation  C_BACKPACK_SCREEN_LOCATION_RL = ResourceLocation.fromNamespaceAndPath(MOD_ID, C_BACKPACK_SCREEN_LOCATION);
@@ -64,17 +61,17 @@ public class Constants {
         public static final ResourceLocation  C_BACKPACK_OPEN_REQUEST_RL = ResourceLocation.fromNamespaceAndPath(MOD_ID, C_BACKPACK_OPEN_REQUEST);
         public static final String C_BACKPACK_UPGRADE_TIER1_ITEM = "backpack_upgrade_tier1_item";
         public static final ResourceLocation  C_BACKPACK_UPGRADE_TIER1_ITEM_RL = ResourceLocation.fromNamespaceAndPath(MOD_ID, C_BACKPACK_UPGRADE_TIER1_ITEM);
-        public static final Item.Properties  BACKPACK_UPGRADE_TIER1_PROPERTIES = new Item.Properties()
+        public static final Item.Properties C_BACKPACK_UPGRADE_TIER1_PROPERTIES = new Item.Properties()
                 .setId(ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(MOD_ID, C_BACKPACK_UPGRADE_TIER1_ITEM)))
                 .stacksTo(1);
         public static final String C_BACKPACK_UPGRADE_TIER2_ITEM = "backpack_upgrade_tier2_item";
         public static final ResourceLocation  C_BACKPACK_UPGRADE_TIER2_ITEM_RL = ResourceLocation.fromNamespaceAndPath(MOD_ID, C_BACKPACK_UPGRADE_TIER2_ITEM);
-        public static final Item.Properties  BACKPACK_UPGRADE_TIER2_PROPERTIES = new Item.Properties()
+        public static final Item.Properties C_BACKPACK_UPGRADE_TIER2_PROPERTIES = new Item.Properties()
                 .setId(ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(MOD_ID, C_BACKPACK_UPGRADE_TIER2_ITEM)))
                 .stacksTo(1);
         public static final String C_BACKPACK_UPGRADE_TIER3_ITEM = "backpack_upgrade_tier3_item";
         public static final ResourceLocation  C_BACKPACK_UPGRADE_TIER3_ITEM_RL = ResourceLocation.fromNamespaceAndPath(MOD_ID, C_BACKPACK_UPGRADE_TIER3_ITEM);
-        public static final Item.Properties  BACKPACK_UPGRADE_TIER3_PROPERTIES = new Item.Properties()
+        public static final Item.Properties C_BACKPACK_UPGRADE_TIER3_PROPERTIES = new Item.Properties()
                 .setId(ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(MOD_ID, C_BACKPACK_UPGRADE_TIER3_ITEM)))
                 .stacksTo(1);
     }

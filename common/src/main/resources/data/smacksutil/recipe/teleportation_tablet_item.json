@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "TP",
+  "key": {
+    "A": "minecraft:netherite_ingot",
+    "E": "minecraft:ender_pearl",
+    "N": "minecraft:nether_star"
+  },
+  "pattern": [
+    "AEA",
+    "ENE",
+    "AEA"
+  ],
+  "result": {
+    "id": "smacksutil:teleportation_tablet_item"
+  }
+}
