@@ -14,8 +14,6 @@ import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.smackplays.smacksutil.Constants;
 import net.smackplays.smacksutil.platform.services.IKeyHandler;
 
-import java.util.List;
-
 @SuppressWarnings("unused")
 public class NeoForgeKeyHandler implements IKeyHandler {
     public static KeyMapping veinKey;
@@ -31,7 +29,7 @@ public class NeoForgeKeyHandler implements IKeyHandler {
     @Override
     public void toggleMagnetConsume(KeyMapping key, Player player) {
         if (key.consumeClick()) {
-            if (Services.PLATFORM.isModLoaded("curios")){
+//            if (Services.PLATFORM.isModLoaded("curios")){
 //                List<SlotResult> results = CuriosApi.getCuriosHelper().findCurios(player, "charm");
 //                if (!results.isEmpty()){
 //                    ItemStack stack = results.getFirst().stack();
@@ -40,7 +38,7 @@ public class NeoForgeKeyHandler implements IKeyHandler {
 //                        return;
 //                    }
 //                }
-            }
+//            }
             NonNullList<Slot> slots = player.inventoryMenu.slots;
             for (int i = slots.size() - 1; i >= 0; i--){
                 ItemStack stack = slots.get(i).getItem();
@@ -55,7 +53,7 @@ public class NeoForgeKeyHandler implements IKeyHandler {
     @Override
     public void toggleLightWandConsume(KeyMapping key, Player player) {
         if (key.consumeClick()) {
-            if (Services.PLATFORM.isModLoaded("curios")){
+//            if (Services.PLATFORM.isModLoaded("curios")){
 //                List<SlotResult> results = CuriosApi.getCuriosHelper().findCurios(player, "hands");
 //                if (!results.isEmpty()){
 //                    ItemStack stack = results.getFirst().stack();
@@ -64,7 +62,7 @@ public class NeoForgeKeyHandler implements IKeyHandler {
 //                        return;
 //                    }
 //                }
-            }
+//            }
             NonNullList<Slot> slots = player.inventoryMenu.slots;
             for (int i = slots.size() - 1; i >= 0; i--){
                 ItemStack stack = slots.get(i).getItem();
@@ -79,7 +77,7 @@ public class NeoForgeKeyHandler implements IKeyHandler {
     @Override
     public void openBackpackConsume(KeyMapping key, Player player) {
         if (key.consumeClick()) {
-            if (Services.PLATFORM.isModLoaded("curios")){
+//            if (Services.PLATFORM.isModLoaded("curios")){
 //                List<SlotResult> results = CuriosApi.getCuriosHelper().findCurios(player, "back");
 //                if (!results.isEmpty()){
 //                    ItemStack stack = results.getFirst().stack();
@@ -88,7 +86,7 @@ public class NeoForgeKeyHandler implements IKeyHandler {
 //                        return;
 //                    }
 //                }
-            }
+//            }
             NonNullList<Slot> slots = player.inventoryMenu.slots;
             for (int i = 0; i <= 8; i++){
                 ItemStack stack = slots.get(i).getItem();

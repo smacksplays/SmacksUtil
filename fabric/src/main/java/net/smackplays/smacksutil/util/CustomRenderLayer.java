@@ -6,6 +6,7 @@ import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.vertex.MeshData;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.renderer.RenderType;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.OptionalDouble;
 
@@ -29,22 +30,22 @@ public class CustomRenderLayer extends RenderType {
     public void draw(MeshData meshData) {}
 
     @Override
-    public RenderTarget getRenderTarget() {
+    public @NotNull RenderTarget getRenderTarget() {
         return null;
     }
 
     @Override
-    public RenderPipeline getRenderPipeline() {
+    public @NotNull RenderPipeline getRenderPipeline() {
         return null;
     }
 
     @Override
-    public VertexFormat format() {
+    public @NotNull VertexFormat format() {
         return null;
     }
 
     @Override
-    public VertexFormat.Mode mode() {
+    public VertexFormat.@NotNull Mode mode() {
         return null;
     }
 }

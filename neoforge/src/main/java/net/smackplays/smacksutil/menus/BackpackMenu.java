@@ -6,11 +6,10 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
 import net.smackplays.smacksutil.SmacksUtil;
 import net.smackplays.smacksutil.inventories.BackpackInventory;
-import net.smackplays.smacksutil.platform.Services;
 import org.jetbrains.annotations.Nullable;
 
-
-import static net.smackplays.smacksutil.Constants.Backpack.*;
+import static net.smackplays.smacksutil.Constants.Backpack.C_BACKPACK_COL_NUM;
+import static net.smackplays.smacksutil.Constants.Backpack.C_BACKPACK_ROW_NUM;
 
 public class BackpackMenu extends AbstractBackpackMenu {
 
@@ -22,13 +21,13 @@ public class BackpackMenu extends AbstractBackpackMenu {
     public static BackpackMenu createGeneric9x6(int syncId, Inventory playerInventory) {
         ItemStack backpack = playerInventory.getSelectedItem();
         if (!backpack.is(SmacksUtil.BACKPACK_ITEM.get())){
-            if (Services.PLATFORM.isModLoaded("curios")){
+//            if (Services.PLATFORM.isModLoaded("curios")){
 //                List<SlotResult> slotResults = CuriosApi.getCuriosHelper().findCurios(playerInventory.player, "back");
 //                if (!slotResults.isEmpty()){
 //                    backpack = slotResults.getFirst().stack();
 //                    return new BackpackMenu(SmacksUtil.BACKPACK_MENU.get(), syncId, playerInventory, new BackpackInventory(backpack,playerInventory.player.registryAccess()));
 //                }
-            }
+//            }
             for (int i = playerInventory.getContainerSize(); i >= 0; i--){
                 if (playerInventory.getItem(i).is(SmacksUtil.BACKPACK_ITEM.get())){
                     backpack = playerInventory.getItem(i);

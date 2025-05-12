@@ -43,8 +43,8 @@ import net.smackplays.smacksutil.screens.AbstractEnchantingToolScreen;
 import net.smackplays.smacksutil.screens.AbstractLargeBackpackScreen;
 import net.smackplays.smacksutil.screens.AbstractTeleportationTabletScreen;
 
-import static net.smackplays.smacksutil.Constants.*;
 import static net.smackplays.smacksutil.Constants.Backpack.*;
+import static net.smackplays.smacksutil.Constants.*;
 
 
 @SuppressWarnings({"unused", "EmptyMethod"})

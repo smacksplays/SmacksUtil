@@ -3,10 +3,10 @@ package net.smackplays.smacksutil.util;
 
 import com.mojang.blaze3d.pipeline.RenderPipeline;
 import com.mojang.blaze3d.pipeline.RenderTarget;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.MeshData;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.renderer.RenderType;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.OptionalDouble;
 
@@ -20,21 +20,21 @@ public class CustomRenderLayer extends RenderType {
                     .setLayeringState(VIEW_OFFSET_Z_LAYERING)
                     .setOutputState(OUTLINE_TARGET)
                     .createCompositeState(false));
-    
+
     public CustomRenderLayer(String string, int i, boolean bl, boolean bl2, Runnable runnable, Runnable runnable2) {
         super(string, i, bl, bl2, runnable, runnable2);
     }
 
     @Override
-    public void draw(MeshData meshData) {}
+    public void draw(@NotNull MeshData meshData) {}
 
     @Override
-    public RenderTarget getRenderTarget() {
+    public @NotNull RenderTarget getRenderTarget() {
         return null;
     }
 
     @Override
-    public RenderPipeline getRenderPipeline() {
+    public @NotNull RenderPipeline getRenderPipeline() {
         return null;
     }
 

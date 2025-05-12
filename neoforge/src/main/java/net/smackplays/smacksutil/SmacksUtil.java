@@ -7,13 +7,16 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.world.*;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.inventory.MenuType;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.LayeredCauldronBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
@@ -21,7 +24,8 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.event.lifecycle.*;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.common.NeoForge;
@@ -37,11 +41,12 @@ import net.smackplays.smacksutil.config.ClothConfigNeoForge;
 import net.smackplays.smacksutil.items.*;
 import net.smackplays.smacksutil.menus.*;
 import net.smackplays.smacksutil.networking.c2spacket.*;
-import net.smackplays.smacksutil.networking.s2cpacket.*;
+import net.smackplays.smacksutil.networking.s2cpacket.S2CBlockBreakPacket;
+import net.smackplays.smacksutil.networking.s2cpacket.S2CBlockBreakPacketHandler;
 import net.smackplays.smacksutil.screens.*;
 
-import static net.smackplays.smacksutil.Constants.*;
 import static net.smackplays.smacksutil.Constants.Backpack.*;
+import static net.smackplays.smacksutil.Constants.*;
 
 @SuppressWarnings({"unused", "EmptyMethod"})
 @Mod(MOD_ID)

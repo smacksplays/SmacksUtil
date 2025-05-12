@@ -8,7 +8,6 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.smackplays.smacksutil.SmacksUtil;
 import net.smackplays.smacksutil.menus.EffectTotemMenu;
-import net.smackplays.smacksutil.menus.TeleportationTabletMenu;
 import org.jetbrains.annotations.NotNull;
 
 public class EffectTotemItem extends AbstractEffectTotemItem{
