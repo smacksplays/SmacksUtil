@@ -18,13 +18,36 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
+/**
+ * Abstract BackpackMenuBase class
+ */
 public class AbstractBackpackMenuBase extends AbstractContainerMenu {
-
+    /**
+     * Container inventory
+     */
     public Container inventory;
+    /**
+     * Inventory playerInventory
+     */
     public Inventory playerInventory;
+    /**
+     * int rows
+     */
     public int rows;
+    /**
+     * int cols
+     */
     public int cols;
 
+    /**
+     * Constructor
+     * @param menuType menuType
+     * @param containerId containerId
+     * @param playerInv playerInv
+     * @param inv inv
+     * @param rows rows
+     * @param cols cols
+     */
     protected AbstractBackpackMenuBase(@Nullable MenuType<?> menuType, int containerId, Inventory playerInv, Container inv, int rows, int cols) {
         super(menuType, containerId);
         inventory = inv;
@@ -33,6 +56,12 @@ public class AbstractBackpackMenuBase extends AbstractContainerMenu {
         this.cols = cols;
     }
 
+    /**
+     * Shift move stacks
+     * @param player player
+     * @param index index
+     * @return ItemStack
+     */
     @Override
     public @NotNull ItemStack quickMoveStack(@NotNull Player player, int index) {
         ItemStack itemStack = ItemStack.EMPTY;
@@ -59,7 +88,15 @@ public class AbstractBackpackMenuBase extends AbstractContainerMenu {
         return itemStack;
     }
 
-
+    /**
+     * moveItemStack
+     * @param stack stack
+     * @param min min
+     * @param max max
+     * @param backwards backwards
+     * @param maxStackSize maxStackSize
+     * @return boolean
+     */
     protected boolean moveItemStack(ItemStack stack, int min, int max, boolean backwards, int maxStackSize) {
         if (min == 4){
             maxStackSize = this.inventory.getMaxStackSize(stack);
@@ -129,10 +166,18 @@ public class AbstractBackpackMenuBase extends AbstractContainerMenu {
         return !bl1;
     }
 
+    /**
+     * stillValid
+     * @param player player
+     * @return boolean
+     */
     public boolean stillValid(@NotNull Player player) {
         return this.inventory.stillValid(player);
     }
 
+    /**
+     * Sort
+     */
     public void sort() {
         BackpackInventory impInv = (BackpackInventory) inventory;
         NonNullList<ItemStack> items = impInv.getItems();
@@ -200,6 +245,13 @@ public class AbstractBackpackMenuBase extends AbstractContainerMenu {
         impInv.setChanged();
     }
 
+    /**
+     * clicked
+     * @param slot_num1 slot_num1
+     * @param slot_num2 slot_num2
+     * @param clickType clickType
+     * @param player player
+     */
     @Override
     public void clicked(int slot_num1, int slot_num2, @NotNull ClickType clickType, @NotNull Player player) {
         if (slot_num1 >= 0 && slot_num2 >= 0){
