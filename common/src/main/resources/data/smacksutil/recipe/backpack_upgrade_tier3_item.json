@@ -1,7 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
   "category": "misc",
-  "group": "BU3",
   "key": {
     "L": "minecraft:leather",
     "C": "minecraft:chest",

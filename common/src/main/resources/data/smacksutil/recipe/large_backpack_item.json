@@ -1,7 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
-  "group": "LB",
+  "category": "equipment",
   "key": {
     "W": "#minecraft:wool",
     "L": "minecraft:leather",

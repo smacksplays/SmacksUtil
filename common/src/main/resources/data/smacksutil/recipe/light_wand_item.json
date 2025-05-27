@@ -1,7 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
-  "group": "LW",
+  "category": "equipment",
   "pattern": [
     "TDT",
     "TST",

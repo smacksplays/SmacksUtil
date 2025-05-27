@@ -1,14 +1,14 @@
 package net.smackplays.smacksutil.platform;
 
-import me.shedaniel.autoconfig.AutoConfig;
-import me.shedaniel.autoconfig.ConfigData;
-import me.shedaniel.autoconfig.ConfigManager;
-import me.shedaniel.autoconfig.annotation.Config;
-import me.shedaniel.autoconfig.annotation.ConfigEntry;
-import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
-import me.shedaniel.clothconfig2.api.ConfigBuilder;
-import me.shedaniel.clothconfig2.api.ConfigCategory;
-import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
+//import me.shedaniel.autoconfig.AutoConfig;
+//import me.shedaniel.autoconfig.ConfigData;
+//import me.shedaniel.autoconfig.ConfigManager;
+//import me.shedaniel.autoconfig.annotation.Config;
+//import me.shedaniel.autoconfig.annotation.ConfigEntry;
+//import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
+//import me.shedaniel.clothconfig2.api.ConfigBuilder;
+//import me.shedaniel.clothconfig2.api.ConfigCategory;
+//import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.ForgeConfigSpec;
@@ -16,15 +16,15 @@ import net.minecraftforge.fml.common.Mod;
 import net.smackplays.smacksutil.Constants;
 import net.smackplays.smacksutil.platform.services.IModConfig;
 
-@SuppressWarnings({"unused", "rawtypes", "UnstableApiUsage"})
-@Config(name = Constants.MOD_ID)
+//@SuppressWarnings({"unused", "rawtypes", "UnstableApiUsage"})
+//@Config(name = Constants.MOD_ID)
 @Mod.EventBusSubscriber(modid = Constants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-public class ForgeModConfig implements IModConfig, ConfigData {
-    @ConfigEntry.Gui.Excluded
+public class ForgeModConfig implements IModConfig { //}, ConfigData {
+//    @ConfigEntry.Gui.Excluded
     private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
-    @ConfigEntry.Gui.Excluded
+//    @ConfigEntry.Gui.Excluded
     public static ForgeModConfig INSTANCE;
-    private static ConfigManager MANAGER;
+//    private static ConfigManager MANAGER;
     public int maxRenderBlocks = IModConfig.maxRenderBlocks;
     public int maxShapelessRadius = IModConfig.maxShapelessRadius;
     public int maxRenderShapelessRadius = IModConfig.maxRenderShapelessRadius;
@@ -41,150 +41,150 @@ public class ForgeModConfig implements IModConfig, ConfigData {
     public boolean enabledFastPlace = IModConfig.enabledFastPlace;
     public boolean enabledKeyPressSound = IModConfig.enabledKeyPressSound;
 
-    public static ConfigBuilder create() {
-        ConfigBuilder builder = ConfigBuilder.create().setTitle(Component.translatable("smacksutil.configsceren.title"));
-        builder.setGlobalized(true);
-        builder.setGlobalizedExpanded(false);
-        ConfigEntryBuilder entryBuilder = builder.entryBuilder();
-        ConfigCategory config = builder.getOrCreateCategory(Component.translatable("smacksutil.category.config"));
-
-        if (Services.CONFIG != null) {
-            config.addEntry(entryBuilder
-                    .startIntField(Component.translatable("text.autoconfig.smacksutil.option.maxRenderBlocks")
-                            , Services.CONFIG.getMaxRenderBlocks())
-                    .setTooltip(Component.translatable("text.autoconfig.smacksutil.option.maxRenderBlocks.@Tooltip"))
-                    .setDefaultValue(150)
-                    .setSaveConsumer(Services.CONFIG::setMaxRenderBlocks)
-                    .build());
-
-            config.addEntry(entryBuilder
-                    .startIntField(
-                            Component.translatable("text.autoconfig.smacksutil.option.maxShapelessRadius")
-                            , Services.CONFIG.getMaxShapelessRadius())
-                    .setTooltip(Component.translatable("text.autoconfig.smacksutil.option.maxShapelessRadius.@Tooltip"))
-                    .setDefaultValue(6)
-                    .setSaveConsumer(Services.CONFIG::setMaxShapelessRadius)
-                    .build());
-
-            config.addEntry(entryBuilder
-                    .startIntField(
-                            Component.translatable("text.autoconfig.smacksutil.option.maxRenderShapelessRadius")
-                            , Services.CONFIG.getMaxRenderShapelessRadius())
-                    .setTooltip(Component.translatable("text.autoconfig.smacksutil.option.maxRenderShapelessRadius.@Tooltip"))
-                    .setDefaultValue(3)
-                    .setSaveConsumer(Services.CONFIG::setMaxRenderShapelessRadius)
-                    .build());
-
-            config.addEntry(entryBuilder
-                    .startBooleanToggle(
-                            Component.translatable("text.autoconfig.smacksutil.option.enabledShapelessVerticalMode")
-                            , Services.CONFIG.isEnabledShapelessVerticalMode())
-                    .setTooltip(Component.translatable("text.autoconfig.smacksutil.option.enabledShapelessVerticalMode.@Tooltip"))
-                    .setDefaultValue(true)
-                    .setSaveConsumer(Services.CONFIG::setEnabledShapelessVerticalMode)
-                    .build());
-
-            config.addEntry(entryBuilder
-                    .startIntField(
-                            Component.translatable("text.autoconfig.smacksutil.option.maxShapelessVerticalRadius")
-                            , Services.CONFIG.getMaxShapelessVerticalRadius())
-                    .setTooltip(Component.translatable("text.autoconfig.smacksutil.option.maxShapelessVerticalRadius.@Tooltip"))
-                    .setDefaultValue(6)
-                    .setSaveConsumer(Services.CONFIG::setMaxShapelessVerticalRadius)
-                    .build());
-
-            config.addEntry(entryBuilder
-                    .startIntField(
-                            Component.translatable("text.autoconfig.smacksutil.option.maxRenderShapelessVerticalRadius")
-                            , Services.CONFIG.getMaxRenderShapelessVerticalRadius())
-                    .setTooltip(Component.translatable("text.autoconfig.smacksutil.option.maxRenderShapelessVerticalRadius.@Tooltip"))
-                    .setDefaultValue(3)
-                    .setSaveConsumer(Services.CONFIG::setMaxRenderShapelessVerticalRadius)
-                    .build());
-
-            config.addEntry(entryBuilder
-                    .startBooleanToggle(
-                            Component.translatable("text.autoconfig.smacksutil.option.enabledTunnelMode")
-                            , Services.CONFIG.isEnabledTunnelMode())
-                    .setTooltip(Component.translatable("text.autoconfig.smacksutil.option.enabledTunnelMode.@Tooltip"))
-                    .setDefaultValue(true)
-                    .setSaveConsumer(Services.CONFIG::setEnabledTunnelMode)
-                    .build());
-
-            config.addEntry(entryBuilder
-                    .startBooleanToggle(
-                            Component.translatable("text.autoconfig.smacksutil.option.enabledMineshaftMode")
-                            , Services.CONFIG.isEnabledMineshaftMode())
-                    .setTooltip(Component.translatable("text.autoconfig.smacksutil.option.enabledMineshaftMode.@Tooltip"))
-                    .setDefaultValue(true)
-                    .setSaveConsumer(Services.CONFIG::setEnabledMineshaftMode)
-                    .build());
-
-            config.addEntry(entryBuilder
-                    .startBooleanToggle(
-                            Component.translatable("text.autoconfig.smacksutil.option.enabledVegetationMode")
-                            , Services.CONFIG.isEnabledVegetationMode())
-                    .setTooltip(Component.translatable("text.autoconfig.smacksutil.option.enabledVegetationMode.@Tooltip"))
-                    .setDefaultValue(true)
-                    .setSaveConsumer(Services.CONFIG::setEnabledVegetationMode)
-                    .build());
-
-            config.addEntry(entryBuilder
-                    .startBooleanToggle(
-                            Component.translatable("text.autoconfig.smacksutil.option.enabledOresMode")
-                            , Services.CONFIG.isEnabledOresMode())
-                    .setTooltip(Component.translatable("text.autoconfig.smacksutil.option.enabledOresMode.@Tooltip"))
-                    .setDefaultValue(true)
-                    .setSaveConsumer(Services.CONFIG::setEnabledOresMode)
-                    .build());
-
-            config.addEntry(entryBuilder
-                    .startBooleanToggle(
-                            Component.translatable("text.autoconfig.smacksutil.option.enabledCropsMode")
-                            , Services.CONFIG.isEnabledCropsMode())
-                    .setTooltip(Component.translatable("text.autoconfig.smacksutil.option.enabledCropsMode.@Tooltip"))
-                    .setDefaultValue(true)
-                    .setSaveConsumer(Services.CONFIG::setEnabledCropsMode)
-                    .build());
-
-            config.addEntry(entryBuilder
-                    .startBooleanToggle(
-                            Component.translatable("text.autoconfig.smacksutil.option.enabledTreesMode")
-                            , Services.CONFIG.isEnabledTreesMode())
-                    .setTooltip(Component.translatable("text.autoconfig.smacksutil.option.enabledTreesMode.@Tooltip"))
-                    .setDefaultValue(true)
-                    .setSaveConsumer(Services.CONFIG::setEnabledTreesMode)
-                    .build());
-
-            config.addEntry(entryBuilder
-                    .startBooleanToggle(
-                            Component.translatable("text.autoconfig.smacksutil.option.enabledFastEat")
-                            , INSTANCE.isEnabledFastPlace())
-                    .setTooltip(Component.translatable("text.autoconfig.smacksutil.option.enabledFastEat.@Tooltip"))
-                    .setDefaultValue(false)
-                    .setSaveConsumer(Services.CONFIG::setEnabledFastEat)
-                    .build());
-
-            config.addEntry(entryBuilder
-                    .startBooleanToggle(
-                            Component.translatable("text.autoconfig.smacksutil.option.enabledFastPlace")
-                            , Services.CONFIG.isEnabledFastPlace())
-                    .setTooltip(Component.translatable("text.autoconfig.smacksutil.option.enabledFastPlace.@Tooltip"))
-                    .setDefaultValue(false)
-                    .setSaveConsumer(Services.CONFIG::setEnabledFastPlace)
-                    .build());
-
-            config.addEntry(entryBuilder
-                    .startBooleanToggle(
-                            Component.translatable("text.autoconfig.smacksutil.option.enabledKeyPressSound")
-                            , Services.CONFIG.isEnabledKeyPressSound())
-                    .setTooltip(Component.translatable("text.autoconfig.smacksutil.option.enabledKeyPressSound.@Tooltip"))
-                    .setDefaultValue(false)
-                    .setSaveConsumer(Services.CONFIG::setEnabledKeyPressSound)
-                    .build());
-        }
-        return builder;
-    }
+//    public static ConfigBuilder create() {
+//        ConfigBuilder builder = ConfigBuilder.create().setTitle(Component.translatable("smacksutil.configsceren.title"));
+//        builder.setGlobalized(true);
+//        builder.setGlobalizedExpanded(false);
+//        ConfigEntryBuilder entryBuilder = builder.entryBuilder();
+//        ConfigCategory config = builder.getOrCreateCategory(Component.translatable("smacksutil.category.config"));
+//
+//        if (Services.CONFIG != null) {
+//            config.addEntry(entryBuilder
+//                    .startIntField(Component.translatable("text.autoconfig.smacksutil.option.maxRenderBlocks")
+//                            , Services.CONFIG.getMaxRenderBlocks())
+//                    .setTooltip(Component.translatable("text.autoconfig.smacksutil.option.maxRenderBlocks.@Tooltip"))
+//                    .setDefaultValue(150)
+//                    .setSaveConsumer(Services.CONFIG::setMaxRenderBlocks)
+//                    .build());
+//
+//            config.addEntry(entryBuilder
+//                    .startIntField(
+//                            Component.translatable("text.autoconfig.smacksutil.option.maxShapelessRadius")
+//                            , Services.CONFIG.getMaxShapelessRadius())
+//                    .setTooltip(Component.translatable("text.autoconfig.smacksutil.option.maxShapelessRadius.@Tooltip"))
+//                    .setDefaultValue(6)
+//                    .setSaveConsumer(Services.CONFIG::setMaxShapelessRadius)
+//                    .build());
+//
+//            config.addEntry(entryBuilder
+//                    .startIntField(
+//                            Component.translatable("text.autoconfig.smacksutil.option.maxRenderShapelessRadius")
+//                            , Services.CONFIG.getMaxRenderShapelessRadius())
+//                    .setTooltip(Component.translatable("text.autoconfig.smacksutil.option.maxRenderShapelessRadius.@Tooltip"))
+//                    .setDefaultValue(3)
+//                    .setSaveConsumer(Services.CONFIG::setMaxRenderShapelessRadius)
+//                    .build());
+//
+//            config.addEntry(entryBuilder
+//                    .startBooleanToggle(
+//                            Component.translatable("text.autoconfig.smacksutil.option.enabledShapelessVerticalMode")
+//                            , Services.CONFIG.isEnabledShapelessVerticalMode())
+//                    .setTooltip(Component.translatable("text.autoconfig.smacksutil.option.enabledShapelessVerticalMode.@Tooltip"))
+//                    .setDefaultValue(true)
+//                    .setSaveConsumer(Services.CONFIG::setEnabledShapelessVerticalMode)
+//                    .build());
+//
+//            config.addEntry(entryBuilder
+//                    .startIntField(
+//                            Component.translatable("text.autoconfig.smacksutil.option.maxShapelessVerticalRadius")
+//                            , Services.CONFIG.getMaxShapelessVerticalRadius())
+//                    .setTooltip(Component.translatable("text.autoconfig.smacksutil.option.maxShapelessVerticalRadius.@Tooltip"))
+//                    .setDefaultValue(6)
+//                    .setSaveConsumer(Services.CONFIG::setMaxShapelessVerticalRadius)
+//                    .build());
+//
+//            config.addEntry(entryBuilder
+//                    .startIntField(
+//                            Component.translatable("text.autoconfig.smacksutil.option.maxRenderShapelessVerticalRadius")
+//                            , Services.CONFIG.getMaxRenderShapelessVerticalRadius())
+//                    .setTooltip(Component.translatable("text.autoconfig.smacksutil.option.maxRenderShapelessVerticalRadius.@Tooltip"))
+//                    .setDefaultValue(3)
+//                    .setSaveConsumer(Services.CONFIG::setMaxRenderShapelessVerticalRadius)
+//                    .build());
+//
+//            config.addEntry(entryBuilder
+//                    .startBooleanToggle(
+//                            Component.translatable("text.autoconfig.smacksutil.option.enabledTunnelMode")
+//                            , Services.CONFIG.isEnabledTunnelMode())
+//                    .setTooltip(Component.translatable("text.autoconfig.smacksutil.option.enabledTunnelMode.@Tooltip"))
+//                    .setDefaultValue(true)
+//                    .setSaveConsumer(Services.CONFIG::setEnabledTunnelMode)
+//                    .build());
+//
+//            config.addEntry(entryBuilder
+//                    .startBooleanToggle(
+//                            Component.translatable("text.autoconfig.smacksutil.option.enabledMineshaftMode")
+//                            , Services.CONFIG.isEnabledMineshaftMode())
+//                    .setTooltip(Component.translatable("text.autoconfig.smacksutil.option.enabledMineshaftMode.@Tooltip"))
+//                    .setDefaultValue(true)
+//                    .setSaveConsumer(Services.CONFIG::setEnabledMineshaftMode)
+//                    .build());
+//
+//            config.addEntry(entryBuilder
+//                    .startBooleanToggle(
+//                            Component.translatable("text.autoconfig.smacksutil.option.enabledVegetationMode")
+//                            , Services.CONFIG.isEnabledVegetationMode())
+//                    .setTooltip(Component.translatable("text.autoconfig.smacksutil.option.enabledVegetationMode.@Tooltip"))
+//                    .setDefaultValue(true)
+//                    .setSaveConsumer(Services.CONFIG::setEnabledVegetationMode)
+//                    .build());
+//
+//            config.addEntry(entryBuilder
+//                    .startBooleanToggle(
+//                            Component.translatable("text.autoconfig.smacksutil.option.enabledOresMode")
+//                            , Services.CONFIG.isEnabledOresMode())
+//                    .setTooltip(Component.translatable("text.autoconfig.smacksutil.option.enabledOresMode.@Tooltip"))
+//                    .setDefaultValue(true)
+//                    .setSaveConsumer(Services.CONFIG::setEnabledOresMode)
+//                    .build());
+//
+//            config.addEntry(entryBuilder
+//                    .startBooleanToggle(
+//                            Component.translatable("text.autoconfig.smacksutil.option.enabledCropsMode")
+//                            , Services.CONFIG.isEnabledCropsMode())
+//                    .setTooltip(Component.translatable("text.autoconfig.smacksutil.option.enabledCropsMode.@Tooltip"))
+//                    .setDefaultValue(true)
+//                    .setSaveConsumer(Services.CONFIG::setEnabledCropsMode)
+//                    .build());
+//
+//            config.addEntry(entryBuilder
+//                    .startBooleanToggle(
+//                            Component.translatable("text.autoconfig.smacksutil.option.enabledTreesMode")
+//                            , Services.CONFIG.isEnabledTreesMode())
+//                    .setTooltip(Component.translatable("text.autoconfig.smacksutil.option.enabledTreesMode.@Tooltip"))
+//                    .setDefaultValue(true)
+//                    .setSaveConsumer(Services.CONFIG::setEnabledTreesMode)
+//                    .build());
+//
+//            config.addEntry(entryBuilder
+//                    .startBooleanToggle(
+//                            Component.translatable("text.autoconfig.smacksutil.option.enabledFastEat")
+//                            , INSTANCE.isEnabledFastPlace())
+//                    .setTooltip(Component.translatable("text.autoconfig.smacksutil.option.enabledFastEat.@Tooltip"))
+//                    .setDefaultValue(false)
+//                    .setSaveConsumer(Services.CONFIG::setEnabledFastEat)
+//                    .build());
+//
+//            config.addEntry(entryBuilder
+//                    .startBooleanToggle(
+//                            Component.translatable("text.autoconfig.smacksutil.option.enabledFastPlace")
+//                            , Services.CONFIG.isEnabledFastPlace())
+//                    .setTooltip(Component.translatable("text.autoconfig.smacksutil.option.enabledFastPlace.@Tooltip"))
+//                    .setDefaultValue(false)
+//                    .setSaveConsumer(Services.CONFIG::setEnabledFastPlace)
+//                    .build());
+//
+//            config.addEntry(entryBuilder
+//                    .startBooleanToggle(
+//                            Component.translatable("text.autoconfig.smacksutil.option.enabledKeyPressSound")
+//                            , Services.CONFIG.isEnabledKeyPressSound())
+//                    .setTooltip(Component.translatable("text.autoconfig.smacksutil.option.enabledKeyPressSound.@Tooltip"))
+//                    .setDefaultValue(false)
+//                    .setSaveConsumer(Services.CONFIG::setEnabledKeyPressSound)
+//                    .build());
+//        }
+//        return builder;
+//    }
 
     @Override
     public int getMaxRenderBlocks() {
@@ -194,7 +194,7 @@ public class ForgeModConfig implements IModConfig, ConfigData {
     @Override
     public void setMaxRenderBlocks(int toSet) {
         INSTANCE.maxRenderBlocks = toSet;
-        MANAGER.save();
+//        MANAGER.save();
     }
 
     @Override
@@ -205,7 +205,7 @@ public class ForgeModConfig implements IModConfig, ConfigData {
     @Override
     public void setMaxShapelessRadius(int toSet) {
         INSTANCE.maxShapelessRadius = toSet;
-        MANAGER.save();
+//        MANAGER.save();
     }
 
     @Override
@@ -216,7 +216,7 @@ public class ForgeModConfig implements IModConfig, ConfigData {
     @Override
     public void setMaxRenderShapelessRadius(int toSet) {
         INSTANCE.maxRenderShapelessRadius = toSet;
-        MANAGER.save();
+//        MANAGER.save();
     }
 
     @Override
@@ -227,7 +227,7 @@ public class ForgeModConfig implements IModConfig, ConfigData {
     @Override
     public void setEnabledShapelessVerticalMode(boolean toSet) {
         INSTANCE.enabledShapelessVerticalMode = toSet;
-        MANAGER.save();
+//        MANAGER.save();
     }
 
     @Override
@@ -238,7 +238,7 @@ public class ForgeModConfig implements IModConfig, ConfigData {
     @Override
     public void setMaxShapelessVerticalRadius(int toSet) {
         INSTANCE.maxShapelessVerticalRadius = toSet;
-        MANAGER.save();
+//        MANAGER.save();
     }
 
     @Override
@@ -249,7 +249,7 @@ public class ForgeModConfig implements IModConfig, ConfigData {
     @Override
     public void setMaxRenderShapelessVerticalRadius(int toSet) {
         INSTANCE.maxRenderShapelessVerticalRadius = toSet;
-        MANAGER.save();
+//        MANAGER.save();
     }
 
     @Override
@@ -260,7 +260,7 @@ public class ForgeModConfig implements IModConfig, ConfigData {
     @Override
     public void setEnabledTunnelMode(boolean toSet) {
         INSTANCE.enabledTunnelMode = toSet;
-        MANAGER.save();
+//        MANAGER.save();
     }
 
     @Override
@@ -271,7 +271,7 @@ public class ForgeModConfig implements IModConfig, ConfigData {
     @Override
     public void setEnabledMineshaftMode(boolean toSet) {
         INSTANCE.enabledMineshaftMode = toSet;
-        MANAGER.save();
+//        MANAGER.save();
     }
 
     @Override
@@ -282,7 +282,7 @@ public class ForgeModConfig implements IModConfig, ConfigData {
     @Override
     public void setEnabledVegetationMode(boolean toSet) {
         INSTANCE.enabledVegetationMode = toSet;
-        MANAGER.save();
+//        MANAGER.save();
     }
 
     @Override
@@ -293,7 +293,7 @@ public class ForgeModConfig implements IModConfig, ConfigData {
     @Override
     public void setEnabledOresMode(boolean toSet) {
         INSTANCE.enabledOresMode = toSet;
-        MANAGER.save();
+//        MANAGER.save();
     }
 
     @Override
@@ -304,7 +304,7 @@ public class ForgeModConfig implements IModConfig, ConfigData {
     @Override
     public void setEnabledCropsMode(boolean toSet) {
         INSTANCE.enabledCropsMode = toSet;
-        MANAGER.save();
+//        MANAGER.save();
     }
 
     @Override
@@ -315,7 +315,7 @@ public class ForgeModConfig implements IModConfig, ConfigData {
     @Override
     public void setEnabledTreesMode(boolean toSet) {
         INSTANCE.enabledTreesMode = toSet;
-        MANAGER.save();
+//        MANAGER.save();
     }
 
     @Override
@@ -326,7 +326,7 @@ public class ForgeModConfig implements IModConfig, ConfigData {
     @Override
     public void setEnabledFastEat(boolean toSet) {
         INSTANCE.enabledFastEat = toSet;
-        MANAGER.save();
+//        MANAGER.save();
     }
 
     @Override
@@ -337,7 +337,7 @@ public class ForgeModConfig implements IModConfig, ConfigData {
     @Override
     public void setEnabledFastPlace(boolean toSet) {
         INSTANCE.enabledFastPlace = toSet;
-        MANAGER.save();
+//        MANAGER.save();
     }
 
     @Override
@@ -348,12 +348,12 @@ public class ForgeModConfig implements IModConfig, ConfigData {
     @Override
     public void setEnabledKeyPressSound(boolean toSet) {
         INSTANCE.enabledKeyPressSound = toSet;
-        MANAGER.save();
+//        MANAGER.save();
     }
 
     public void init() {
-        AutoConfig.register(ForgeModConfig.class, GsonConfigSerializer::new);
-        INSTANCE = AutoConfig.getConfigHolder(ForgeModConfig.class).getConfig();
-        MANAGER = (ConfigManager) AutoConfig.getConfigHolder(ForgeModConfig.class);
+//        AutoConfig.register(ForgeModConfig.class, GsonConfigSerializer::new);
+//        INSTANCE = AutoConfig.getConfigHolder(ForgeModConfig.class).getConfig();
+//        MANAGER = (ConfigManager) AutoConfig.getConfigHolder(ForgeModConfig.class);
     }
 }

@@ -1,7 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
-  "group": "ET",
+  "category": "equipment",
   "key": {
     "G": "minecraft:gold_ingot",
     "R": "minecraft:potion",

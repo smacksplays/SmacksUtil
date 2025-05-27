@@ -17,15 +17,25 @@ import org.jetbrains.annotations.NotNull;
 import static net.smackplays.smacksutil.Constants.Backpack.C_BACKPACK_COL_NUM;
 import static net.smackplays.smacksutil.Constants.Backpack.C_BACKPACK_ROW_NUM;
 
-
 /**
  * Test
  */
 public abstract class AbstractBackpackItem extends Item{
+    /**
+     * Test
+     * @param properties Props
+     */
     public AbstractBackpackItem(Properties properties) {
         super(properties);
     }
 
+    /**
+     * Test
+     * @param world World
+     * @param player Player
+     * @param hand Hand
+     * @return Result
+     */
     @Override
     public @NotNull InteractionResult use(Level world, @NotNull Player player, @NotNull InteractionHand hand) {
         if (world.isClientSide) return InteractionResult.PASS;
@@ -35,6 +45,11 @@ public abstract class AbstractBackpackItem extends Item{
         return InteractionResult.SUCCESS;
     }
 
+    /**
+     * Test
+     * @param context Context
+     * @return Result
+     */
     @Override
     public @NotNull InteractionResult useOn(UseOnContext context) {
         if (context.getPlayer() == null) return InteractionResult.FAIL;
@@ -43,6 +58,11 @@ public abstract class AbstractBackpackItem extends Item{
         return InteractionResult.SUCCESS;
     }
 
+    /**
+     * Test
+     * @param stack ItemStack
+     * @return MenuProvider
+     */
     public MenuProvider createScreenHandlerFactory(ItemStack stack) {
         return new SimpleMenuProvider((i, playerInventory, playerEntity) ->
                 new AbstractBackpackMenu(MenuType.GENERIC_9x6, i, playerInventory, new BackpackInventory(stack, playerInventory.player.registryAccess(), C_BACKPACK_ROW_NUM * C_BACKPACK_COL_NUM + 4)), stack.getHoverName());

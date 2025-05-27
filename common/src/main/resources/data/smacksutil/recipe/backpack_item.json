@@ -1,7 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
-  "group": "B",
+  "category": "equipment",
   "pattern": [
     "WLS",
     "LCL",

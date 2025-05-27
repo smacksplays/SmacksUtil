@@ -1,7 +1,6 @@
 {
   "type": "minecraft:crafting_shapeless",
-  "category": "misc",
-  "group": "AM",
+  "category": "equipment",
   "ingredients": [
     "#minecraft:wool"
   ],

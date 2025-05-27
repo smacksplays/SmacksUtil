@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe1": {
+      "conditions": {
+        "recipe": "smacksutil:light_wand_item"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_the_recipe2": {
+      "conditions": {
+        "recipe": "minecraft:diamond_block"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_the_recipe3": {
+      "conditions": {
+        "recipe": "minecraft:torch"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe1",
+      "has_the_recipe2",
+      "has_the_recipe3"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "smacksutil:auto_light_wand_item"
+    ]
+  }
+}

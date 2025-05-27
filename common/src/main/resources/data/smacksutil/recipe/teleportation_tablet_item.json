@@ -1,7 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
-  "group": "TP",
+  "category": "equipment",
   "key": {
     "A": "minecraft:netherite_ingot",
     "E": "minecraft:ender_pearl",
