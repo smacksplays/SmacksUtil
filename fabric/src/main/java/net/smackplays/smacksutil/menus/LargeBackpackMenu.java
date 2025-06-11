@@ -6,13 +6,14 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.smackplays.smacksutil.SmacksUtil;
 import net.smackplays.smacksutil.inventories.BackpackInventory;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
-import static net.smackplays.smacksutil.Constants.Backpack.C_LARGE_BACKPACK_COL_NUM;
-import static net.smackplays.smacksutil.Constants.Backpack.C_LARGE_BACKPACK_ROW_NUM;
+import static net.smackplays.smacksutil.Constants.C_LARGE_BACKPACK_COL_NUM;
+import static net.smackplays.smacksutil.Constants.C_LARGE_BACKPACK_ROW_NUM;
+import static net.smackplays.smacksutil.SmacksUtil.LARGE_BACKPACK_ITEM;
+import static net.smackplays.smacksutil.SmacksUtil.LARGE_BACKPACK_MENU;
 
 public class LargeBackpackMenu extends AbstractLargeBackpackMenu {
 
@@ -20,18 +21,18 @@ public class LargeBackpackMenu extends AbstractLargeBackpackMenu {
         super(menuType, syncId, playerInv, inv);
     }
 
-    @SuppressWarnings("unused")
     public static LargeBackpackMenu createGeneric13x9(int syncId, Inventory playerInventory, Vector3f vec) {
+        vec.floor();
         ItemStack backpack = playerInventory.getSelectedItem();
 
         NonNullList<Slot> slots = playerInventory.player.inventoryMenu.slots;
         for (int i = slots.size() - 1; i >= 0; i--){
-            if (slots.get(i).getItem().is(SmacksUtil.LARGE_BACKPACK_ITEM)){
+            if (slots.get(i).getItem().is(LARGE_BACKPACK_ITEM)){
                 backpack = slots.get(i).getItem();
                 break;
             }
         }
-        return new LargeBackpackMenu(SmacksUtil.LARGE_BACKPACK_MENU, syncId, playerInventory,
+        return new LargeBackpackMenu(LARGE_BACKPACK_MENU, syncId, playerInventory,
                 new BackpackInventory(backpack, playerInventory.player.registryAccess(), C_LARGE_BACKPACK_ROW_NUM * C_LARGE_BACKPACK_COL_NUM + 4));
     }
 }

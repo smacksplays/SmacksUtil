@@ -3,58 +3,65 @@ package net.smackplays.smacksutil.veinminer.modes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.smackplays.smacksutil.util.BlockPosComparator;
 import net.smackplays.smacksutil.util.ModTags;
 
 import java.util.ArrayList;
 
-@SuppressWarnings("unchecked")
+/**
+ * Veinminer Shapeless Mode */
 public class Vegetation extends VeinMode {
+    /** world*/
+    private Level world;
+    /** result*/
+    private ArrayList<BlockPos> result;
+    /** Constructor*/
     public Vegetation() {
         ModeName = "Vegetation";
     }
 
+    /** Get the Ore Blocks connected to sourcePos if they are Ores.
+     * @param world world
+     * @param player player
+     * @param sourcePos sourcePos
+     * @param radius radius
+     * @param isExactMatch isExactMatch
+     * @return Sorted list of Blocks to break.*/
     @Override
     public ArrayList<BlockPos> getBlocks(Level world, Player player, BlockPos sourcePos, int radius, boolean isExactMatch) {
-        if (world == null || player == null || sourcePos == null) return (ArrayList<BlockPos>) toBreak.clone();
-        oldToBreak = (ArrayList<BlockPos>) toBreak.clone();
-        toBreak.clear();
-        toCheck.clear();
-        checked.clear();
-        Block toMatch = world.getBlockState(sourcePos).getBlock();
-
-        if (!oldToBreak.isEmpty() && oldSourcePos.equals(sourcePos)
-                && oldRadius == radius && oldToMatch.equals(toMatch) && oldIsExactMatch == isExactMatch) {
-            return (ArrayList<BlockPos>) oldToBreak.clone();
-        }
+        this.world = world;
+        this.result = new ArrayList<>();
 
         BlockPos pos = new BlockPos(sourcePos.getX() - radius, sourcePos.getY() - 2, sourcePos.getZ() - radius);
+        return crops(pos, radius, player);
+    }
 
+    /** tunnel method
+     * @param curr curr
+     * @param radius radius
+     * @param player player
+     * @return Sorted list of Blocks to break */
+    public ArrayList<BlockPos> crops(BlockPos curr, int radius, Player player) {
         for (int i = 0; i < radius * 2 + 1; i++) {
             for (int j = 0; j < radius * 2 + 1; j++) {
                 for (int u = 0; u < 5; u++) {
-                    if (world.getBlockState(pos).is(ModTags.Blocks.VEGETATION_BLOCKS) && player.hasCorrectToolForDrops(world.getBlockState(pos))) {
-                        toBreak.add(pos);
+                    if (world.getBlockState(curr).is(ModTags.Blocks.VEGETATION_BLOCKS) && player.hasCorrectToolForDrops(world.getBlockState(curr))) {
+                        result.add(curr);
                     }
-                    pos = pos.offset(0, 1, 0);
+                    curr = curr.offset(0, 1, 0);
                 }
-                pos = pos.offset(0, -5, 1);
+                curr = curr.offset(0, -5, 1);
             }
-            pos = pos.offset(1, 0, -radius * 2 - 1);
+            curr = curr.offset(1, 0, -radius * 2 - 1);
         }
 
-        toBreak.sort(new BlockPosComparator(sourcePos));
-
-        oldToBreak = (ArrayList<BlockPos>) toBreak.clone();
-        oldRadius = radius;
-        oldSourcePos = sourcePos;
-        oldToMatch = toMatch;
-        oldIsExactMatch = isExactMatch;
-
-        return (ArrayList<BlockPos>) toBreak.clone();
+        return result;
     }
 
+
+
+    /** check if Rendering is allowed
+     * @param radius radius
+     * @return true if allowed*/
     @Override
     public boolean doRender(int radius) {
         return false;

@@ -11,17 +11,28 @@ import net.smackplays.smacksutil.inventories.BackpackInventory;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
-import static net.smackplays.smacksutil.Constants.Backpack.C_BACKPACK_COL_NUM;
-import static net.smackplays.smacksutil.Constants.Backpack.C_BACKPACK_ROW_NUM;
+import static net.smackplays.smacksutil.Constants.C_BACKPACK_COL_NUM;
+import static net.smackplays.smacksutil.Constants.C_BACKPACK_ROW_NUM;
 
+/**
+ * Class BackpackMenu */
 public class BackpackMenu extends AbstractBackpackMenu {
-
+    /** Constructor
+     * @param menuType menuType
+     * @param syncId syncId
+     * @param playerInv playerInv
+     * @param inv inv*/
     public BackpackMenu(@Nullable MenuType<?> menuType, int syncId, Inventory playerInv, Container inv) {
         super(menuType, syncId, playerInv, inv);
     }
 
-    @SuppressWarnings("unused")
+    /** Create generic Menu
+     * @param syncId syncId
+     * @param playerInventory playerInventory
+     * @param vec vec
+     * @return BackpackMenu*/
     public static BackpackMenu createGeneric9x6(int syncId, Inventory playerInventory, Vector3f vec) {
+        vec.floor();
         ItemStack backpack = playerInventory.getSelectedItem();
 
         NonNullList<Slot> slots = playerInventory.player.inventoryMenu.slots;

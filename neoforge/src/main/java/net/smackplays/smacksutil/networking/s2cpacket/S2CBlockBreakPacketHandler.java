@@ -6,9 +6,9 @@ import net.smackplays.smacksutil.networking.s2chandlers.S2CCommonBlockBreakPacke
 
 public class S2CBlockBreakPacketHandler {
 
-    @SuppressWarnings("unused")
     public static void handle(S2CBlockBreakPacket data, IPayloadContext context) {
         BlockPos pos = new BlockPos((int)data.pos().x, (int)data.pos().y, (int)data.pos().z);
+        context.player();
         S2CCommonBlockBreakPacketHandler.handle(pos);
     }
 }

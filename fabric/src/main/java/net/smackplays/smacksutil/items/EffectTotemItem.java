@@ -8,10 +8,11 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
-import net.smackplays.smacksutil.SmacksUtil;
 import net.smackplays.smacksutil.menus.EffectTotemMenu;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3f;
+
+import static net.smackplays.smacksutil.SmacksUtil.EFFECT_TOTEM_MENU;
 
 public class EffectTotemItem extends AbstractEffectTotemItem {
     public EffectTotemItem(Properties properties) {
@@ -33,7 +34,7 @@ public class EffectTotemItem extends AbstractEffectTotemItem {
 
             @Override
             public AbstractContainerMenu createMenu(int syncId, @NotNull Inventory playerInventory, @NotNull Player player) {
-                return new EffectTotemMenu(SmacksUtil.EFFECT_TOTEM_MENU, syncId, playerInventory);
+                return new EffectTotemMenu(EFFECT_TOTEM_MENU, syncId, playerInventory);
             }
         };
     }

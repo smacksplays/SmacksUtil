@@ -21,21 +21,47 @@ import java.util.*;
 
 import static net.smackplays.smacksutil.Constants.*;
 
+/**
+ * AbstractEffectTotemScreen
+ * @param <T> extends AbstractEffectTotemMenu
+ */
 public class AbstractEffectTotemScreen<T extends AbstractEffectTotemMenu> extends AbstractContainerScreen<T> {
+    /** scrollbarHeight_left */
     private final int scrollbarHeight_left = 232;
+    /** scrollbarHeight_right */
     private final int scrollbarHeight_right = 232;
+    /** scrolling_left */
     public boolean scrolling_left;
+    /** scrolling_right */
     public boolean scrolling_right;
+    /** scrollOffs_left */
     private float scrollOffs_left;
+    /** scrollOffs_right */
     private float scrollOffs_right;
+    /** backgroundWidth */
     protected final int backgroundWidth = 308;
+    /** backgroundHeight */
     protected final int backgroundHeight = 267;
+    /** LabelList_left */
     private final List<Label> LabelList_left = new ArrayList<>();
+    /** LabelList_right */
     private final List<Label> LabelList_right = new ArrayList<>();
+
+    /**
+     * Constructor
+     * @param handler handler
+     * @param inventory inventory
+     * @param title title
+     */
     public AbstractEffectTotemScreen(T handler, Inventory inventory, Component title) {
         super(handler, inventory, title);
     }
 
+    /** Render Background
+     * @param context context
+     * @param delta delta
+     * @param mouseX mouseX
+     * @param mouseY mouseY*/
     @Override
     protected void renderBg(GuiGraphics context, float delta, int mouseX, int mouseY) {
         LabelList_left.clear();
@@ -53,6 +79,15 @@ public class AbstractEffectTotemScreen<T extends AbstractEffectTotemMenu> extend
         renderBgRight(x, y, context, effectTotem, mouseX, mouseY);
     }
 
+    /**
+     * Render Background Left
+     * @param x x
+     * @param y u
+     * @param context context
+     * @param effectTotem effectTotem
+     * @param mouseX mouseX
+     * @param mouseY mouseY
+     */
     private void renderBgLeft(int x, int y, GuiGraphics context, ItemStack effectTotem, int mouseX, int mouseY) {
         Map<String, Integer> currentEffectList = getCurrentEffectList(effectTotem);
         ResourceLocation scroller_left = currentEffectList.size() > 13 ? C_SCROLLER_SPRITE_LOCATION_RL : C_SCROLLER_DISABLED_SPRITE_LOCATION_RL;
@@ -95,6 +130,15 @@ public class AbstractEffectTotemScreen<T extends AbstractEffectTotemMenu> extend
         LabelList_left.sort(Comparator.comparing((Label l) -> l.name));
     }
 
+    /**
+     * Render Background Right
+     * @param x x
+     * @param y u
+     * @param context context
+     * @param effectTotem effectTotem
+     * @param mouseX mouseX
+     * @param mouseY mouseY
+     */
     private void renderBgRight(int x, int y, GuiGraphics context, ItemStack effectTotem, int mouseX, int mouseY) {
         Map<String, Integer> availableEffectList = getAllEffects();
         ResourceLocation scroller_right = availableEffectList.size() > 13 ? C_SCROLLER_SPRITE_LOCATION_RL : C_SCROLLER_DISABLED_SPRITE_LOCATION_RL;
@@ -144,6 +188,11 @@ public class AbstractEffectTotemScreen<T extends AbstractEffectTotemMenu> extend
         }
     }
 
+    /** Render
+     * @param context context
+     * @param mouseX mouseX
+     * @param mouseY mouseY
+     * @param delta delta*/
     @Override
     public void render(@NotNull GuiGraphics context, int mouseX, int mouseY, float delta) {
         renderBackground(context, mouseX, mouseY, delta);
@@ -151,6 +200,10 @@ public class AbstractEffectTotemScreen<T extends AbstractEffectTotemMenu> extend
         renderTooltip(context, mouseX, mouseY);
     }
 
+    /** Render labels
+     * @param context context
+     * @param mouseX mouseX
+     * @param mouseY mouseY*/
     @Override
     protected void renderLabels(GuiGraphics context, int mouseX, int mouseY) {
         context.drawString(this.font, this.title, this.titleLabelX - 65, this.titleLabelY - 51, 0x404040, false);
@@ -166,11 +219,16 @@ public class AbstractEffectTotemScreen<T extends AbstractEffectTotemMenu> extend
         }
     }
 
+    /** init */
     @Override
     protected void init() {
         super.init();
     }
 
+    /** Get current effect List
+     * @param effectTotem effectTotem
+     * @return Map
+     */
     private Map<String, Integer> getCurrentEffectList(ItemStack effectTotem){
         Map<String, Integer> map = new HashMap<>();
         CustomData data = effectTotem.get(DataComponents.CUSTOM_DATA);
@@ -194,6 +252,13 @@ public class AbstractEffectTotemScreen<T extends AbstractEffectTotemMenu> extend
         return map;
     }
 
+    /**
+     * Mouse Clicked
+     * @param mouseX mouseX
+     * @param mouseY mouseY
+     * @param lrClick lrClick
+     * @return true
+     */
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int lrClick) {
         int x = (width - this.backgroundWidth) / 2;
@@ -293,6 +358,10 @@ public class AbstractEffectTotemScreen<T extends AbstractEffectTotemMenu> extend
         return super.mouseClicked(mouseX, mouseY, lrClick);
     }
 
+    /**
+     * Get all Effects
+     * @return map
+     */
     private Map<String, Integer> getAllEffects(){
         Map<String, Integer> map = new HashMap<>();
         for (Label label : getAllLabels()){
@@ -301,6 +370,13 @@ public class AbstractEffectTotemScreen<T extends AbstractEffectTotemMenu> extend
         return map;
     }
 
+    /** Mouse Dragged
+     * @param mouseX mouseX
+     * @param mouseY mouseY
+     * @param $$2 $$2
+     * @param scrollX scrollX
+     * @param scrollY scrollY
+     * @return true */
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, int $$2, double scrollX, double scrollY) {
         int y = (height - backgroundHeight) / 2;
@@ -317,6 +393,11 @@ public class AbstractEffectTotemScreen<T extends AbstractEffectTotemMenu> extend
         }
     }
 
+    /** Mouse Released
+     * @param d d
+     * @param e e
+     * @param i i
+     * @return super */
     @Override
     public boolean mouseReleased(double d, double e, int i) {
         this.scrolling_left = false;
@@ -324,6 +405,14 @@ public class AbstractEffectTotemScreen<T extends AbstractEffectTotemMenu> extend
         return super.mouseReleased(d, e, i);
     }
 
+    /**
+     * Mouse inside Scrollbar left
+     * @param x x
+     * @param y u
+     * @param mouseX mouseX
+     * @param mouseY mouseY
+     * @return true if inside
+     */
     public boolean insideScrollbar_left(int x, int y, double mouseX, double mouseY) {
         boolean b1 = x + 136 < mouseX;
         boolean b2 = x + 148.5 >= mouseX;
@@ -332,6 +421,14 @@ public class AbstractEffectTotemScreen<T extends AbstractEffectTotemMenu> extend
         return b1 && b2 && b3 && b4;
     }
 
+    /**
+     * Mouse inside Field left
+     * @param x x
+     * @param y u
+     * @param mouseX mouseX
+     * @param mouseY mouseY
+     * @return true if inside
+     */
     public boolean insideField_left(int x, int y, double mouseX, double mouseY) {
         boolean b1 = x + 8  < mouseX;
         boolean b2 = x + 8 + 148.5 >= mouseX;
@@ -340,6 +437,14 @@ public class AbstractEffectTotemScreen<T extends AbstractEffectTotemMenu> extend
         return b1 && b2 && b3 && b4;
     }
 
+    /**
+     * Mouse inside Scrollbar Right
+     * @param x x
+     * @param y u
+     * @param mouseX mouseX
+     * @param mouseY mouseY
+     * @return true if inside
+     */
     public boolean insideScrollbar_right(int x, int y, double mouseX, double mouseY) {
         boolean b1 = x + 151 < mouseX;
         boolean b2 = x + 151 + 148.5 >= mouseX;
@@ -348,6 +453,14 @@ public class AbstractEffectTotemScreen<T extends AbstractEffectTotemMenu> extend
         return b1 && b2 && b3 && b4;
     }
 
+    /**
+     * Mouse inside Field right
+     * @param x x
+     * @param y u
+     * @param mouseX mouseX
+     * @param mouseY mouseY
+     * @return true if inside
+     */
     public boolean insideField_right(int x, int y, double mouseX, double mouseY) {
         boolean b1 = x + 8 + 151 < mouseX;
         boolean b2 = x + 8 + 151 + 126 >= mouseX;
@@ -356,6 +469,12 @@ public class AbstractEffectTotemScreen<T extends AbstractEffectTotemMenu> extend
         return b1 && b2 && b3 && b4;
     }
 
+    /** Mouse scrolled
+     * @param mouseX mouseX
+     * @param mouseY mouseY
+     * @param $$2 $$2
+     * @param scroll_delta scroll_delta
+     * @return super */
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double $$2, double scroll_delta) {
         int x = (width - this.backgroundWidth) / 2;
@@ -398,6 +517,10 @@ public class AbstractEffectTotemScreen<T extends AbstractEffectTotemMenu> extend
         return super.mouseScrolled(mouseX, mouseY, $$2, scroll_delta);
     }
 
+    /**
+     * Getter
+     * @return List of Effect Labels
+     */
     private List<Label> getAllLabels() {
         List<Label> list = new ArrayList<>();
         list.add(new Label("speed", 1, 0, 0));
@@ -443,6 +566,11 @@ public class AbstractEffectTotemScreen<T extends AbstractEffectTotemMenu> extend
         return list;
     }
 
+    /** Record Label
+     * @param name name
+     * @param amplifier amplifier
+     * @param x x
+     * @param y y */
     public record Label(String name, int amplifier, int x, int y) {
     }
 }

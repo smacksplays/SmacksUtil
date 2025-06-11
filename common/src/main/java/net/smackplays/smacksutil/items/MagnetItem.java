@@ -23,15 +23,23 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.function.Consumer;
 
+/** class MagnetItem */
 public class MagnetItem extends Item {
-
+    /** ColorCode Green */
     private static final int GREEN = 65280;
+    /** ColorCode RED */
     private static final int RED = 16711680;
-
+    /** Constructor
+     * @param properties properties */
     public MagnetItem(Properties properties) {
         super(properties);
     }
 
+    /** Use on air
+     * @param world world
+     * @param player player
+     * @param interactionHand interactionHand
+     * @return Result */
     @Override
     public @NotNull InteractionResult use(Level world, @NotNull Player player, @NotNull InteractionHand interactionHand) {
         ItemStack stack = player.getItemInHand(interactionHand);
@@ -43,6 +51,11 @@ public class MagnetItem extends Item {
         return super.use(world, player, interactionHand);
     }
 
+    /** Inventory tick
+     * @param stack stack
+     * @param world world
+     * @param entity entity
+     * @param equipmentSlot equipmentSlot */
     @Override
     public void inventoryTick(ItemStack stack, @NotNull ServerLevel world, @NotNull Entity entity, EquipmentSlot equipmentSlot) {
         CustomData customData = stack.get(DataComponents.CUSTOM_DATA);
@@ -56,6 +69,10 @@ public class MagnetItem extends Item {
         super.inventoryTick(stack, world, entity, equipmentSlot);
     }
 
+    /** Attract Items
+     * @param entity entity
+     * @param world world
+     * @param range range */
     public void attract(Entity entity, Level world, int range){
         AABB area = new AABB(entity.position().add(-range, -range, -range), entity.position().add(range, range, range));
         Player player = (Player) entity;
@@ -72,6 +89,9 @@ public class MagnetItem extends Item {
         }
     }
 
+    /** Toggle Magnet
+     * @param stack stack
+     * @param player player */
     public void toggle(ItemStack stack, Player player){
         CustomData customData = stack.get(DataComponents.CUSTOM_DATA);
         if(customData != null){
@@ -85,10 +105,17 @@ public class MagnetItem extends Item {
         }
     }
 
+    /** Send Message to Player
+     * @param player player
+     * @param msg msg
+     * @param color color */
     public void notifyPlayer(Player player, String msg, int color){
         player.displayClientMessage(Component.literal("Magnet: " + msg).withColor(color), true);
     }
 
+    /** Check if is enabled
+     * @param stack stack
+     * @return true if enabled */
     @Override
     public boolean isFoil(@NotNull ItemStack stack) {
         CustomData customData = stack.get(DataComponents.CUSTOM_DATA);
@@ -99,6 +126,12 @@ public class MagnetItem extends Item {
         return false;
     }
 
+    /** Append Hover Text
+     * @param stack stack
+     * @param context context
+     * @param display display
+     * @param consumer consumer
+     * @param flag flag */
     @Override
     public void appendHoverText(ItemStack stack, @NotNull TooltipContext context, @NotNull TooltipDisplay display,
                                 @NotNull Consumer<Component> consumer, @NotNull TooltipFlag flag) {
@@ -113,6 +146,8 @@ public class MagnetItem extends Item {
         }
     }
 
+    /** getRange
+     * @return Range */
     public int getRange(){
         return 5;
     }

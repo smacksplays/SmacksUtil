@@ -22,14 +22,26 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
+/** abstract class AbstractEffectTotemItem */
 public abstract class AbstractEffectTotemItem extends Item {
+    /** counter */
     private static int counter = 0;
+    /** LIST_NAME */
     private static final String LIST_NAME = "effect_list";
+    /** EFFECT_TIME */
     private static final int EFFECT_TIME = 30 * 20;
+
+    /** Constructor
+     * @param properties properties */
     public AbstractEffectTotemItem(Properties properties) {
         super(properties);
     }
 
+    /** Inventory tick
+     * @param stack stack
+     * @param level level
+     * @param entity entity
+     * @param slot slot */
     @Override
     public void inventoryTick(@NotNull ItemStack stack, @NotNull ServerLevel level, @NotNull Entity entity, EquipmentSlot slot) {
         if (counter == 50){
@@ -59,6 +71,11 @@ public abstract class AbstractEffectTotemItem extends Item {
         counter ++;
     }
 
+    /** Use on air
+     * @param level level
+     * @param player player
+     * @param hand hand
+     * @return InteractionResult*/
     @Override
     public @NotNull InteractionResult use(@NotNull Level level, @NotNull Player player, @NotNull InteractionHand hand) {
         if (level.isClientSide) return InteractionResult.PASS;
@@ -68,6 +85,9 @@ public abstract class AbstractEffectTotemItem extends Item {
         return InteractionResult.SUCCESS;
     }
 
+    /** Use on Block
+     * @param context context
+     * @return InteractionResult*/
     @Override
     public @NotNull InteractionResult useOn(UseOnContext context) {
         if (context.getPlayer() == null) return InteractionResult.FAIL;
@@ -76,8 +96,14 @@ public abstract class AbstractEffectTotemItem extends Item {
         return InteractionResult.SUCCESS;
     }
 
+    /** Abstract createScreenHandlerFactory
+     * @param stack  stack
+     * @return MenuProvider*/
     abstract MenuProvider createScreenHandlerFactory(ItemStack stack);
 
+    /** getEffect
+     * @param name name
+     * @return Effect matching name*/
     private Holder<MobEffect> getEffect(String name){
         return switch (name) {
             case "speed" -> MobEffects.SPEED;

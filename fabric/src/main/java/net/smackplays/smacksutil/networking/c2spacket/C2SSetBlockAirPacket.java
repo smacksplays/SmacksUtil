@@ -9,6 +9,9 @@ import org.joml.Vector3f;
 
 import static net.smackplays.smacksutil.Constants.C_SET_BLOCK_AIR_REQUEST_RL;
 
+/**
+ * Record C2SSetBlockAirPacket
+ * @param pos pos */
 public record C2SSetBlockAirPacket(Vector3f pos) implements CustomPacketPayload {
     public static final Type<C2SSetBlockAirPacket> TYPE
             = new Type<>(C_SET_BLOCK_AIR_REQUEST_RL);

@@ -7,8 +7,16 @@ import net.minecraft.world.entity.player.Player;
 import net.smackplays.smacksutil.CommonClass;
 import net.smackplays.smacksutil.platform.Services;
 
+/**
+ * Common Handler for the BlockBreakPacket */
 public class S2CCommonBlockBreakPacketHandler {
+    /** Constructor*/
+    public S2CCommonBlockBreakPacketHandler(){
 
+    }
+
+    /** Handle BlockBreakPacket
+     * @param pos pos*/
     public static void handle(BlockPos pos) {
         Player player = Minecraft.getInstance().player;
         assert Services.KEY_HANDLER != null;
@@ -16,6 +24,10 @@ public class S2CCommonBlockBreakPacketHandler {
             CommonClass.veinMiner.veinMiner(player.level(), player, pos);
         }
     }
+
+    /** Handle BlockBreakPacket
+     * @param player player
+     * @param pos pos*/
     public static void handle(LocalPlayer player, BlockPos pos) {
         assert Services.KEY_HANDLER != null;
         if (Services.KEY_HANDLER.isVeinKeyDown() && player != null){

@@ -8,16 +8,15 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
-import net.smackplays.smacksutil.SmacksUtil;
 import net.smackplays.smacksutil.inventories.BackpackInventory;
 import net.smackplays.smacksutil.menus.LargeBackpackMenu;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3f;
 
-import static net.smackplays.smacksutil.Constants.Backpack.C_LARGE_BACKPACK_COL_NUM;
-import static net.smackplays.smacksutil.Constants.Backpack.C_LARGE_BACKPACK_ROW_NUM;
+import static net.smackplays.smacksutil.Constants.C_LARGE_BACKPACK_COL_NUM;
+import static net.smackplays.smacksutil.Constants.C_LARGE_BACKPACK_ROW_NUM;
+import static net.smackplays.smacksutil.SmacksUtil.LARGE_BACKPACK_MENU;
 
-@SuppressWarnings("unused")
 public class LargeBackpackItem extends AbstractBackpackItem {
 
     public LargeBackpackItem(Properties properties) {
@@ -39,7 +38,7 @@ public class LargeBackpackItem extends AbstractBackpackItem {
 
             @Override
             public AbstractContainerMenu createMenu(int syncId, @NotNull Inventory playerInventory, @NotNull Player player) {
-                return new LargeBackpackMenu(SmacksUtil.LARGE_BACKPACK_MENU, syncId, playerInventory,
+                return new LargeBackpackMenu(LARGE_BACKPACK_MENU, syncId, playerInventory,
                         new BackpackInventory(stack, player.registryAccess(), C_LARGE_BACKPACK_ROW_NUM * C_LARGE_BACKPACK_COL_NUM + 4));
             }
         };

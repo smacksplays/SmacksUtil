@@ -45,10 +45,8 @@ import net.smackplays.smacksutil.networking.s2cpacket.S2CBlockBreakPacket;
 import net.smackplays.smacksutil.networking.s2cpacket.S2CBlockBreakPacketHandler;
 import net.smackplays.smacksutil.screens.*;
 
-import static net.smackplays.smacksutil.Constants.Backpack.*;
 import static net.smackplays.smacksutil.Constants.*;
 
-@SuppressWarnings({"unused", "EmptyMethod"})
 @Mod(MOD_ID)
 public class SmacksUtil {
 
@@ -93,11 +91,10 @@ public class SmacksUtil {
     public static final DeferredHolder<MenuType<?>, MenuType<EffectTotemMenu>> EFFECT_TOTEM_MENU =
             MENUS.register(C_EFFECT_TOTEM_MENU, () -> new MenuType<>(EffectTotemMenu::create, FeatureFlags.DEFAULT_FLAGS));
 
-
     public SmacksUtil(IEventBus modEventBus, ModContainer modContainer) {
         CommonClass.init();
+        LOG.info(modContainer.getModId());
 
-        //modEventBus.addListener(this::interModEnqueue);
         modEventBus.addListener(this::commonSetup);
 
         ITEMS.register(modEventBus);
@@ -111,13 +108,6 @@ public class SmacksUtil {
             ClothConfigNeoForge.registerModsPage();
         }
     }
-//    public void interModEnqueue(InterModEnqueueEvent e){
-//        if (Services.PLATFORM.isModLoaded("curios")){
-//            InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE, () -> new SlotTypeMessage.Builder("charm").size(1).build());
-//            InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE, () -> new SlotTypeMessage.Builder("back").size(1).build());
-//            InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE, () -> new SlotTypeMessage.Builder("hands").size(1).build());
-//        }
-//    }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
     }
@@ -143,11 +133,11 @@ public class SmacksUtil {
 
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event) {
-
     }
 
     @EventBusSubscriber(modid = MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static class ClientModEvents {
+
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
             CauldronInteraction.WATER.map().putIfAbsent(BACKPACK_ITEM.get(), ClientModEvents::dyedItemIteration);
@@ -176,11 +166,11 @@ public class SmacksUtil {
         public static class RegisterMenuScreens {
             @SubscribeEvent
             public static void register(final RegisterMenuScreensEvent event) {
-                event.register(SmacksUtil.BACKPACK_MENU.get(), AbstractBackpackScreen<BackpackMenu>::new);
-                event.register(SmacksUtil.LARGE_BACKPACK_MENU.get(), AbstractLargeBackpackScreen<LargeBackpackMenu>::new);
-                event.register(SmacksUtil.ENCHANTING_TOOL_MENU.get(), AbstractEnchantingToolScreen<EnchantingToolMenu>::new);
-                event.register(SmacksUtil.TELEPORTATION_TABLET_MENU.get(), AbstractTeleportationTabletScreen<TeleportationTabletMenu>::new);
-                event.register(SmacksUtil.EFFECT_TOTEM_MENU.get(), AbstractEffectTotemScreen<EffectTotemMenu>::new);
+                event.register(BACKPACK_MENU.get(), AbstractBackpackScreen<BackpackMenu>::new);
+                event.register(LARGE_BACKPACK_MENU.get(), AbstractLargeBackpackScreen<LargeBackpackMenu>::new);
+                event.register(ENCHANTING_TOOL_MENU.get(), AbstractEnchantingToolScreen<EnchantingToolMenu>::new);
+                event.register(TELEPORTATION_TABLET_MENU.get(), AbstractTeleportationTabletScreen<TeleportationTabletMenu>::new);
+                event.register(EFFECT_TOTEM_MENU.get(), AbstractEffectTotemScreen<EffectTotemMenu>::new);
             }
 
         }
@@ -189,8 +179,7 @@ public class SmacksUtil {
         public static class PacketEvents {
             @SubscribeEvent
             public static void register(final RegisterPayloadHandlersEvent event) {
-
-                final PayloadRegistrar C2SRegistrar = event.registrar(Constants.MOD_ID)
+                final PayloadRegistrar C2SRegistrar = event.registrar(MOD_ID)
                         .versioned(NeoForgeVersion.getVersion())
                         .optional();
                 C2SRegistrar.playToServer(
@@ -253,9 +242,10 @@ public class SmacksUtil {
                         C2STeleportationNBTPacketHandler::handle
                 );
 
-                final PayloadRegistrar S2CRegistrar = event.registrar(Constants.MOD_ID)
+                final PayloadRegistrar S2CRegistrar = event.registrar(MOD_ID)
                         .versioned(NeoForgeVersion.getVersion())
                         .optional();
+
                 S2CRegistrar.playToClient(
                         S2CBlockBreakPacket.TYPE,
                         S2CBlockBreakPacket.STREAM_CODEC,

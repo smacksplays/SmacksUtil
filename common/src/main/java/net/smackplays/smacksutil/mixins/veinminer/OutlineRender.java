@@ -14,10 +14,27 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+/**
+ * Class OutlineRender */
 @Mixin(LevelRenderer.class)
 public abstract class OutlineRender {
+    /** Constructor*/
+    public OutlineRender() {
 
-    @Inject(at = @At("HEAD"), method = "renderHitOutline", cancellable = true)
+    }
+
+    /** facilitate outline rendering
+     * @param poseStack poseStack
+     * @param buffer buffer
+     * @param entity entity
+     * @param cameraX cameraX
+     * @param cameraY cameraY
+     * @param cameraZ cameraZ
+     * @param pos pos
+     * @param state state
+     * @param color color
+     * @param ci ci*/
+    @Inject(at = @At("HEAD"), method = "renderHitOutline")
     private void drawBlockOutline(PoseStack poseStack, VertexConsumer buffer,
                                   Entity entity, double cameraX, double cameraY,
                                   double cameraZ, BlockPos pos, BlockState state, int color, CallbackInfo ci) {
@@ -30,7 +47,6 @@ public abstract class OutlineRender {
                 CommonClass.veinMiner.drawOutline(poseStack, cameraX, cameraY,
                         cameraZ, pos, entity.level());
             }
-            ci.cancel();
         }
     }
 }

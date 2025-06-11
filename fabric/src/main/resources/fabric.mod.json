@@ -26,9 +26,6 @@
     ],
     "modmenu": [
       "net.smackplays.smacksutil.config.ModMenuIntegration"
-    ],
-    "jei_mod_plugin": [
-      "com.mrcrayfish.configured.impl.jei.ConfiguredJeiPlugin"
     ]
   },
   "mixins": [

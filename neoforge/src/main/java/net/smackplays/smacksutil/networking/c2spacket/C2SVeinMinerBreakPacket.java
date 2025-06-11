@@ -9,6 +9,7 @@ import org.joml.Vector3f;
 
 import static net.smackplays.smacksutil.Constants.C_VEINMINER_BREAK_REQUEST_RL;
 
+
 public record C2SVeinMinerBreakPacket(Vector3f pos, boolean isCreative, boolean replaceSeeds) implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<C2SVeinMinerBreakPacket> TYPE
             = new CustomPacketPayload.Type<>(C_VEINMINER_BREAK_REQUEST_RL);

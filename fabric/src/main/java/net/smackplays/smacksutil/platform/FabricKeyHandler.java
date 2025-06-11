@@ -9,17 +9,27 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.smackplays.smacksutil.platform.services.IKeyHandler;
 
+/**
+ * Class FabricKeyHandler */
 public class FabricKeyHandler implements IKeyHandler {
+    /** veinKey*/
     public static KeyMapping veinKey;
+    /** veinPreviewKey*/
     public static KeyMapping veinPreviewKey;
+    /** fastPlaceKey*/
     public static KeyMapping fastPlaceKey;
+    /** exactMatchKey*/
     public static KeyMapping exactMatchKey;
     public static KeyMapping openBackpackKey;
     public static KeyMapping toggleMagnetKey;
     public static KeyMapping toggleLightWandKey;
-
+    /** veinKeyDown*/
     boolean veinKeyDown;
+    /** Constructor*/
+    public FabricKeyHandler(){
 
+    }
+    /** RegisterEvents*/
     public void registerEvents() {
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             if (client.player != null && client.level != null) {
@@ -33,13 +43,14 @@ public class FabricKeyHandler implements IKeyHandler {
             }
         });
     }
+
     @Override
     public void openBackpackConsume(KeyMapping key, Player player){
         if (key.consumeClick()) {
             NonNullList<Slot> slots = player.inventoryMenu.slots;
             for (int i = slots.size() - 1; i >= 0; i--){
                 ItemStack stack = slots.get(i).getItem();
-                if ((stack.is(Services.PLATFORM.getLargeBackackItem()) || stack.is(Services.PLATFORM.getBackackItem())) && Services.C2S_PACKET_SENDER != null){
+                if ((stack.is(Services.PLATFORM.getLargeBackpackItem()) || stack.is(Services.PLATFORM.getBackpackItem())) && Services.C2S_PACKET_SENDER != null){
                     Services.C2S_PACKET_SENDER.BackpackOpenPacket(i);
                     return;
                 }
@@ -47,11 +58,14 @@ public class FabricKeyHandler implements IKeyHandler {
         }
     }
 
+    /** Getter
+     * @return veinKeyDown*/
     @Override
     public boolean isVeinKeyDown() {
-        return veinKeyDown;
+        return veinKey.isDown();
     }
 
+    /** Register*/
     @Override
     public void register() {
         veinKey = KeyBindingHelper.registerKeyBinding(IVeinKey);
@@ -63,6 +77,4 @@ public class FabricKeyHandler implements IKeyHandler {
         toggleLightWandKey = KeyBindingHelper.registerKeyBinding(IToggleLightWandKey);
         registerEvents();
     }
-
-
 }

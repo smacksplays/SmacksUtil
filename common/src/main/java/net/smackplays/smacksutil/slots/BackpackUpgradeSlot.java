@@ -32,9 +32,6 @@ public class BackpackUpgradeSlot extends Slot {
             if (container instanceof BackpackInventory inv){
                 return inv.checkRemoveUpgrade(inv.getMaxStackSize() / offset);
             }
-//            if (container instanceof IBackpackInventory inv){
-//                return inv.checkRemoveUpgrade(inv.getMaxStackSize() / offset);
-//            }
         }
         return super.mayPickup(player);
     }

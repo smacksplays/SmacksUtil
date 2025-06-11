@@ -4,12 +4,13 @@ import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
-import net.smackplays.smacksutil.SmacksUtil;
 import net.smackplays.smacksutil.inventories.BackpackInventory;
 import org.jetbrains.annotations.Nullable;
 
-import static net.smackplays.smacksutil.Constants.Backpack.C_BACKPACK_COL_NUM;
-import static net.smackplays.smacksutil.Constants.Backpack.C_BACKPACK_ROW_NUM;
+import static net.smackplays.smacksutil.Constants.C_BACKPACK_COL_NUM;
+import static net.smackplays.smacksutil.Constants.C_BACKPACK_ROW_NUM;
+import static net.smackplays.smacksutil.SmacksUtil.BACKPACK_ITEM;
+import static net.smackplays.smacksutil.SmacksUtil.BACKPACK_MENU;
 
 public class BackpackMenu extends AbstractBackpackMenu {
 
@@ -17,10 +18,9 @@ public class BackpackMenu extends AbstractBackpackMenu {
         super(menuType, syncId, playerInv, inv);
     }
 
-    @SuppressWarnings("unused")
     public static BackpackMenu createGeneric9x6(int syncId, Inventory playerInventory) {
         ItemStack backpack = playerInventory.getSelectedItem();
-        if (!backpack.is(SmacksUtil.BACKPACK_ITEM.get())){
+        if (!backpack.is(BACKPACK_ITEM.get())){
 //            if (Services.PLATFORM.isModLoaded("curios")){
 //                List<SlotResult> slotResults = CuriosApi.getCuriosHelper().findCurios(playerInventory.player, "back");
 //                if (!slotResults.isEmpty()){
@@ -29,13 +29,13 @@ public class BackpackMenu extends AbstractBackpackMenu {
 //                }
 //            }
             for (int i = playerInventory.getContainerSize(); i >= 0; i--){
-                if (playerInventory.getItem(i).is(SmacksUtil.BACKPACK_ITEM.get())){
+                if (playerInventory.getItem(i).is(BACKPACK_ITEM.get())){
                     backpack = playerInventory.getItem(i);
                     break;
                 }
             }
         }
-        return new BackpackMenu(SmacksUtil.BACKPACK_MENU.get(), syncId, playerInventory,
+        return new BackpackMenu(BACKPACK_MENU.get(), syncId, playerInventory,
                 new BackpackInventory(backpack, playerInventory.player.registryAccess(), C_BACKPACK_ROW_NUM * C_BACKPACK_COL_NUM + 4));
     }
 }

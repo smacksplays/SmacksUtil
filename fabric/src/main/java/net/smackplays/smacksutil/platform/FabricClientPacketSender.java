@@ -12,11 +12,19 @@ import org.joml.Vector3f;
 
 import java.util.UUID;
 
-import static net.smackplays.smacksutil.Constants.Backpack.C_BACKPACK_OPEN_REQUEST_RL;
-import static net.smackplays.smacksutil.Constants.Backpack.C_BACKPACK_SORT_REQUEST_RL;
 import static net.smackplays.smacksutil.Constants.*;
 
+/**
+ * Class FabricClientPacketSender */
 public class FabricClientPacketSender implements IClientPacketSender {
+    /** Constructor*/
+    public FabricClientPacketSender() {
+
+    }
+    /** VeinMinerBreakPacket
+     * @param pos pos
+     * @param isCreative isCreative
+     * @param replaceSeeds replaceSeeds*/
     @Override
     public void VeinMinerBreakPacket(BlockPos pos, boolean isCreative, boolean replaceSeeds) {
         Vector3f pos3f = new Vector3f(pos.getX(), pos.getY(), pos.getZ());
@@ -60,6 +68,8 @@ public class FabricClientPacketSender implements IClientPacketSender {
         }
     }
 
+    /** SetBlockAirPacket
+     * @param pos pos*/
     @Override
     public void SetBlockAirPacket(BlockPos pos) {
         Vector3f pos3f = new Vector3f(pos.getX(), pos.getY(), pos.getZ());

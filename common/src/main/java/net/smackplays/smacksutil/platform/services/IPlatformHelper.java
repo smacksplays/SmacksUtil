@@ -1,54 +1,38 @@
 package net.smackplays.smacksutil.platform.services;
 
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 
+/**
+ * Interface IPlatformHelper */
 public interface IPlatformHelper {
+    /** Interface method getBackpackItem*/
+    Item getBackpackItem();
 
-    /**
-     * Gets the name of the current platform
-     *
-     * @return The name of the current platform.
-     */
-    String getPlatformName();
+    /** Interface method getLargeBackpackItem*/
+    Item getLargeBackpackItem();
 
-    /**
-     * Checks if a mod with the given id is loaded.
-     *
-     * @param modId The mod to check if it is loaded.
-     * @return True if the mod is loaded, false otherwise.
-     */
-    boolean isModLoaded(String modId);
-
-    /**
-     * Check if the game is currently in a development environment.
-     *
-     * @return True if in a development environment, false otherwise.
-     */
-    boolean isDevelopmentEnvironment();
-
-    /**
-     * Gets the name of the environment type as a string.
-     *
-     * @return The name of the environment type.
-     */
-    default String getEnvironmentName() {
-
-        return isDevelopmentEnvironment() ? "development" : "production";
-    }
-
-    Item getBackackItem();
-    Item getLargeBackackItem();
+    /** Interface method getMagnetItem*/
     Item getMagnetItem();
+
+    /** Interface method getAdvancedMagnetItem*/
     Item getAdvancedMagnetItem();
+
+    /** Interface method getLightWandItem*/
     Item getLightWandItem();
+
+    /** Interface method getAutoWandItem*/
     Item getAutoWandItem();
+
+    /** Interface method getUpgrade1Item*/
     Item getUpgrade1Item();
+
+    /** Interface method getUpgrade2Item*/
     Item getUpgrade2Item();
+
+    /** Interface method getUpgrade3Item*/
     Item getUpgrade3Item();
+
+    /** Interface method isClient
+     * @return true if client*/
     boolean isClient();
-    ItemStack getTrinketOrCuriosStack(Player player, String slot);
-    RenderType getRenderType();
 }

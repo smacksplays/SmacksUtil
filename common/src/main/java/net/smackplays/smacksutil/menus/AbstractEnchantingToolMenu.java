@@ -12,10 +12,18 @@ import net.smackplays.smacksutil.slots.EnchantingToolSlot;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/** abstract class AbstractEnchantingToolMenu */
 public abstract class AbstractEnchantingToolMenu extends AbstractContainerMenu {
+    /** inventory */
     public final Container inventory;
+    /** playerInventory */
     public final Inventory playerInventory;
 
+    /** Constructor
+     * @param menuType menuType
+     * @param syncId syncId
+     * @param playerInv playerInv
+     * @param inv inv */
     public AbstractEnchantingToolMenu(@Nullable MenuType<?> menuType, int syncId, Inventory playerInv, Container inv) {
         super(menuType, syncId);
         this.playerInventory = playerInv;
@@ -39,10 +47,17 @@ public abstract class AbstractEnchantingToolMenu extends AbstractContainerMenu {
         }
     }
 
+    /** stillValid
+     * @param player player
+     * @return boolean */
     public boolean stillValid(@NotNull Player player) {
         return this.inventory.stillValid(player);
     }
 
+    /** Quick move stack
+     * @param player player
+     * @param index index
+     * @return ItemStack */
     @Override
     public @NotNull ItemStack quickMoveStack(@NotNull Player player, int index) {
         ItemStack itemStack = ItemStack.EMPTY;

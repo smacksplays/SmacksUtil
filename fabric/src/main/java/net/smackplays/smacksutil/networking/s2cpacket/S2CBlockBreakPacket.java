@@ -9,6 +9,9 @@ import org.joml.Vector3f;
 
 import static net.smackplays.smacksutil.Constants.C_VEINMINER_SERVER_BLOCK_BREAK_REQUEST_RL;
 
+/**
+ * Record
+ * @param pos pos */
 public record S2CBlockBreakPacket(Vector3f pos) implements CustomPacketPayload {
 
     public static final Type<S2CBlockBreakPacket> TYPE

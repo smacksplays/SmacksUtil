@@ -19,35 +19,24 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 /**
- * Abstract BackpackMenuBase class
- */
+ * Abstract BackpackMenuBase class */
 public class AbstractBackpackMenuBase extends AbstractContainerMenu {
-    /**
-     * Container inventory
-     */
+    /** Container inventory*/
     public Container inventory;
-    /**
-     * Inventory playerInventory
-     */
+    /** Inventory playerInventory*/
     public Inventory playerInventory;
-    /**
-     * int rows
-     */
-    public int rows;
-    /**
-     * int cols
-     */
-    public int cols;
+    /** int rows*/
+    public final int rows;
+    /** int cols*/
+    public final int cols;
 
-    /**
-     * Constructor
+    /** Constructor
      * @param menuType menuType
      * @param containerId containerId
      * @param playerInv playerInv
      * @param inv inv
      * @param rows rows
-     * @param cols cols
-     */
+     * @param cols cols*/
     protected AbstractBackpackMenuBase(@Nullable MenuType<?> menuType, int containerId, Inventory playerInv, Container inv, int rows, int cols) {
         super(menuType, containerId);
         inventory = inv;
@@ -56,12 +45,10 @@ public class AbstractBackpackMenuBase extends AbstractContainerMenu {
         this.cols = cols;
     }
 
-    /**
-     * Shift move stacks
+    /** Shift move stacks
      * @param player player
      * @param index index
-     * @return ItemStack
-     */
+     * @return ItemStack*/
     @Override
     public @NotNull ItemStack quickMoveStack(@NotNull Player player, int index) {
         ItemStack itemStack = ItemStack.EMPTY;
@@ -88,15 +75,13 @@ public class AbstractBackpackMenuBase extends AbstractContainerMenu {
         return itemStack;
     }
 
-    /**
-     * moveItemStack
+    /** moveItemStack
      * @param stack stack
      * @param min min
      * @param max max
      * @param backwards backwards
      * @param maxStackSize maxStackSize
-     * @return boolean
-     */
+     * @return boolean*/
     protected boolean moveItemStack(ItemStack stack, int min, int max, boolean backwards, int maxStackSize) {
         if (min == 4){
             maxStackSize = this.inventory.getMaxStackSize(stack);
@@ -166,18 +151,14 @@ public class AbstractBackpackMenuBase extends AbstractContainerMenu {
         return !bl1;
     }
 
-    /**
-     * stillValid
+    /** stillValid
      * @param player player
-     * @return boolean
-     */
+     * @return boolean*/
     public boolean stillValid(@NotNull Player player) {
         return this.inventory.stillValid(player);
     }
 
-    /**
-     * Sort
-     */
+    /** Sort*/
     public void sort() {
         BackpackInventory impInv = (BackpackInventory) inventory;
         NonNullList<ItemStack> items = impInv.getItems();
@@ -224,16 +205,6 @@ public class AbstractBackpackMenuBase extends AbstractContainerMenu {
                             }
                         }
                     }
-//                    if (ItemStack.isSameItemSameComponents(stack1, stack2)
-//                            && ((stack1.isStackable() && stack2.isStackable() && stack1.getCount() + stack2.getCount() <= maxStackSize)
-//                            || (!stack1.isStackable() && !stack2.isStackable() && stack1.getCount() + stack2.getCount() <= maxStackSize/64))) {
-//                            //    && stack1.getCount() + stack2.getCount() <= maxStackSize / (64 / stack1.getMaxStackSize()))
-//                            //|| (!stack1.isStackable() && !stack2.isStackable()
-//                            //    && stack1.getCount() + stack2.getCount() <= maxStackSize / 64))) {
-//                        stack1.setCount(stack1.getCount() + stack2.getCount());
-//                        temp.set(i, stack1);
-//                        temp.set(j, Items.AIR.getDefaultInstance());
-//                    }
                 }
             }
         }
@@ -245,13 +216,11 @@ public class AbstractBackpackMenuBase extends AbstractContainerMenu {
         impInv.setChanged();
     }
 
-    /**
-     * clicked
+    /** clicked
      * @param slot_num1 slot_num1
      * @param slot_num2 slot_num2
      * @param clickType clickType
-     * @param player player
-     */
+     * @param player player*/
     @Override
     public void clicked(int slot_num1, int slot_num2, @NotNull ClickType clickType, @NotNull Player player) {
         if (slot_num1 >= 0 && slot_num2 >= 0){

@@ -6,7 +6,7 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import org.jetbrains.annotations.NotNull;
 
-import static net.smackplays.smacksutil.Constants.Backpack.C_BACKPACK_OPEN_REQUEST_RL;
+import static net.smackplays.smacksutil.Constants.C_BACKPACK_OPEN_REQUEST_RL;
 
 public record C2SBackpackOpenPacket(int slot) implements CustomPacketPayload {
 

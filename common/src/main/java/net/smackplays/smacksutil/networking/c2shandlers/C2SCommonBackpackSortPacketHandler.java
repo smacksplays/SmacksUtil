@@ -6,17 +6,12 @@ import net.minecraft.world.item.ItemStack;
 import net.smackplays.smacksutil.items.AbstractBackpackItem;
 import net.smackplays.smacksutil.menus.AbstractBackpackMenu;
 import net.smackplays.smacksutil.menus.AbstractLargeBackpackMenu;
-import net.smackplays.smacksutil.platform.Services;
 
 public class C2SCommonBackpackSortPacketHandler {
     public static void handle(ServerPlayer player, int slot) {
         AbstractContainerMenu screenHandler = player.containerMenu;
-        ItemStack stack;
-        if (slot == -1){
-            stack = Services.PLATFORM.getTrinketOrCuriosStack(player, "back");
-        } else {
-            stack = player.getInventory().getItem(slot);
-        }
+        ItemStack stack = player.getInventory().getItem(slot);
+
         if (AbstractBackpackItem.class.isAssignableFrom(stack.getItem().getClass())) {
             if (AbstractBackpackMenu.class.isAssignableFrom(screenHandler.getClass())) {
                 AbstractBackpackMenu BackpackMenu = (AbstractBackpackMenu)screenHandler;

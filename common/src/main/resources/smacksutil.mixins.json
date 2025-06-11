@@ -13,6 +13,7 @@
     "PlayerMixin",
     "backpacks.GuiGraphicsMixin",
     "fastplace.MinecraftClientMixin",
+    "veinminer.GuiMixin",
     "veinminer.MouseScroll",
     "veinminer.OutlineRender"
   ],

@@ -13,6 +13,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.CommonColors;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -34,24 +35,47 @@ import java.util.Map;
 
 import static net.smackplays.smacksutil.Constants.*;
 
+/** class AbstractTeleportationTabletScreen
+ * @param <T> extends AbstractTeleportationTabletMenu */
 public class AbstractTeleportationTabletScreen<T extends AbstractTeleportationTabletMenu> extends AbstractContainerScreen<T> {
+    /** scrolling */
     public boolean scrolling;
+    /** scrollOffs */
     private float scrollOffs;
+    /** backgroundWidth */
     protected final int backgroundWidth = 157;
+    /** backgroundHeight */
     protected final int backgroundHeight = 295;
+    /** scrollbarHeight */
     private final int scrollbarHeight = 175;
+    /** editBoxX */
     public EditBox editBoxX;
+    /** editBoxY */
     public EditBox editBoxY;
+    /** editBoxZ */
     public EditBox editBoxZ;
+    /** editBoxName */
     public EditBox editBoxName;
+    /** removeButtonWidget */
     public Button removeButtonWidget;
+    /** isRemove */
     public boolean isRemove = false;
+    /** labelList */
     private final List<Label> labelList = new ArrayList<>();
 
+    /** Constructor
+     * @param handler handler
+     * @param inventory inventory
+     * @param title title */
     public AbstractTeleportationTabletScreen(T handler, Inventory inventory, Component title) {
         super(handler, inventory, title);
     }
 
+    /** Render Background
+     * @param context context
+     * @param delta delta
+     * @param mouseX mouseX
+     * @param mouseY mouseY */
     @Override
     protected void renderBg(GuiGraphics context, float delta, int mouseX, int mouseY) {
         labelList.clear();
@@ -102,6 +126,11 @@ public class AbstractTeleportationTabletScreen<T extends AbstractTeleportationTa
         }
     }
 
+    /** Render
+     * @param context context
+     * @param mouseX mouseX
+     * @param mouseY mouseY
+     * @param delta delta */
     @Override
     public void render(@NotNull GuiGraphics context, int mouseX, int mouseY, float delta) {
         renderBackground(context, mouseX, mouseY, delta);
@@ -109,6 +138,10 @@ public class AbstractTeleportationTabletScreen<T extends AbstractTeleportationTa
         renderTooltip(context, mouseX, mouseY);
     }
 
+    /** Render labels
+     * @param context context
+     * @param mouseX mouseX
+     * @param mouseY mouseY */
     @Override
     protected void renderLabels(GuiGraphics context, int mouseX, int mouseY) {
         context.drawString(this.font, this.title, this.titleLabelX + 10, this.titleLabelY - 65, 0x404040, false);
@@ -117,6 +150,7 @@ public class AbstractTeleportationTabletScreen<T extends AbstractTeleportationTa
         }
     }
 
+    /** init */
     @Override
     protected void init() {
         super.init();
@@ -124,7 +158,7 @@ public class AbstractTeleportationTabletScreen<T extends AbstractTeleportationTa
         int y = (height - this.backgroundHeight) / 2;
         Player player = this.menu.playerInventory.player;
 
-        removeButtonWidget = Button.builder(Component.literal("").withColor(GREEN),
+        removeButtonWidget = Button.builder(Component.literal("").withColor(CommonColors.GREEN),
                 (bW) -> onToggleRemove()).pos(x + 110, y + 3).size(40, 10).build();
         this.addRenderableWidget(removeButtonWidget);
 
@@ -158,6 +192,7 @@ public class AbstractTeleportationTabletScreen<T extends AbstractTeleportationTa
         this.addRenderableWidget(buttonWidget);
     }
 
+    /** onButtonWidgetPressed */
     private void onButtonWidgetPressed(){
         if (editBoxX.getValue().isBlank() || editBoxY.getValue().isBlank() || editBoxZ.getValue().isBlank() || editBoxName.getValue().isBlank()) return;
         if (NumberUtils.isParsable(editBoxX.getValue())
@@ -179,13 +214,17 @@ public class AbstractTeleportationTabletScreen<T extends AbstractTeleportationTa
         }
     }
 
+    /** onToggleRemove */
     private void onToggleRemove(){
         this.isRemove = !this.isRemove;
         String text = this.isRemove ? "Remove" : "";
-        int color = this.isRemove ? RED : GREEN;
+        int color = this.isRemove ? CommonColors.RED : CommonColors.GREEN;
         removeButtonWidget.setMessage(Component.literal(text).withColor(color));
     }
 
+    /** getTeleportationList
+     * @param stack stack
+     * @return Map of Enchantments on stack */
     private Map<String, TeleportationData> getTeleportationList(ItemStack stack){
         Map<String, TeleportationData> map = new HashMap<>();
         CustomData data = stack.get(DataComponents.CUSTOM_DATA);
@@ -221,7 +260,13 @@ public class AbstractTeleportationTabletScreen<T extends AbstractTeleportationTa
         return map;
     }
 
-
+    /** Mouse Dragged
+     * @param mouseX mouseX
+     * @param mouseY mouseY
+     * @param $$2 $$2
+     * @param scrollX scrollX
+     * @param scrollY scrollY
+     * @return true */
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, int $$2, double scrollX, double scrollY) {
         int y = (height - backgroundHeight) / 2;
@@ -234,12 +279,22 @@ public class AbstractTeleportationTabletScreen<T extends AbstractTeleportationTa
         }
     }
 
+    /** Mouse Released
+     * @param d d
+     * @param e e
+     * @param i i
+     * @return super */
     @Override
     public boolean mouseReleased(double d, double e, int i) {
         this.scrolling = false;
         return super.mouseReleased(d, e, i);
     }
 
+    /** Mouse Clicked
+     * @param mouseX mouseX
+     * @param mouseY mouseY
+     * @param lrClick lrClick
+     * @return super */
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int lrClick) {
         int x = (width - this.backgroundWidth) / 2;
@@ -295,6 +350,12 @@ public class AbstractTeleportationTabletScreen<T extends AbstractTeleportationTa
         return super.mouseClicked(mouseX, mouseY, lrClick);
     }
 
+    /** Mouse scrolled
+     * @param mouseX mouseX
+     * @param mouseY mouseY
+     * @param $$2 $$2
+     * @param scroll_delta scroll_delta
+     * @return super */
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double $$2, double scroll_delta) {
         if (!this.scrolling) {
@@ -313,6 +374,12 @@ public class AbstractTeleportationTabletScreen<T extends AbstractTeleportationTa
         return super.mouseScrolled(mouseX, mouseY, $$2, scroll_delta);
     }
 
+    /** Check if inside Scrollbar
+     * @param x x
+     * @param y y
+     * @param mouseX mouseX
+     * @param mouseY mouseY
+     * @return true if inside */
     public boolean insideScrollbar(int x, int y, double mouseX, double mouseY) {
         boolean b1 = x + 136 < mouseX;
         boolean b2 = x + 148.5 >= mouseX;
@@ -320,6 +387,13 @@ public class AbstractTeleportationTabletScreen<T extends AbstractTeleportationTa
         boolean b4 = y + 205 >= mouseY;
         return b1 && b2 && b3 && b4;
     }
+
+    /** Check if inside EditBoxX
+     * @param x x
+     * @param y y
+     * @param mouseX mouseX
+     * @param mouseY mouseY
+     * @return true if inside */
     public boolean insideEditBoxX(int x, int y, double mouseX, double mouseY) {
         boolean b1 = x + 18 < mouseX;
         boolean b2 = x + 148.5 >= mouseX;
@@ -327,6 +401,13 @@ public class AbstractTeleportationTabletScreen<T extends AbstractTeleportationTa
         boolean b4 = y + 226 >= mouseY;
         return b1 && b2 && b3 && b4;
     }
+
+    /** Check if inside EditBoxY
+     * @param x x
+     * @param y y
+     * @param mouseX mouseX
+     * @param mouseY mouseY
+     * @return true if inside */
     public boolean insideEditBoxY(int x, int y, double mouseX, double mouseY) {
         boolean b1 = x + 18 < mouseX;
         boolean b2 = x + 148.5 >= mouseX;
@@ -334,6 +415,13 @@ public class AbstractTeleportationTabletScreen<T extends AbstractTeleportationTa
         boolean b4 = y + 246 >= mouseY;
         return b1 && b2 && b3 && b4;
     }
+
+    /** Check if inside EditBoxZ
+     * @param x x
+     * @param y y
+     * @param mouseX mouseX
+     * @param mouseY mouseY
+     * @return true if inside */
     public boolean insideEditBoxZ(int x, int y, double mouseX, double mouseY) {
         boolean b1 = x + 18 < mouseX;
         boolean b2 = x + 148.5 >= mouseX;
@@ -341,6 +429,13 @@ public class AbstractTeleportationTabletScreen<T extends AbstractTeleportationTa
         boolean b4 = y + 266 >= mouseY;
         return b1 && b2 && b3 && b4;
     }
+
+    /** Check if inside EditBoxName
+     * @param x x
+     * @param y y
+     * @param mouseX mouseX
+     * @param mouseY mouseY
+     * @return true if inside */
     public boolean insideEditBoxName(int x, int y, double mouseX, double mouseY) {
         boolean b1 = x + 18 < mouseX;
         boolean b2 = x + 116.5 >= mouseX;
@@ -349,13 +444,29 @@ public class AbstractTeleportationTabletScreen<T extends AbstractTeleportationTa
         return b1 && b2 && b3 && b4;
     }
 
-    @SuppressWarnings("SameParameterValue")
+    /** Record Label
+     * @param component component
+     * @param x x
+     * @param y y
+     * @param color color
+     * @param shadow shadow */
     public record Label(Component component, int x, int y, int color, boolean shadow) {
     }
 
+    /** Record TeleportationData
+     * @param pos pos
+     * @param xRot xRot
+     * @param yRot yRot
+     * @param dim dim
+     * @param levelKey levelKey */
     public record TeleportationData(Vec3 pos, float xRot, float yRot, String dim, ResourceKey<Level> levelKey) {
     }
 
+    /** keyPressed
+     * @param GLFW_code GLFW_code
+     * @param $$1 $$1
+     * @param $$2 $$2
+     * @return bool */
     @Override
     public boolean keyPressed(int GLFW_code, int $$1, int $$2) {
         if (GLFW_code == GLFW.GLFW_KEY_ESCAPE &&

@@ -20,10 +20,10 @@ import net.smackplays.smacksutil.items.*;
 import net.smackplays.smacksutil.menus.*;
 import net.smackplays.smacksutil.networking.c2spacket.*;
 
-import static net.smackplays.smacksutil.Constants.Backpack.*;
 import static net.smackplays.smacksutil.Constants.*;
 
-@SuppressWarnings("unused")
+/**
+ * Class SmacksUtil */
 public class SmacksUtil implements ModInitializer {
     public static final Item BACKPACK_ITEM = new BackpackItem(C_BACKPACK_PROPERTIES);
     public static final Item LARGE_BACKPACK_ITEM = new LargeBackpackItem(C_LARGE_BACKPACK_PROPERTIES);
@@ -45,6 +45,11 @@ public class SmacksUtil implements ModInitializer {
     public static final MenuType<TeleportationTabletMenu> TELEPORTATION_TABLET_MENU = new ExtendedScreenHandlerType<>(TeleportationTabletMenu::create, ByteBufCodecs.VECTOR3F);
     public static final MenuType<EffectTotemMenu> EFFECT_TOTEM_MENU = new ExtendedScreenHandlerType<>(EffectTotemMenu::create, ByteBufCodecs.VECTOR3F);
 
+    /** Constructor*/
+    public SmacksUtil() {
+
+    }
+    /** Init*/
     @Override
     public void onInitialize() {
         CommonClass.init();

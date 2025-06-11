@@ -10,7 +10,19 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
+/**
+ * Common Handler for the VeinMinerBreakPacket */
 public class C2SCommonVeinMinerBreakPacketHandler {
+    /** Constructor*/
+    public C2SCommonVeinMinerBreakPacketHandler(){
+
+    }
+    /** Break block and hurt tool. Also apply enchantments
+     * @param player player
+     * @param world world
+     * @param pos pos
+     * @param isCreative isCreative
+     * @param replaceSeeds replaceSeeds*/
     public static void handle(ServerPlayer player, Level world, BlockPos pos, boolean isCreative, boolean replaceSeeds) {
         ItemStack stack = player.getMainHandItem();
 

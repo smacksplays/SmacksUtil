@@ -58,9 +58,9 @@ public class MobCatcherItem extends Item {
         return InteractionResult.SUCCESS;
     }
 
-    @SuppressWarnings("unused")
     public boolean pickupLivingEntity(@NotNull ItemStack stack, Player player, @NotNull LivingEntity livingEntity, @NotNull InteractionHand interactionHand) {
         Level world = player.level();
+        stack.copy();
         ItemStack mainHandStack = player.getItemInHand(interactionHand);
         if (!isHolding(mainHandStack) && !world.isClientSide && interactionHand.equals(InteractionHand.MAIN_HAND)) {
             CompoundTag tag = new CompoundTag();

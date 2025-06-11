@@ -13,7 +13,6 @@ import net.smackplays.smacksutil.menus.EnchantingToolMenu;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3f;
 
-@SuppressWarnings("unused")
 public class FabricEnchantingToolItem extends AbstractEnchantingToolItem {
     public FabricEnchantingToolItem(Properties properties) {
         super(properties);

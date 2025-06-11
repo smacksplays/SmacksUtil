@@ -8,12 +8,12 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
-import net.smackplays.smacksutil.SmacksUtil;
 import net.smackplays.smacksutil.menus.TeleportationTabletMenu;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3f;
 
-@SuppressWarnings("unused")
+import static net.smackplays.smacksutil.SmacksUtil.TELEPORTATION_TABLET_MENU;
+
 public class TeleportationTabletItem extends AbstractTeleportationTablet{
     public TeleportationTabletItem(Properties properties) {
         super(properties);
@@ -34,7 +34,7 @@ public class TeleportationTabletItem extends AbstractTeleportationTablet{
 
             @Override
             public AbstractContainerMenu createMenu(int syncId, @NotNull Inventory playerInventory, @NotNull Player player) {
-                return new TeleportationTabletMenu(SmacksUtil.TELEPORTATION_TABLET_MENU, syncId, playerInventory);
+                return new TeleportationTabletMenu(TELEPORTATION_TABLET_MENU, syncId, playerInventory);
             }
         };
     }

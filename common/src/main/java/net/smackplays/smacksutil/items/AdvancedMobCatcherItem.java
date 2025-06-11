@@ -66,7 +66,6 @@ public class AdvancedMobCatcherItem extends Item {
         return InteractionResult.SUCCESS;
     }
 
-    @SuppressWarnings("unused")
     public boolean pickupLivingEntity(@NotNull ItemStack stack, Player player, @NotNull LivingEntity livingEntity, @NotNull InteractionHand interactionHand) {
         Level world = player.level();
         ItemStack mainHandStack = player.getItemInHand(interactionHand);

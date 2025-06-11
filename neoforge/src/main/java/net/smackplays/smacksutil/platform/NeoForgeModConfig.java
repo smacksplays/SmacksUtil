@@ -10,18 +10,15 @@ import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import net.minecraft.network.chat.Component;
-import net.neoforged.neoforge.common.ModConfigSpec;
-import net.smackplays.smacksutil.Constants;
 import net.smackplays.smacksutil.platform.services.IModConfig;
 
-@SuppressWarnings({"unused", "rawtypes", "UnstableApiUsage"})
-@Config(name = Constants.MOD_ID)
+import static net.smackplays.smacksutil.Constants.MOD_ID;
+
+@Config(name = MOD_ID)
 public class NeoForgeModConfig implements IModConfig, ConfigData {
     @ConfigEntry.Gui.Excluded
-    private static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder();
-    @ConfigEntry.Gui.Excluded
     public static NeoForgeModConfig INSTANCE;
-    private static ConfigManager MANAGER;
+    private static ConfigManager<NeoForgeModConfig> MANAGER;
     public int maxRenderBlocks = IModConfig.maxRenderBlocks;
     public int maxShapelessRadius = IModConfig.maxShapelessRadius;
     public int maxRenderShapelessRadius = IModConfig.maxRenderShapelessRadius;
@@ -351,6 +348,6 @@ public class NeoForgeModConfig implements IModConfig, ConfigData {
     public void init() {
         AutoConfig.register(NeoForgeModConfig.class, GsonConfigSerializer::new);
         INSTANCE = AutoConfig.getConfigHolder(NeoForgeModConfig.class).getConfig();
-        MANAGER = (ConfigManager) AutoConfig.getConfigHolder(NeoForgeModConfig.class);
+        MANAGER = (ConfigManager<NeoForgeModConfig>) AutoConfig.getConfigHolder(NeoForgeModConfig.class);
     }
 }

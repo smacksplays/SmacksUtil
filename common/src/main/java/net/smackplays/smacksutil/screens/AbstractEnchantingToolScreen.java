@@ -13,6 +13,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.EnchantmentTags;
+import net.minecraft.util.CommonColors;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
@@ -21,7 +22,6 @@ import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
-import net.smackplays.smacksutil.Constants;
 import net.smackplays.smacksutil.inventories.EnchantmentToolInventory;
 import net.smackplays.smacksutil.menus.AbstractEnchantingToolMenu;
 import net.smackplays.smacksutil.platform.Services;
@@ -33,22 +33,40 @@ import java.util.Optional;
 
 import static net.smackplays.smacksutil.Constants.*;
 
-
+/** class AbstractEnchantingToolScreen
+ * @param <T> extends AbstractEnchantingToolMenu */
 public class AbstractEnchantingToolScreen<T extends AbstractEnchantingToolMenu> extends AbstractContainerScreen<T> {
+    /** scrolling */
     public boolean scrolling;
+    /** scrollOffs */
     private float scrollOffs;
+    /** backgroundWidth */
     protected final int backgroundWidth = 176;
+    /** backgroundHeight */
     protected final int backgroundHeight = 224;
+    /** addRemove */
     private boolean addRemove = true;
+    /** buttonWidget */
     private Button buttonWidget;
+    /** labelList */
     private final List<Label> labelList = new ArrayList<>();
+    /** registryAccess */
     private final RegistryAccess registryAccess;
 
+    /** Constructor
+     * @param handler handler
+     * @param inventory inventory
+     * @param title title*/
     public AbstractEnchantingToolScreen(T handler, Inventory inventory, Component title) {
         super(handler, inventory, title);
         registryAccess = inventory.player.registryAccess();
     }
 
+    /** Render Background
+     * @param context context
+     * @param delta delta
+     * @param mouseX mouseX
+     * @param mouseY mouseY*/
     @Override
     protected void renderBg(GuiGraphics context, float delta, int mouseX, int mouseY) {
         labelList.clear();
@@ -96,6 +114,9 @@ public class AbstractEnchantingToolScreen<T extends AbstractEnchantingToolMenu> 
         }
     }
 
+    /** Get Enchantments
+     * @param stack stack
+     * @return List of Enchantments*/
     public ArrayList<Holder<Enchantment>> getEnchantments(ItemStack stack) {
         ArrayList<Holder<Enchantment>> list = new ArrayList<>();
         ArrayList<Holder<Enchantment>> presentEnchantments = new ArrayList<>();
@@ -122,6 +143,11 @@ public class AbstractEnchantingToolScreen<T extends AbstractEnchantingToolMenu> 
         return list;
     }
 
+    /** Render
+     * @param context context
+     * @param mouseX mouseX
+     * @param mouseY mouseY
+     * @param delta delta*/
     @Override
     public void render(@NotNull GuiGraphics context, int mouseX, int mouseY, float delta) {
         renderBackground(context, mouseX, mouseY, delta);
@@ -137,6 +163,10 @@ public class AbstractEnchantingToolScreen<T extends AbstractEnchantingToolMenu> 
         }
     }
 
+    /** Render labels
+     * @param context context
+     * @param mouseX mouseX
+     * @param mouseY mouseY*/
     @Override
     protected void renderLabels(GuiGraphics context, int mouseX, int mouseY) {
         context.drawString(this.font, this.title, this.titleLabelX - 38, this.titleLabelY - 31, 0x404040, false);
@@ -145,7 +175,7 @@ public class AbstractEnchantingToolScreen<T extends AbstractEnchantingToolMenu> 
             context.drawString(this.font, l.component, titleLabelX - 45 + l.x, titleLabelY - 34 + l.y, 0x404040, l.shadow);
         }
     }
-
+    /** init */
     @Override
     protected void init() {
         super.init();
@@ -154,17 +184,25 @@ public class AbstractEnchantingToolScreen<T extends AbstractEnchantingToolMenu> 
         int y = (height - backgroundHeight) / 2;
         // Center the title
         titleLabelX = (backgroundWidth - font.width(title)) / 2;
-        buttonWidget = Button.builder(Component.literal("Add").withColor(Constants.GREEN), (bW) -> onToggleAddRemove()).pos(x + 132, y + 3).size(40, 10).build();
+        buttonWidget = Button.builder(Component.literal("Add").withColor(CommonColors.GREEN), (bW) -> onToggleAddRemove()).pos(x + 132, y + 3).size(40, 10).build();
         this.addRenderableWidget(buttonWidget);
     }
 
+    /** Toggle Remove Add */
     public void onToggleAddRemove() {
         this.addRemove = !this.addRemove;
         String text = this.addRemove ? "Add" : "Remove";
-        int color = this.addRemove ? Constants.GREEN : Constants.RED;
+        int color = this.addRemove ? CommonColors.GREEN : CommonColors.RED;
         buttonWidget.setMessage(Component.literal(text).withColor(color));
     }
 
+    /** has clicked outside
+     * @param mouseX mouseX
+     * @param mouseY mouseY
+     * @param left left
+     * @param top top
+     * @param button button
+     * @return true if clicked outside*/
     @Override
     protected boolean hasClickedOutside(double mouseX, double mouseY, int left, int top, int button) {
         return mouseX < (double) (width - backgroundWidth) / 2 - 10
@@ -173,6 +211,12 @@ public class AbstractEnchantingToolScreen<T extends AbstractEnchantingToolMenu> 
                 || mouseY > (double) (height + backgroundHeight) / 2 + 10;
     }
 
+    /** Check if inside Scrollbar
+     * @param x x
+     * @param y y
+     * @param mouseX mouseX
+     * @param mouseY mouseY
+     * @return true if inside */
     public boolean insideScrollbar(int x, int y, double mouseX, double mouseY) {
         boolean b1 = x + 136 < mouseX;
         boolean b2 = x + 148 >= mouseX;
@@ -181,6 +225,13 @@ public class AbstractEnchantingToolScreen<T extends AbstractEnchantingToolMenu> 
         return b1 && b2 && b3 && b4;
     }
 
+    /** Mouse Dragged
+     * @param mouseX mouseX
+     * @param mouseY mouseY
+     * @param $$2 $$2
+     * @param scrollX scrollX
+     * @param scrollY scrollY
+     * @return true */
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, int $$2, double scrollX, double scrollY) {
         int y = (height - backgroundHeight) / 2;
@@ -193,13 +244,22 @@ public class AbstractEnchantingToolScreen<T extends AbstractEnchantingToolMenu> 
         }
     }
 
+    /** Mouse Released
+     * @param d d
+     * @param e e
+     * @param i i
+     * @return super */
     @Override
     public boolean mouseReleased(double d, double e, int i) {
         this.scrolling = false;
         return super.mouseReleased(d, e, i);
     }
 
-    //TODO fix
+    /** Mouse Clicked
+     * @param mouseX mouseX
+     * @param mouseY mouseY
+     * @param $$2 $$2
+     * @return super */
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int $$2) {
         int x = (width - this.backgroundWidth) / 2;
@@ -242,6 +302,12 @@ public class AbstractEnchantingToolScreen<T extends AbstractEnchantingToolMenu> 
         return super.mouseClicked(mouseX, mouseY, $$2);
     }
 
+    /** Mouse scrolled
+     * @param mouseX mouseX
+     * @param mouseY mouseY
+     * @param $$2 $$2
+     * @param scroll_delta scroll_delta
+     * @return super */
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double $$2, double scroll_delta) {
         if (!this.scrolling) {
@@ -260,7 +326,11 @@ public class AbstractEnchantingToolScreen<T extends AbstractEnchantingToolMenu> 
         return super.mouseScrolled(mouseX, mouseY, $$2, scroll_delta);
     }
 
-    @SuppressWarnings("SameParameterValue")
+    /** Record Label
+     * @param component component
+     * @param x x
+     * @param y y
+     * @param shadow shadow */
     private record Label(Component component, int x, int y, boolean shadow) {
     }
 }

@@ -2,92 +2,69 @@ package net.smackplays.smacksutil.platform;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.smackplays.smacksutil.SmacksUtil;
 import net.smackplays.smacksutil.platform.services.IPlatformHelper;
-import net.smackplays.smacksutil.util.CustomRenderLayer;
 
+import static net.smackplays.smacksutil.SmacksUtil.*;
+
+/**
+ * Class FabricPlatformHelper */
 public class FabricPlatformHelper implements IPlatformHelper {
+    /** Constructor*/
+    public FabricPlatformHelper() {
 
-    @Override
-    public String getPlatformName() {
-        return "Fabric";
     }
 
-    @Override
-    public boolean isModLoaded(String modId) {
-
-        return FabricLoader.getInstance().isModLoaded(modId);
-    }
-
-    @Override
-    public boolean isDevelopmentEnvironment() {
-
-        return FabricLoader.getInstance().isDevelopmentEnvironment();
-    }
-
-    @Override
-    public Item getBackackItem() {
-        return SmacksUtil.BACKPACK_ITEM;
-    }
-
-    @Override
-    public Item getLargeBackackItem() {
-        return SmacksUtil.LARGE_BACKPACK_ITEM;
-    }
-
-    @Override
-    public Item getMagnetItem() {
-        return SmacksUtil.MAGNET_ITEM;
-    }
-
-    @Override
-    public Item getAdvancedMagnetItem() {
-        return SmacksUtil.ADVANCED_MAGNET_ITEM;
-    }
-
-    @Override
-    public Item getLightWandItem() {
-        return SmacksUtil.LIGHT_WAND_ITEM;
-    }
-
-    @Override
-    public Item getAutoWandItem() {
-        return SmacksUtil.AUTO_LIGHT_WAND_ITEM;
-    }
-
-    @Override
-    public Item getUpgrade1Item() {
-        return SmacksUtil.BACKPACK_UPGRADE_TIER1_ITEM;
-    }
-
-    @Override
-    public Item getUpgrade2Item() {
-        return SmacksUtil.BACKPACK_UPGRADE_TIER2_ITEM;
-    }
-
-    @Override
-    public Item getUpgrade3Item() {
-        return SmacksUtil.BACKPACK_UPGRADE_TIER3_ITEM;
-    }
-
+    /** Getter
+     * @return true if client*/
     @Override
     public boolean isClient(){
         EnvType t = FabricLoader.getInstance().getEnvironmentType();
         return t.name().equals("CLIENT");
     }
 
-    // Trinkets extend player inventory, thus this function is never used but has to be implemented.
     @Override
-    public ItemStack getTrinketOrCuriosStack(Player player, String slot) {
-        return ItemStack.EMPTY;
+    public Item getBackpackItem() {
+        return BACKPACK_ITEM;
     }
 
     @Override
-    public RenderType getRenderType() {
-        return CustomRenderLayer.LINES;
+    public Item getLargeBackpackItem() {
+        return LARGE_BACKPACK_ITEM;
+    }
+
+    @Override
+    public Item getMagnetItem() {
+        return MAGNET_ITEM;
+    }
+
+    @Override
+    public Item getAdvancedMagnetItem() {
+        return ADVANCED_MAGNET_ITEM;
+    }
+
+    @Override
+    public Item getLightWandItem() {
+        return LIGHT_WAND_ITEM;
+    }
+
+    @Override
+    public Item getAutoWandItem() {
+        return AUTO_LIGHT_WAND_ITEM;
+    }
+
+    @Override
+    public Item getUpgrade1Item() {
+        return BACKPACK_UPGRADE_TIER1_ITEM;
+    }
+
+    @Override
+    public Item getUpgrade2Item() {
+        return BACKPACK_UPGRADE_TIER2_ITEM;
+    }
+
+    @Override
+    public Item getUpgrade3Item() {
+        return BACKPACK_UPGRADE_TIER3_ITEM;
     }
 }

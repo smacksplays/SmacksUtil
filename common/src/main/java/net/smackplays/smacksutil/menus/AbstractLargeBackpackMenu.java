@@ -8,11 +8,16 @@ import net.smackplays.smacksutil.slots.BackpackUpgradeSlot;
 import net.smackplays.smacksutil.slots.InvSlot;
 import org.jetbrains.annotations.Nullable;
 
-import static net.smackplays.smacksutil.Constants.Backpack.C_LARGE_BACKPACK_COL_NUM;
-import static net.smackplays.smacksutil.Constants.Backpack.C_LARGE_BACKPACK_ROW_NUM;
+import static net.smackplays.smacksutil.Constants.C_LARGE_BACKPACK_COL_NUM;
+import static net.smackplays.smacksutil.Constants.C_LARGE_BACKPACK_ROW_NUM;
 
+/** abstract class AbstractLargeBackpackMenu */
 public abstract class AbstractLargeBackpackMenu extends AbstractBackpackMenuBase {
-
+    /** Constructor
+     * @param menuType menuType
+     * @param syncId syncId
+     * @param playerInv playerInv
+     * @param inv inv*/
     public AbstractLargeBackpackMenu(@Nullable MenuType<?> menuType, int syncId, Inventory playerInv, Container inv) {
         super(menuType, syncId, playerInv, inv, C_LARGE_BACKPACK_ROW_NUM, C_LARGE_BACKPACK_COL_NUM);
         checkContainerSize(inv, this.rows * this.cols + 4);
@@ -22,6 +27,7 @@ public abstract class AbstractLargeBackpackMenu extends AbstractBackpackMenuBase
         addSlots();
     }
 
+    /** Add Slots */
     private void addSlots(){
         int i = (this.rows - 4) * 18;
         for (int j = 0; j < 4; ++j){

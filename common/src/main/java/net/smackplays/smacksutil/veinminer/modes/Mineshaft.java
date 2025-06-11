@@ -6,66 +6,89 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.smackplays.smacksutil.util.BlockPosComparator;
 import net.smackplays.smacksutil.util.ModTags;
+import net.smackplays.smacksutil.util.PlayerUtil;
 
 import java.util.ArrayList;
 
-@SuppressWarnings("unchecked")
+/**
+ * Veinminer Crops Mode */
 public class Mineshaft extends VeinMode {
-    public Mineshaft() {
-        ModeName = "Mineshaft";
+    /** world*/
+    private Level world;
+    /** isExactMatch*/
+    private boolean isExactMatch;
+    /** tag*/
+    private TagKey<Block> tag;
+    /** block*/
+    private Block sourceBlock;
+    /** result*/
+    private ArrayList<BlockPos> result;
+    /** playerDirection*/
+    private Direction playerDirection;
+    /** upMode*/
+    private final boolean upMode;
+    /** Constructor*/
+    public Mineshaft(boolean upMode) {
+        ModeName = "Mineshaft" + (upMode ? "(up)" : "(down)");
         MAX_RADIUS = 10;
+        this.upMode = upMode;
     }
 
+    /** Get the Blocks connected to sourcePos if they are Ores.
+     * @param world world
+     * @param player player
+     * @param sourcePos sourcePos
+     * @param radius radius
+     * @param isExactMatch isExactMatch
+     * @return Sorted list of Blocks to break.*/
     @Override
     public ArrayList<BlockPos> getBlocks(Level world, Player player, BlockPos sourcePos, int radius, boolean isExactMatch) {
-        if (world == null || player == null || sourcePos == null) return (ArrayList<BlockPos>) toBreak.clone();
-        oldToBreak = (ArrayList<BlockPos>) toBreak.clone();
-        toBreak.clear();
-        toCheck.clear();
-        checked.clear();
-        Block toMatch = world.getBlockState(sourcePos).getBlock();
-
-        if (!oldToBreak.isEmpty() && oldSourcePos.equals(sourcePos)
-                && oldRadius == radius && oldToMatch.equals(toMatch) && oldIsExactMatch == isExactMatch) {
-            return (ArrayList<BlockPos>) oldToBreak.clone();
+        this.world = world;
+        this.isExactMatch = isExactMatch;
+        this.sourceBlock = world.getBlockState(sourcePos).getBlock();
+        this.result = new ArrayList<>();
+        this.playerDirection = PlayerUtil.getTargetFaceDirection(player, world);
+        if (playerDirection.equals(Direction.DOWN) || playerDirection.equals(Direction.UP)) {
+            playerDirection = player.getDirection().getOpposite();
         }
 
-        TagKey<Block> tag = null;
-        if (world.getBlockState(sourcePos).is(ModTags.Blocks.VEIN_MINING)) {
-            tag = ModTags.Blocks.VEIN_MINING;
+        if (world.getBlockState(sourcePos).is(ModTags.Blocks.MINE_ABLE_PICKAXE)) {
+            this.tag = ModTags.Blocks.MINE_ABLE_PICKAXE;
         } else if (world.getBlockState(sourcePos).is(ModTags.Blocks.STONE_BLOCKS)) {
-            tag = ModTags.Blocks.STONE_BLOCKS;
+            this.tag = ModTags.Blocks.STONE_BLOCKS;
         } else if (world.getBlockState(sourcePos).is(ModTags.Blocks.DIRT_BLOCKS)) {
-            tag = ModTags.Blocks.DIRT_BLOCKS;
+            this.tag = ModTags.Blocks.DIRT_BLOCKS;
+        } else {
+            tag = null;
         }
 
-        mineshaft(sourcePos, player.getDirection(), radius, player, world, isExactMatch, toMatch, tag);
-
-        toBreak.sort(new BlockPosComparator(sourcePos));
-
-        oldToBreak = (ArrayList<BlockPos>) toBreak.clone();
-        oldRadius = radius;
-        oldSourcePos = sourcePos;
-        oldToMatch = toMatch;
-        oldIsExactMatch = isExactMatch;
-
-        return (ArrayList<BlockPos>) toBreak.clone();
+        return mineshaft(sourcePos, radius, player);
     }
 
-    public void mineshaft(BlockPos curr, Direction direction, int radius, Player player, Level world, boolean isExactMatch, Block toMatch, TagKey<Block> tag) {
-        for (int i = 0; i < radius * 2; i++) {
-            if (checkMatch(isExactMatch, curr, world, player, toMatch, tag)) {
-                toBreak.add(curr);
+    /** tunnel method
+     * @param curr curr
+     * @param radius radius
+     * @param player player
+     * @return Sorted list of Blocks to break */
+    public ArrayList<BlockPos> mineshaft(BlockPos curr, int radius, Player player) {
+        for (int i = 0; i < radius; i++) {
+            if (checkMatch(isExactMatch, curr, world, player, sourceBlock, tag, result)) {
+                result.add(curr);
                 for (int j = 1; j < 4; j++) {
-                    if (checkMatch(isExactMatch, curr.relative(direction, j), world, player, toMatch, tag)) {
-                        toBreak.add(curr.relative(direction, j));
+                    if (checkMatch(isExactMatch, curr.relative(playerDirection, -j), world, player, sourceBlock, tag, result)) {
+                        result.add(curr.relative(playerDirection, -j));
                     }
                 }
-                curr = curr.relative(direction, 1);
+                curr = curr.relative(playerDirection, -1);
             }
-            curr = curr.below();
+            else break;
+            if (upMode) {
+                curr = curr.above();
+            } else {
+                curr = curr.below();
+            }
         }
+        return result;
     }
 }

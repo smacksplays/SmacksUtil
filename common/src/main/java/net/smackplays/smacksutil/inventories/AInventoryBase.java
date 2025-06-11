@@ -8,9 +8,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
 
 public abstract class AInventoryBase implements IInventoryBase{
-    public ItemStack stack;
-    public RegistryAccess registryAccess;
-    public NonNullList<ItemStack> items;
+    public final ItemStack stack;
+    public final RegistryAccess registryAccess;
+    public final NonNullList<ItemStack> items;
     public AInventoryBase(ItemStack stack, RegistryAccess registryAccess, int inventorySize){
         this.stack = stack;
         this.registryAccess = registryAccess;

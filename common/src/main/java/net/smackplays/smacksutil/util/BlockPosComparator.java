@@ -5,10 +5,15 @@ import net.minecraft.core.BlockPos;
 
 import java.util.Comparator;
 
+
+ /** BlockPosComparator
+ * Sort comparing to the sourcePos using the center of the Blocks. */
 public class BlockPosComparator implements Comparator<BlockPos> {
 
     final BlockPos sourcePos;
 
+    /** Constructor
+     * @param sourcePosIn sourcePos*/
     public BlockPosComparator(BlockPos sourcePosIn) {
         sourcePos = sourcePosIn;
     }

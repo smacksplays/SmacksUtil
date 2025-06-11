@@ -6,88 +6,158 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.smackplays.smacksutil.platform.Services;
-import net.smackplays.smacksutil.util.BlockPosComparator;
 import net.smackplays.smacksutil.util.ModTags;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
-@SuppressWarnings("unchecked")
-public class ShapelessVertical extends VeinMode {
+/**
+ * Veinminer ShapelessVertical Mode */
+public class ShapelessVertical extends Shapeless{
+    /** world*/
+    private Level world;
+    /** isExactMatch*/
+    private boolean isExactMatch;
+    /** tag*/
+    private TagKey<Block> tag;
+    /** block*/
+    private Block sourceBlock;
+    /** queue*/
+    private ArrayList<BlockPos> queue;
+    /** checked*/
+    private ArrayList<BlockPos> checked;
+    /** result*/
+    private ArrayList<BlockPos> result;
+    /** sourcePos*/
+    private BlockPos sourcePos;
+    /** playerPos*/
+    private BlockPos playerPos;
+    /** Constructor*/
     public ShapelessVertical() {
         ModeName = "ShapelessVertical";
-        MAX_RADIUS = 5;
+        if (Services.CONFIG != null){
+            maxBlocks = Services.CONFIG.getMaxRenderBlocks();
+        }
     }
 
+    /** Get the Ore Blocks connected to sourcePos if they are Ores.
+     * @param world world
+     * @param player player
+     * @param sourcePos sourcePos
+     * @param radius radius
+     * @param isExactMatch isExactMatch
+     * @return Sorted list of Blocks to break.*/
     @Override
     public ArrayList<BlockPos> getBlocks(Level world, Player player, BlockPos sourcePos, int radius, boolean isExactMatch) {
-        if (world == null || player == null || sourcePos == null) return (ArrayList<BlockPos>) toBreak.clone();
-        oldToBreak = (ArrayList<BlockPos>) toBreak.clone();
-        toBreak.clear();
-        toCheck.clear();
-        checked.clear();
-        Block toMatch = world.getBlockState(sourcePos).getBlock();
+        this.world = world;
+        this.isExactMatch = isExactMatch;
+        this.sourceBlock = world.getBlockState(sourcePos).getBlock();
+        this.queue = new ArrayList<>(Collections.singletonList(sourcePos));
+        this.checked = new ArrayList<>();
+        this.result = new ArrayList<>();
+        this.sourcePos = sourcePos;
+        this.playerPos = player.getOnPos();
 
-        if (!oldToBreak.isEmpty() && oldSourcePos.equals(sourcePos)
-                && oldRadius == radius && oldToMatch.equals(toMatch) && oldIsExactMatch == isExactMatch) {
-            return (ArrayList<BlockPos>) oldToBreak.clone();
-        }
-
-        TagKey<Block> tag = null;
         if (world.getBlockState(sourcePos).is(ModTags.Blocks.STONE_BLOCKS)) {
-            tag = ModTags.Blocks.STONE_BLOCKS;
+            this.tag = ModTags.Blocks.STONE_BLOCKS;
         } else if (world.getBlockState(sourcePos).is(ModTags.Blocks.DIRT_BLOCKS)) {
-            tag = ModTags.Blocks.DIRT_BLOCKS;
+            this.tag = ModTags.Blocks.DIRT_BLOCKS;
+        } else {
+            tag = null;
         }
 
-        shapeless_vert(sourcePos, sourcePos, radius, player, world, isExactMatch, toMatch, tag);
-
-        toBreak.sort(new BlockPosComparator(sourcePos));
-
-        oldToBreak = (ArrayList<BlockPos>) toBreak.clone();
-        oldRadius = radius;
-        oldSourcePos = sourcePos;
-        oldToMatch = toMatch;
-        oldIsExactMatch = isExactMatch;
-
-        return (ArrayList<BlockPos>) toBreak.clone();
+        return breathFirstSearch();
     }
 
-    private void shapeless_vert(BlockPos curr, BlockPos sourcePos, int radius, Player player,
-                                Level world, boolean isExactMatch, Block toMatch, TagKey<Block> tag) {
-        if (curr.getX() > sourcePos.getX() + radius
-                || curr.getX() < sourcePos.getX() - radius) {
-            return;
-        }
-        if (curr.getY() > sourcePos.getY() + radius
-                || curr.getY() < player.getY()) {
-            return;
-        }
-        if (curr.getZ() > sourcePos.getZ() + radius
-                || curr.getZ() < sourcePos.getZ() - radius) {
-            return;
-        }
-        if (checked.contains(curr)) {
-            return;
-        } else {
-            checked.add(curr);
-        }
-        if (checkMatch(isExactMatch, curr, world, player, toMatch, tag)) {
-            toBreak.add(curr);
-        }
-        ArrayList<BlockPos> surrounding = getSurrounding(curr, world, isExactMatch, toMatch, tag);
-        surrounding.sort(new BlockPosComparator(curr));
-        for (BlockPos pos : surrounding) {
-            if (checkMatch(isExactMatch, pos, world, player, toMatch, tag)) {
-                shapeless_vert(pos, sourcePos, radius, player, world, isExactMatch, toMatch, tag);
+    /** BreathFirstSearch algorithm
+     * @return Sorted list of connected blocks*/
+    private ArrayList<BlockPos> breathFirstSearch() {
+        while (!queue.isEmpty()) {
+            BlockPos pos = queue.removeFirst();
+            if (!checked.contains(pos)){
+                checked.add(pos);
+            }
+            for (BlockPos p : findConnected(pos)){
+                if (!queue.contains(p)) {
+                    queue.add(p);
+                }
+            }
+            if (!result.contains(pos)){
+                result.add(pos);
+            }
+            queue.sort(Comparator.comparing(p -> p.getCenter().distanceTo(sourcePos.getCenter())));
+            if (result.size() >= maxBlocks){
+                return result;
             }
         }
+        return result;
     }
 
-    @Override
-    public boolean doRender(int radius) {
-        if (Services.CONFIG != null) {
-            return radius <= Services.CONFIG.getMaxRenderShapelessVerticalRadius();
+    /** Find all connected Blocks using 14-Neighbour method
+     * @param curr curr
+     * @return List of surrounding matching blocks*/
+    private ArrayList<BlockPos> findConnected(BlockPos curr) {
+        ArrayList<BlockPos> connected = new ArrayList<>();
+        if (checkConnected(curr.above())) {
+            connected.add(curr.above());
         }
-        return false;
+        if (checkConnected(curr.north())) {
+            connected.add(curr.north());
+        }
+        if (checkConnected(curr.east())) {
+            connected.add(curr.east());
+        }
+        if (checkConnected(curr.south())) {
+            connected.add(curr.south());
+        }
+        if (checkConnected(curr.west())) {
+            connected.add(curr.west());
+        }
+        if (checkConnected(curr.below())) {
+            connected.add(curr.below());
+        }
+        if (checkConnected(curr.above().north())) {
+            connected.add(curr.above().north());
+        }
+        if (checkConnected(curr.above().east())) {
+            connected.add(curr.above().east());
+        }
+        if (checkConnected(curr.above().south())) {
+            connected.add(curr.above().south());
+        }
+        if (checkConnected(curr.above().west())) {
+            connected.add(curr.above().west());
+        }
+        if (checkConnected(curr.below().north())) {
+            connected.add(curr.below().north());
+        }
+        if (checkConnected(curr.below().east())) {
+            connected.add(curr.below().east());
+        }
+        if (checkConnected(curr.below().south())) {
+            connected.add(curr.below().south());
+        }
+        if (checkConnected(curr.below().west())) {
+            connected.add(curr.below().west());
+        }
+        return connected;
+    }
+
+    /** Check if given block matches source block or is already in a list
+     * @param curr curr
+     * @return true if no match*/
+    private boolean checkConnected(BlockPos curr){
+        var condition = false;
+        if (isExactMatch || tag == null) {
+            condition = world.getBlockState(curr).is(sourceBlock);
+        } else {
+            condition = world.getBlockState(curr).is(tag);
+        }
+        return condition
+                && !checked.contains(curr)
+                && !queue.contains(curr)
+                && !result.contains(curr)
+                && playerPos.getY() < curr.getY();
     }
 }

@@ -14,28 +14,22 @@ import net.smackplays.smacksutil.inventories.BackpackInventory;
 import net.smackplays.smacksutil.menus.AbstractBackpackMenu;
 import org.jetbrains.annotations.NotNull;
 
-import static net.smackplays.smacksutil.Constants.Backpack.C_BACKPACK_COL_NUM;
-import static net.smackplays.smacksutil.Constants.Backpack.C_BACKPACK_ROW_NUM;
+import static net.smackplays.smacksutil.Constants.C_BACKPACK_COL_NUM;
+import static net.smackplays.smacksutil.Constants.C_BACKPACK_ROW_NUM;
 
-/**
- * Test
- */
+/** abstract class AbstractBackpackItem */
 public abstract class AbstractBackpackItem extends Item{
-    /**
-     * Test
-     * @param properties Props
-     */
+    /** Constructor
+     * @param properties properties */
     public AbstractBackpackItem(Properties properties) {
         super(properties);
     }
 
-    /**
-     * Test
-     * @param world World
-     * @param player Player
-     * @param hand Hand
-     * @return Result
-     */
+    /** Use on air
+     * @param world world
+     * @param player player
+     * @param hand hand
+     * @return Result */
     @Override
     public @NotNull InteractionResult use(Level world, @NotNull Player player, @NotNull InteractionHand hand) {
         if (world.isClientSide) return InteractionResult.PASS;
@@ -45,11 +39,9 @@ public abstract class AbstractBackpackItem extends Item{
         return InteractionResult.SUCCESS;
     }
 
-    /**
-     * Test
-     * @param context Context
-     * @return Result
-     */
+    /** Use on block
+     * @param context context
+     * @return Result */
     @Override
     public @NotNull InteractionResult useOn(UseOnContext context) {
         if (context.getPlayer() == null) return InteractionResult.FAIL;
@@ -58,11 +50,9 @@ public abstract class AbstractBackpackItem extends Item{
         return InteractionResult.SUCCESS;
     }
 
-    /**
-     * Test
+    /** createScreenHandlerFactory
      * @param stack ItemStack
-     * @return MenuProvider
-     */
+     * @return MenuProvider */
     public MenuProvider createScreenHandlerFactory(ItemStack stack) {
         return new SimpleMenuProvider((i, playerInventory, playerEntity) ->
                 new AbstractBackpackMenu(MenuType.GENERIC_9x6, i, playerInventory, new BackpackInventory(stack, playerInventory.player.registryAccess(), C_BACKPACK_ROW_NUM * C_BACKPACK_COL_NUM + 4)), stack.getHoverName());

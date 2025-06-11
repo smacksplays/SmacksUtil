@@ -11,10 +11,10 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
-import net.smackplays.smacksutil.Constants;
 import net.smackplays.smacksutil.platform.services.IKeyHandler;
 
-@SuppressWarnings("unused")
+import static net.smackplays.smacksutil.Constants.MOD_ID;
+
 public class NeoForgeKeyHandler implements IKeyHandler {
     public static KeyMapping veinKey;
     public static KeyMapping veinPreviewKey;
@@ -90,14 +90,14 @@ public class NeoForgeKeyHandler implements IKeyHandler {
             NonNullList<Slot> slots = player.inventoryMenu.slots;
             for (int i = 0; i <= 8; i++){
                 ItemStack stack = slots.get(i).getItem();
-                if ((stack.is(Services.PLATFORM.getLargeBackackItem()) || stack.is(Services.PLATFORM.getBackackItem())) && Services.C2S_PACKET_SENDER != null){
+                if ((stack.is(Services.PLATFORM.getLargeBackpackItem()) || stack.is(Services.PLATFORM.getBackpackItem())) && Services.C2S_PACKET_SENDER != null){
                     Services.C2S_PACKET_SENDER.BackpackOpenPacket(i);
                     return;
                 }
             }
             for (int i = slots.size() - 1; i >= 0; i--){
                 ItemStack stack = slots.get(i).getItem();
-                if ((stack.is(Services.PLATFORM.getLargeBackackItem()) || stack.is(Services.PLATFORM.getBackackItem())) && Services.C2S_PACKET_SENDER != null){
+                if ((stack.is(Services.PLATFORM.getLargeBackpackItem()) || stack.is(Services.PLATFORM.getBackpackItem())) && Services.C2S_PACKET_SENDER != null){
                     Services.C2S_PACKET_SENDER.BackpackOpenPacket(i);
                     return;
                 }
@@ -114,7 +114,7 @@ public class NeoForgeKeyHandler implements IKeyHandler {
     public void register() {
     }
 
-    @EventBusSubscriber(modid = Constants.MOD_ID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
+    @EventBusSubscriber(modid = MOD_ID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
     public static class ClientModBusEvents {
         @SubscribeEvent
         public static void onKeyRegister(RegisterKeyMappingsEvent event) {
@@ -138,7 +138,7 @@ public class NeoForgeKeyHandler implements IKeyHandler {
         }
     }
 
-    @EventBusSubscriber(modid = Constants.MOD_ID, value = Dist.CLIENT)
+    @EventBusSubscriber(modid = MOD_ID, value = Dist.CLIENT)
     public static class ClientForgeEvents {
         @SubscribeEvent
         public static void onKeyInput(InputEvent.Key event) {
