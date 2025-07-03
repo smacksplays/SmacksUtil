@@ -4,7 +4,7 @@ import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.util.CommonColors;
 import net.minecraft.world.entity.player.Player;
 import net.smackplays.smacksutil.CommonClass;
@@ -33,7 +33,7 @@ public abstract class GuiMixin {
             if (player != null && player.isShiftKeyDown()) {
                 ArrayList<String> toDisplayModes = CommonClass.veinMiner.getModes();
 
-                guiGraphics.blit(RenderType::guiTextured, Constants.C_VEINMINER_MODE_BOX_LOCATION_RL
+                guiGraphics.blit(RenderPipelines.GUI_TEXTURED, Constants.C_VEINMINER_MODE_BOX_LOCATION_RL
                         , 1, 1,0, 0, 110, 40, 110, 40);
 
                 guiGraphics.drawString(this.minecraft.font, toDisplayModes.get(2), 10, 7, CommonColors.WHITE);

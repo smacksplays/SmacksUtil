@@ -176,6 +176,9 @@ public class AbstractBackpackMenuBase extends AbstractContainerMenu {
                                     stack1.setCount(stack1.getCount() + stack2.getCount());
                                     temp.set(i, stack1);
                                     temp.set(j, Items.AIR.getDefaultInstance());
+                                } else {
+                                    stack2.setCount(stack1.getCount() + stack2.getCount() - maxStackSize);
+                                    stack1.setCount(maxStackSize);
                                 }
                             } else if (stack1.getMaxStackSize() < 64) {
                                 var actualMaxStackSize = maxStackSize / (64 / stack1.getMaxStackSize());

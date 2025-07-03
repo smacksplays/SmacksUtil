@@ -64,8 +64,8 @@ public class MobCatcherItem extends Item {
         ItemStack mainHandStack = player.getItemInHand(interactionHand);
         if (!isHolding(mainHandStack) && !world.isClientSide && interactionHand.equals(InteractionHand.MAIN_HAND)) {
             CompoundTag tag = new CompoundTag();
-            livingEntity.save(tag);
-            livingEntity.addAdditionalSaveData(tag);
+            //livingEntity.save(tag);
+            //livingEntity.addAdditionalSaveData(tag);
             tag.putBoolean("is_Holding", true);
             mainHandStack.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
             setHolding(true);

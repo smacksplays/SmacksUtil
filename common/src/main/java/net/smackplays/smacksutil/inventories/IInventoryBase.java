@@ -5,10 +5,12 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.*;
 import org.jetbrains.annotations.NotNull;
 
 public interface IInventoryBase extends WorldlyContainer {
@@ -114,7 +116,10 @@ public interface IInventoryBase extends WorldlyContainer {
     default void loadAllItems(CompoundTag tag, NonNullList<ItemStack> items, RegistryAccess registryAccess) {
         if (tag.getCompound("Items").isEmpty()) return;
         CompoundTag itemTag = tag.getCompound("Items").get();
-        ContainerHelper.loadAllItems(itemTag, items, registryAccess);
+
+        var t = TagValueInput.create(ProblemReporter.DISCARDING, registryAccess, itemTag);
+
+        ContainerHelper.loadAllItems(t, items);
         if (tag.getList("counts").isEmpty()) return;
         ListTag countList = tag.getList("counts").get();
         for (int i = 0; i < countList.size(); i++) {
@@ -139,8 +144,9 @@ public interface IInventoryBase extends WorldlyContainer {
             }
         }
         tag.put("counts", countList);
-        CompoundTag itemTag = ContainerHelper.saveAllItems(new CompoundTag(), items, registryAccess);
-        tag.put("Items", itemTag);
+        TagValueOutput out = TagValueOutput.createWithContext(ProblemReporter.DISCARDING, registryAccess);
+        ContainerHelper.saveAllItems(out, items);
+        tag.put("Items", out.buildResult());
         loadAllItems(tag, items, registryAccess);
         return tag;
     }

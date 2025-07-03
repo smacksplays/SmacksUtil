@@ -135,7 +135,7 @@ public class SmacksUtil {
     public void onServerStarting(ServerStartingEvent event) {
     }
 
-    @EventBusSubscriber(modid = MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+    @EventBusSubscriber(modid = MOD_ID, value = Dist.CLIENT)
     public static class ClientModEvents {
 
         @SubscribeEvent
@@ -162,7 +162,7 @@ public class SmacksUtil {
             }
         }
 
-        @EventBusSubscriber(modid = MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+        @EventBusSubscriber(modid = MOD_ID)
         public static class RegisterMenuScreens {
             @SubscribeEvent
             public static void register(final RegisterMenuScreensEvent event) {
@@ -175,7 +175,7 @@ public class SmacksUtil {
 
         }
 
-        @EventBusSubscriber(modid = MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+        @EventBusSubscriber(modid = MOD_ID)
         public static class PacketEvents {
             @SubscribeEvent
             public static void register(final RegisterPayloadHandlersEvent event) {

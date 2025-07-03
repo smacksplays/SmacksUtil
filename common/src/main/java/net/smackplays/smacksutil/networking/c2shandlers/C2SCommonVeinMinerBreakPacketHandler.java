@@ -27,13 +27,14 @@ public class C2SCommonVeinMinerBreakPacketHandler {
         ItemStack stack = player.getMainHandItem();
 
         BlockState currBlockState = world.getBlockState(pos);
-
+        if (currBlockState.isAir()) return;
+        if(stack.getMaxDamage() == stack.getDamageValue() + 1) return;
         world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
         if (!isCreative) {
             BlockEntity currBlockEntity = currBlockState.hasBlockEntity() ? world.getBlockEntity(pos) : null;
             Block.dropResources(currBlockState, world, pos, currBlockEntity, null, stack);
             if (stack.isDamageableItem()) {
-                stack.hurtAndBreak(1, (ServerLevel)player.level(), player, c -> {});
+                stack.hurtAndBreak(1, player.level(), player, c -> {});
             }
         }
         if (replaceSeeds) {

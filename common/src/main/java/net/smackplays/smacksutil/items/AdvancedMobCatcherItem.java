@@ -6,6 +6,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -20,6 +21,7 @@ import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.TagValueOutput;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
@@ -79,9 +81,11 @@ public class AdvancedMobCatcherItem extends Item {
             }
             list = (ListTag) tag.get("Entities");
             if (list != null && isBelowMax(mainHandStack) && !world.isClientSide && interactionHand.equals(InteractionHand.MAIN_HAND)) {
-                CompoundTag entityTag = new CompoundTag();
-                livingEntity.save(entityTag);
-                livingEntity.addAdditionalSaveData(entityTag);
+                TagValueOutput out = TagValueOutput.createWithContext(ProblemReporter.DISCARDING, player.registryAccess());
+                livingEntity.save(out);
+                // TODO
+                //livingEntity.addAdditionalSaveData(out);
+                CompoundTag entityTag = out.buildResult();
                 if (!list.contains(entityTag)) {
                     list.add(entityTag);
                 }

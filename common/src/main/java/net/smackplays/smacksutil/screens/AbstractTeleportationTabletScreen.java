@@ -5,6 +5,7 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.StringWidget;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
@@ -82,14 +83,14 @@ public class AbstractTeleportationTabletScreen<T extends AbstractTeleportationTa
 
         int x = (width - backgroundWidth) / 2;
         int y = (height - backgroundHeight) / 2;
-        context.blit(RenderType::guiTextured, C_TELEPORTATION_TABLET_SCREEN_LOCATION_RL,
+        context.blit(RenderPipelines.GUI_TEXTURED, C_TELEPORTATION_TABLET_SCREEN_LOCATION_RL,
                 x, y, 0.0F, 0.0F, 512, 512, 512, 512);
 
         Player player = this.menu.playerInventory.player;
         ItemStack telTool = player.getInventory().getSelectedItem();
         Map<String, TeleportationData> posMap = getTeleportationList(telTool);
         ResourceLocation scroller = posMap.size() > 10 ? C_SCROLLER_SPRITE_LOCATION_RL : C_SCROLLER_DISABLED_SPRITE_LOCATION_RL;
-        context.blitSprite(RenderType::guiTextured, scroller, x + 137, (y + 15) + (int) this.scrollOffs, 12, 15);
+        context.blitSprite(RenderPipelines.GUI_TEXTURED, scroller, x + 137, (y + 15) + (int) this.scrollOffs, 12, 15);
         List<String> keyList = new ArrayList<>(posMap.keySet().stream().toList());
 
         if (this.scrollOffs > 0 && posMap.size() > 10) {
@@ -112,15 +113,15 @@ public class AbstractTeleportationTabletScreen<T extends AbstractTeleportationTa
                 boolean b3 = y + 13 + 19 * i < mouseY;
                 boolean b4 = y + 32 + 19 * i >= mouseY;
                 if (b1 && b2 && b3 && b4) {
-                    context.blit(RenderType::guiTextured, C_ENCHANTING_SLOT_HIGHLIGHTED_SPRITE_LOCATION_RL,
+                    context.blit(RenderPipelines.GUI_TEXTURED, C_ENCHANTING_SLOT_HIGHLIGHTED_SPRITE_LOCATION_RL,
                             x + 8, y + 15 + 19 * i, 0, 0, 126, 19, 126, 19);
                 } else {
-                    context.blit(RenderType::guiTextured, C_ENCHANTING_SLOT_SPRITE_LOCATION_RL,
+                    context.blit(RenderPipelines.GUI_TEXTURED, C_ENCHANTING_SLOT_SPRITE_LOCATION_RL,
                             x + 8, y + 15 + 19 * i, 0, 0, 126, 19, 126, 19);
                 }
-                labelList.add(new Label(Component.literal(name), 10, 20 + 19 * i, 0x404040, false));
+                labelList.add(new Label(Component.literal(name), 10, 20 + 19 * i, -12566464, false));
             } else {
-                context.blit(RenderType::guiTextured, C_ENCHANTING_SLOT_DISABLED_SPRITE_LOCATION_RL,
+                context.blit(RenderPipelines.GUI_TEXTURED, C_ENCHANTING_SLOT_DISABLED_SPRITE_LOCATION_RL,
                         x + 8, y + 15 + 19 * i, 0, 0, 126, 19, 126, 19);
             }
         }
@@ -144,7 +145,7 @@ public class AbstractTeleportationTabletScreen<T extends AbstractTeleportationTa
      * @param mouseY mouseY */
     @Override
     protected void renderLabels(GuiGraphics context, int mouseX, int mouseY) {
-        context.drawString(this.font, this.title, this.titleLabelX + 10, this.titleLabelY - 65, 0x404040, false);
+        context.drawString(this.font, this.title, this.titleLabelX + 10, this.titleLabelY - 65, -12566464, false);
         for (Label l : labelList){
             context.drawString(this.font, l.component, titleLabelX + 2 + l.x, titleLabelY - 70 + l.y, l.color, l.shadow);
         }
