@@ -52,15 +52,14 @@ public class Mineshaft extends VeinMode {
             tag = null;
         }
 
-        return mineshaft(sourcePos, radius, player);
+        return mineshaft(sourcePos, radius);
     }
 
     /** tunnel method
      * @param curr curr
      * @param radius radius
-     * @param player player
      * @return Sorted list of Blocks to break */
-    public ArrayList<BlockPos> mineshaft(BlockPos curr, int radius, Player player) {
+    public ArrayList<BlockPos> mineshaft(BlockPos curr, int radius) {
         for (int i = 0; i < radius; i++) {
             if (checkConnected(curr)) {
                 result.add(curr);
