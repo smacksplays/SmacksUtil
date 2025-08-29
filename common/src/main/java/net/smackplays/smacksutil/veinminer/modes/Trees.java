@@ -1,36 +1,17 @@
 package net.smackplays.smacksutil.veinminer.modes;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.smackplays.smacksutil.platform.Services;
 import net.smackplays.smacksutil.util.ModTags;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 
 /**
  * Veinminer Trees Mode */
 public class Trees extends VeinMode{
-    /** world*/
-    private Level world;
-    /** isExactMatch*/
-    private boolean isExactMatch;
-    /** tag*/
-    private TagKey<Block> tag;
-    /** block*/
-    private Block sourceBlock;
-    /** queue*/
-    private ArrayList<BlockPos> queue;
-    /** checked*/
-    private ArrayList<BlockPos> checked;
-    /** result*/
-    private ArrayList<BlockPos> result;
-    /** sourcePos*/
-    private BlockPos sourcePos;
     /** Constructor*/
     public Trees() {
         ModeName = "Trees";
@@ -49,6 +30,7 @@ public class Trees extends VeinMode{
     @Override
     public ArrayList<BlockPos> getBlocks(Level world, Player player, BlockPos sourcePos, int radius, boolean isExactMatch) {
         this.world = world;
+        this.player = player;
         this.isExactMatch = isExactMatch;
         this.sourceBlock = world.getBlockState(sourcePos).getBlock();
         this.queue = new ArrayList<>(Collections.singletonList(sourcePos));
@@ -58,120 +40,5 @@ public class Trees extends VeinMode{
         this.tag = ModTags.Blocks.TREE_BLOCKS;
 
         return breathFirstSearch();
-    }
-
-    /** BreathFirstSearch algorithm
-     * @return Sorted list of connected blocks*/
-    private ArrayList<BlockPos> breathFirstSearch() {
-        while (!queue.isEmpty()) {
-            BlockPos pos = queue.removeFirst();
-            if (!checked.contains(pos)){
-                checked.add(pos);
-            }
-            for (BlockPos p : findConnected(pos)){
-                if (!queue.contains(p)) {
-                    queue.add(p);
-                }
-            }
-            if (!result.contains(pos)){
-                result.add(pos);
-            }
-            queue.sort(Comparator.comparing(p -> p.getCenter().distanceTo(sourcePos.getCenter())));
-            if (result.size() >= maxBlocks){
-                return result;
-            }
-        }
-        return result;
-    }
-
-    /** Find all connected Blocks using 14-Neighbour method
-     * @param curr curr
-     * @return List of surrounding matching blocks*/
-    private ArrayList<BlockPos> findConnected(BlockPos curr) {
-        ArrayList<BlockPos> connected = new ArrayList<>();
-        if (checkConnected(curr.above())) {
-            connected.add(curr.above());
-        }
-        if (checkConnected(curr.north())) {
-            connected.add(curr.north());
-        }
-        if (checkConnected(curr.east())) {
-            connected.add(curr.east());
-        }
-        if (checkConnected(curr.south())) {
-            connected.add(curr.south());
-        }
-        if (checkConnected(curr.west())) {
-            connected.add(curr.west());
-        }
-        if (checkConnected(curr.below())) {
-            connected.add(curr.below());
-        }
-        if (checkConnected(curr.above().north())) {
-            connected.add(curr.above().north());
-        }
-        if (checkConnected(curr.above().east())) {
-            connected.add(curr.above().east());
-        }
-        if (checkConnected(curr.above().south())) {
-            connected.add(curr.above().south());
-        }
-        if (checkConnected(curr.above().west())) {
-            connected.add(curr.above().west());
-        }
-        if (checkConnected(curr.above().north().east())) {
-            connected.add(curr.above().north().east());
-        }
-        if (checkConnected(curr.above().north().west())) {
-            connected.add(curr.above().north().west());
-        }
-        if (checkConnected(curr.above().south().east())) {
-            connected.add(curr.above().south().east());
-        }
-        if (checkConnected(curr.above().south().west())) {
-            connected.add(curr.above().south().west());
-        }
-        if (checkConnected(curr.below().north())) {
-            connected.add(curr.below().north());
-        }
-        if (checkConnected(curr.below().east())) {
-            connected.add(curr.below().east());
-        }
-        if (checkConnected(curr.below().south())) {
-            connected.add(curr.below().south());
-        }
-        if (checkConnected(curr.below().west())) {
-            connected.add(curr.below().west());
-        }
-        if (checkConnected(curr.below().north().east())) {
-            connected.add(curr.below().north().east());
-        }
-        if (checkConnected(curr.below().north().west())) {
-            connected.add(curr.below().north().west());
-        }
-        if (checkConnected(curr.below().south().east())) {
-            connected.add(curr.below().south().east());
-        }
-        if (checkConnected(curr.below().south().west())) {
-            connected.add(curr.below().south().west());
-        }
-        return connected;
-    }
-
-
-    /** Check if given block matches source block or is already in a list
-     * @param curr curr
-     * @return true if no match*/
-    private boolean checkConnected(BlockPos curr){
-        var condition = false;
-        if (isExactMatch || tag == null) {
-            condition = world.getBlockState(curr).is(sourceBlock);
-        } else {
-            condition = world.getBlockState(curr).is(tag);
-        }
-        return condition
-                && !checked.contains(curr)
-                && !queue.contains(curr)
-                && !result.contains(curr);
     }
 }

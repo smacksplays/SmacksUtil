@@ -2,10 +2,8 @@ package net.smackplays.smacksutil.veinminer.modes;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.smackplays.smacksutil.util.ModTags;
 import net.smackplays.smacksutil.util.PlayerUtil;
 
@@ -13,16 +11,6 @@ import java.util.ArrayList;
 
 /** Class Tunnel */
 public class Tunnel extends VeinMode {
-    /** world*/
-    private Level world;
-    /** isExactMatch*/
-    private boolean isExactMatch;
-    /** tag*/
-    private TagKey<Block> tag;
-    /** block*/
-    private Block sourceBlock;
-    /** result*/
-    private ArrayList<BlockPos> result;
     /** playerDirection*/
     private Direction playerDirection;
     /** Constructor*/
@@ -41,6 +29,7 @@ public class Tunnel extends VeinMode {
     @Override
     public ArrayList<BlockPos> getBlocks(Level world, Player player, BlockPos sourcePos, int radius, boolean isExactMatch) {
         this.world = world;
+        this.player = player;
         this.isExactMatch = isExactMatch;
         this.sourceBlock = world.getBlockState(sourcePos).getBlock();
         this.result = new ArrayList<>();
@@ -64,18 +53,18 @@ public class Tunnel extends VeinMode {
      * @return Sorted list of Blocks to break */
     public ArrayList<BlockPos> tunnel(BlockPos curr, int radius, Player player) {
         for (int i = 0; i < radius; i++) {
-            if (checkMatch(isExactMatch, curr, world, player, sourceBlock, tag, result)) {
+            if (checkConnected(curr)) {
                 result.add(curr);
                 if (playerDirection.equals(Direction.UP)) {
-                    if (checkMatch(isExactMatch, curr.relative(player.getDirection(), -1), world, player, sourceBlock, tag, result)) {
+                    if (checkConnected(curr.relative(player.getDirection(), -1))) {
                         result.add(curr.relative(player.getDirection(), -1));
                     }
                 } else if (playerDirection.equals(Direction.DOWN)) {
-                    if (checkMatch(isExactMatch, curr.relative(player.getDirection(), 1), world, player, sourceBlock, tag, result)) {
+                    if (checkConnected(curr.relative(player.getDirection()))) {
                         result.add(curr.relative(player.getDirection(), 1));
                     }
                 }else {
-                    if (checkMatch(isExactMatch, curr.below(), world, player, sourceBlock, tag, result)) {
+                    if (checkConnected(curr.below())) {
                         result.add(curr.below());
                     }
                 }

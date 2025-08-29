@@ -25,6 +25,7 @@ pluginManagement {
                 includeGroupAndSubgroups("org.spongepowered")
             }
         }
+        maven { url = "https://maven.fabricmc.net" }
     }
 }
 

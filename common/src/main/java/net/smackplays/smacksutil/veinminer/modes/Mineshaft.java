@@ -2,10 +2,8 @@ package net.smackplays.smacksutil.veinminer.modes;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.smackplays.smacksutil.util.ModTags;
 import net.smackplays.smacksutil.util.PlayerUtil;
 
@@ -14,16 +12,6 @@ import java.util.ArrayList;
 /**
  * Veinminer Crops Mode */
 public class Mineshaft extends VeinMode {
-    /** world*/
-    private Level world;
-    /** isExactMatch*/
-    private boolean isExactMatch;
-    /** tag*/
-    private TagKey<Block> tag;
-    /** block*/
-    private Block sourceBlock;
-    /** result*/
-    private ArrayList<BlockPos> result;
     /** playerDirection*/
     private Direction playerDirection;
     /** upMode*/
@@ -45,6 +33,7 @@ public class Mineshaft extends VeinMode {
     @Override
     public ArrayList<BlockPos> getBlocks(Level world, Player player, BlockPos sourcePos, int radius, boolean isExactMatch) {
         this.world = world;
+        this.player = player;
         this.isExactMatch = isExactMatch;
         this.sourceBlock = world.getBlockState(sourcePos).getBlock();
         this.result = new ArrayList<>();
@@ -73,10 +62,10 @@ public class Mineshaft extends VeinMode {
      * @return Sorted list of Blocks to break */
     public ArrayList<BlockPos> mineshaft(BlockPos curr, int radius, Player player) {
         for (int i = 0; i < radius; i++) {
-            if (checkMatch(isExactMatch, curr, world, player, sourceBlock, tag, result)) {
+            if (checkConnected(curr)) {
                 result.add(curr);
                 for (int j = 1; j < 4; j++) {
-                    if (checkMatch(isExactMatch, curr.relative(playerDirection, -j), world, player, sourceBlock, tag, result)) {
+                    if (checkConnected(curr.relative(playerDirection, -j))) {
                         result.add(curr.relative(playerDirection, -j));
                     }
                 }

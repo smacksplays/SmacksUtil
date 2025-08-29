@@ -82,6 +82,8 @@ public class SmacksUtil implements ModInitializer {
         registerItem(C_TELEPORTATION_TABLET_ITEM_RL, TELEPORTATION_TABLET_ITEM);
         registerItem(C_EFFECT_TOTEM_ITEM_RL, EFFECT_TOTEM);
 
+        registerCommand();
+
         PayloadTypeRegistry.playC2S().register(C2SEnchantPacket.TYPE, C2SEnchantPacket.STREAM_CODEC);
         ServerPlayNetworking.registerGlobalReceiver(C2SEnchantPacket.TYPE, C2SEnchantPacketHandler::handle);
         PayloadTypeRegistry.playC2S().register(C2SBackpackSortPacket.TYPE, C2SBackpackSortPacket.STREAM_CODEC);
@@ -107,5 +109,8 @@ public class SmacksUtil implements ModInitializer {
     private static void registerItem(ResourceLocation resourceLocation, Item item) {
         Registry.register(BuiltInRegistries.ITEM, resourceLocation, item);
         ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.TOOLS_AND_UTILITIES).register(itemGroup -> itemGroup.accept(item));
+    }
+
+    private static void registerCommand(){
     }
 }

@@ -10,10 +10,6 @@ import java.util.ArrayList;
 /**
  * Veinminer Shapeless Mode */
 public class Vegetation extends VeinMode {
-    /** world*/
-    private Level world;
-    /** result*/
-    private ArrayList<BlockPos> result;
     /** Constructor*/
     public Vegetation() {
         ModeName = "Vegetation";
@@ -29,6 +25,7 @@ public class Vegetation extends VeinMode {
     @Override
     public ArrayList<BlockPos> getBlocks(Level world, Player player, BlockPos sourcePos, int radius, boolean isExactMatch) {
         this.world = world;
+        this.player = player;
         this.result = new ArrayList<>();
 
         BlockPos pos = new BlockPos(sourcePos.getX() - radius, sourcePos.getY() - 2, sourcePos.getZ() - radius);

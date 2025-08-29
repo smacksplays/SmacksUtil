@@ -2,10 +2,8 @@ package net.smackplays.smacksutil.veinminer.modes;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.smackplays.smacksutil.util.ModTags;
 import net.smackplays.smacksutil.util.PlayerUtil;
 
@@ -13,16 +11,6 @@ import java.util.ArrayList;
 
 /** Class ThreeByThree */
 public class ThreeByThree extends VeinMode {
-    /** world*/
-    private Level world;
-    /** isExactMatch*/
-    private boolean isExactMatch;
-    /** tag*/
-    private TagKey<Block> tag;
-    /** block*/
-    private Block sourceBlock;
-    /** result*/
-    private ArrayList<BlockPos> result;
     /** playerDirection*/
     private Direction playerDirection;
     /** radius*/
@@ -43,6 +31,7 @@ public class ThreeByThree extends VeinMode {
     @Override
     public ArrayList<BlockPos> getBlocks(Level world, Player player, BlockPos sourcePos, int radius, boolean isExactMatch) {
         this.world = world;
+        this.player = player;
         this.isExactMatch = isExactMatch;
         this.sourceBlock = world.getBlockState(sourcePos).getBlock();
         this.result = new ArrayList<>();
@@ -105,17 +94,17 @@ public class ThreeByThree extends VeinMode {
         }
     }
 
-    /** Check if given block matches source block or is already in a list
-     * @param curr curr
-     * @return true if no match*/
-    private boolean checkConnected(BlockPos curr){
+    @Override
+    public boolean checkConnected(BlockPos curr) {
         var condition = false;
+        if (world.getBlockState(curr).is(ModTags.Blocks.VEIN_BLACKLIST)) return false;
+        if (!player.hasCorrectToolForDrops(world.getBlockState(curr)) && !player.isCreative()) return false;
         if (isExactMatch || tag == null) {
             condition = world.getBlockState(curr).is(sourceBlock);
         } else {
             condition = world.getBlockState(curr).is(tag);
         }
         return condition
-                && !result.contains(curr);
+                && (result != null && !result.contains(curr));
     }
 }
