@@ -27,6 +27,8 @@
   "smacksutil.category.config": "Config",
   "text.autoconfig.smacksutil.option.maxRenderBlocks": "Max Blocks to Render",
   "text.autoconfig.smacksutil.option.maxRenderBlocks.@Tooltip": "Allows the player to define how many Blocks can be rendered. This is used to reduce lag.",
+  "text.autoconfig.smacksutil.option.maxMiningBlocks": "Max Blocks to Mine",
+  "text.autoconfig.smacksutil.option.maxMiningBlocks.@Tooltip": "Allows the player to define how many Blocks can be mined at once.",
   "text.autoconfig.smacksutil.option.maxShapelessRadius": "Max Radius in Shapeless Mode",
   "text.autoconfig.smacksutil.option.maxShapelessRadius.@Tooltip": "Allows the player to define the max Shapeless Radius.",
   "text.autoconfig.smacksutil.option.maxRenderShapelessRadius": "Max Render Radius in Shapeless Mode",

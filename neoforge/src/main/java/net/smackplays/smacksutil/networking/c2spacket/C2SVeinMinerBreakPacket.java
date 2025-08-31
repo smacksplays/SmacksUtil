@@ -10,14 +10,16 @@ import org.joml.Vector3f;
 import static net.smackplays.smacksutil.Constants.C_VEINMINER_BREAK_REQUEST_RL;
 
 
-public record C2SVeinMinerBreakPacket(Vector3f pos, boolean isCreative, boolean replaceSeeds) implements CustomPacketPayload {
+public record C2SVeinMinerBreakPacket(Vector3f sourcePos, Vector3f curr, boolean isCreative, boolean replaceSeeds) implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<C2SVeinMinerBreakPacket> TYPE
             = new CustomPacketPayload.Type<>(C_VEINMINER_BREAK_REQUEST_RL);
 
 
     public static final StreamCodec<ByteBuf, C2SVeinMinerBreakPacket> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.VECTOR3F,
-            C2SVeinMinerBreakPacket::pos,
+            C2SVeinMinerBreakPacket::sourcePos,
+            ByteBufCodecs.VECTOR3F,
+            C2SVeinMinerBreakPacket::curr,
             ByteBufCodecs.BOOL,
             C2SVeinMinerBreakPacket::isCreative,
             ByteBufCodecs.BOOL,

@@ -45,7 +45,9 @@ public class Shapeless extends VeinMode{
         } else {
             tag = null;
         }
-
+        if (Services.CONFIG != null){
+            this.maxBlocks = Services.CONFIG.getMaxMiningBlocks();
+        }
         return breathFirstSearch();
     }
 }

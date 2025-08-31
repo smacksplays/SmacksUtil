@@ -38,7 +38,9 @@ public class Ores extends VeinMode {
         this.result = new ArrayList<>();
         this.sourcePos = sourcePos;
         this.tag = ModTags.Blocks.ORES_TAG;
-
+        if (Services.CONFIG != null){
+            this.maxBlocks = Services.CONFIG.getMaxMiningBlocks();
+        }
         return breathFirstSearch();
     }
 }

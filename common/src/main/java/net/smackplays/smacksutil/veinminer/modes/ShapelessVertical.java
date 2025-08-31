@@ -48,7 +48,9 @@ public class ShapelessVertical extends Shapeless{
         } else {
             tag = null;
         }
-
+        if (Services.CONFIG != null){
+            this.maxBlocks = Services.CONFIG.getMaxMiningBlocks();
+        }
         return breathFirstSearch();
     }
 

@@ -12,10 +12,11 @@ import java.util.UUID;
  * Interface IClientPacketSender */
 public interface IClientPacketSender {
     /** Interface method VeinMinerBreakPacket
-     * @param pos pos
+     * @param sourcePos sourcePos
+     * @param curr curr
      * @param isCreative isCreative
      * @param replaceSeeds replaceSeeds*/
-    void VeinMinerBreakPacket(BlockPos pos, boolean isCreative, boolean replaceSeeds);
+    void VeinMinerBreakPacket(BlockPos sourcePos, BlockPos curr, boolean isCreative, boolean replaceSeeds);
 
     /** Interface method EnchantPacket
      * @param stack stack

@@ -7,7 +7,8 @@ import net.smackplays.smacksutil.networking.c2shandlers.C2SCommonVeinMinerBreakP
 
 public class C2SVeinMinerBreakPacketHandler {
     public static void handle(final C2SVeinMinerBreakPacket data, final IPayloadContext context) {
-        BlockPos pos = new BlockPos((int)data.pos().x, (int)data.pos().y, (int)data.pos().z);
-        C2SCommonVeinMinerBreakPacketHandler.handle((ServerPlayer) context.player(), context.player().level(), pos, data.isCreative(), data.replaceSeeds());
+        BlockPos sourcePos = new BlockPos((int)data.sourcePos().x, (int)data.sourcePos().y, (int)data.sourcePos().z);
+        BlockPos curr = new BlockPos((int)data.curr().x, (int)data.curr().y, (int)data.curr().z);
+        C2SCommonVeinMinerBreakPacketHandler.handle((ServerPlayer) context.player(), context.player().level(), sourcePos, curr, data.isCreative(), data.replaceSeeds());
     }
 }

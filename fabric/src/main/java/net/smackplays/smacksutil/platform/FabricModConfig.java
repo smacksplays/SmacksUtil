@@ -20,6 +20,10 @@ public class FabricModConfig implements IModConfig, ConfigData {
     @ConfigEntry.Gui.Tooltip()
     @Comment("Maximum blocks that are allowed to be rendered.")
     public int maxRenderBlocks = IModConfig.maxRenderBlocks;
+    /** maxMiningBlocks*/
+    @ConfigEntry.Gui.Tooltip()
+    @Comment("Maximum blocks that are allowed to be mined.")
+    public int maxMiningBlocks = IModConfig.maxMiningBlocks;
     /** maxShapelessRadius*/
     @ConfigEntry.Gui.Tooltip()
     @Comment("Maximum radius in Shapeless mode.")
@@ -92,6 +96,20 @@ public class FabricModConfig implements IModConfig, ConfigData {
     @Override
     public void setMaxRenderBlocks(int toSet) {
         INSTANCE.maxRenderBlocks = toSet;
+    }
+
+    /** Getter
+     * @return maxMiningBlocks*/
+    @Override
+    public int getMaxMiningBlocks() {
+        return INSTANCE.maxMiningBlocks;
+    }
+
+    /** Setter
+     * @param toSet toSet*/
+    @Override
+    public void setMaxMiningBlocks(int toSet) {
+        INSTANCE.maxMiningBlocks = toSet;
     }
 
     /** Getter

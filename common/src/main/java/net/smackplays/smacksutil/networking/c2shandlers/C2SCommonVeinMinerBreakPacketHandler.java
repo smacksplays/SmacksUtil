@@ -19,25 +19,26 @@ public class C2SCommonVeinMinerBreakPacketHandler {
     /** Break block and hurt tool. Also apply enchantments
      * @param player player
      * @param world world
-     * @param pos pos
+     * @param sourcePos sourcePos
+     * @param curr curr
      * @param isCreative isCreative
      * @param replaceSeeds replaceSeeds*/
-    public static void handle(ServerPlayer player, Level world, BlockPos pos, boolean isCreative, boolean replaceSeeds) {
+    public static void handle(ServerPlayer player, Level world, BlockPos sourcePos, BlockPos curr, boolean isCreative, boolean replaceSeeds) {
         ItemStack stack = player.getMainHandItem();
 
-        BlockState currBlockState = world.getBlockState(pos);
+        BlockState currBlockState = world.getBlockState(curr);
         if (currBlockState.isAir()) return;
         if(stack.getMaxDamage() == stack.getDamageValue() + 1) return;
-        world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+        world.setBlockAndUpdate(curr, Blocks.AIR.defaultBlockState());
         if (!isCreative) {
-            BlockEntity currBlockEntity = currBlockState.hasBlockEntity() ? world.getBlockEntity(pos) : null;
-            Block.dropResources(currBlockState, world, pos, currBlockEntity, null, stack);
+            BlockEntity currBlockEntity = currBlockState.hasBlockEntity() ? world.getBlockEntity(curr) : null;
+            Block.dropResources(currBlockState, world, sourcePos, currBlockEntity, null, stack);
             if (stack.isDamageableItem()) {
                 stack.hurtAndBreak(1, player.level(), player, c -> {});
             }
         }
         if (replaceSeeds) {
-            world.setBlockAndUpdate(pos, currBlockState.getBlock().defaultBlockState());
+            world.setBlockAndUpdate(curr, currBlockState.getBlock().defaultBlockState());
         }
     }
 }

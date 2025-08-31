@@ -22,14 +22,16 @@ public class FabricClientPacketSender implements IClientPacketSender {
 
     }
     /** VeinMinerBreakPacket
-     * @param pos pos
+     * @param sourcePos sourcePos
+     * @param curr curr
      * @param isCreative isCreative
      * @param replaceSeeds replaceSeeds*/
     @Override
-    public void VeinMinerBreakPacket(BlockPos pos, boolean isCreative, boolean replaceSeeds) {
-        Vector3f pos3f = new Vector3f(pos.getX(), pos.getY(), pos.getZ());
+    public void VeinMinerBreakPacket(BlockPos sourcePos, BlockPos curr, boolean isCreative, boolean replaceSeeds) {
+        Vector3f sourcePos3f = new Vector3f(sourcePos.getX(), sourcePos.getY(), sourcePos.getZ());
+        Vector3f curr3f = new Vector3f(curr.getX(), curr.getY(), curr.getZ());
         if (ClientPlayNetworking.canSend(C_VEINMINER_BREAK_REQUEST_RL)){
-            ClientPlayNetworking.send(new C2SVeinMinerBreakPacket(pos3f, isCreative, replaceSeeds));
+            ClientPlayNetworking.send(new C2SVeinMinerBreakPacket(sourcePos3f, curr3f, isCreative, replaceSeeds));
         }
     }
 

@@ -30,7 +30,8 @@ public abstract class GuiMixin {
     private void smacksUtil$renderItemHotbar(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
         if (Services.KEY_HANDLER != null && Services.KEY_HANDLER.isVeinKeyDown()) {
             Player player = Minecraft.getInstance().player;
-            if (player != null && player.isShiftKeyDown()) {
+            if (player == null) return;
+            if (player.isShiftKeyDown()) {
                 ArrayList<String> toDisplayModes = CommonClass.veinMiner.getModes();
 
                 guiGraphics.blit(RenderPipelines.GUI_TEXTURED, Constants.C_VEINMINER_MODE_BOX_LOCATION_RL
@@ -39,6 +40,27 @@ public abstract class GuiMixin {
                 guiGraphics.drawString(this.minecraft.font, toDisplayModes.get(2), 10, 7, CommonColors.WHITE);
                 guiGraphics.drawString(this.minecraft.font, "->" + toDisplayModes.get(1), 10, 7 + minecraft.font.lineHeight, CommonColors.WHITE);
                 guiGraphics.drawString(this.minecraft.font, toDisplayModes.get(0), 10, 7 + minecraft.font.lineHeight * 2, CommonColors.WHITE);
+            } else {
+                ArrayList<String> toDisplayModes = CommonClass.veinMiner.getModes();
+                String actualMode = CommonClass.veinMiner.getActualMode();
+
+                guiGraphics.blit(RenderPipelines.GUI_TEXTURED, Constants.C_VEINMINER_MODE_BOX_LOCATION_RL
+                        , 1, 1,0, 0, 110, 40, 110, 40);
+
+                if (actualMode != null){
+                    guiGraphics.drawString(this.minecraft.font, actualMode, 10, 7, CommonColors.WHITE);
+                } else {
+                    guiGraphics.drawString(this.minecraft.font, toDisplayModes.get(1), 10, 7, CommonColors.WHITE);
+                }
+                if (toDisplayModes.get(1).equals("Shapeless") || toDisplayModes.get(1).equals("ShapelessVertical")
+                        || toDisplayModes.get(1).equals("Ores") || toDisplayModes.get(1).equals("Trees")) {
+                    if (Services.CONFIG != null){
+                        guiGraphics.drawString(this.minecraft.font, "Max: " + Services.CONFIG.getMaxMiningBlocks() + " Blocks", 10, 7 + minecraft.font.lineHeight, CommonColors.WHITE);
+                    }
+                } else {
+                    guiGraphics.drawString(this.minecraft.font, "Radius: " + CommonClass.veinMiner.getRadius() + " Blocks", 10, 7 + minecraft.font.lineHeight, CommonColors.WHITE);
+                }
+                guiGraphics.drawString(this.minecraft.font, "Mining: " + CommonClass.veinMiner.getCurrToMine() + " Blocks", 10, 7 + minecraft.font.lineHeight * 2, CommonColors.WHITE);
             }
         }
     }

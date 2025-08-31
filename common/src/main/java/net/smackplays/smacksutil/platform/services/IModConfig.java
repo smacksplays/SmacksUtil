@@ -5,6 +5,8 @@ package net.smackplays.smacksutil.platform.services;
 public interface IModConfig {
     /** maxRenderBlocks*/
     int maxRenderBlocks = 150;
+    /** maxMiningBlocks*/
+    int maxMiningBlocks = 150;
     /** maxShapelessRadius*/
     int maxShapelessRadius = 6;
     /** maxRenderShapelessRadius*/
@@ -44,6 +46,14 @@ public interface IModConfig {
     /** Interface method setMaxRenderBlocks
      * @param toSet toSet*/
     void setMaxRenderBlocks(int toSet);
+
+    /** Interface method getMaxMiningBlocks
+     * @return MaxMiningBlocks*/
+    int getMaxMiningBlocks();
+
+    /** Interface method setMaxMiningBlocks
+     * @param toSet toSet*/
+    void setMaxMiningBlocks(int toSet);
 
     /** Interface method getMaxShapelessRadius
      * @return MaxShapelessRadius*/

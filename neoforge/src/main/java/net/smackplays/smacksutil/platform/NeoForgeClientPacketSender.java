@@ -15,9 +15,11 @@ import java.util.UUID;
 
 public class NeoForgeClientPacketSender implements IClientPacketSender {
     @Override
-    public void VeinMinerBreakPacket(BlockPos pos, boolean isCreative, boolean replaceSeeds) {
+    public void VeinMinerBreakPacket(BlockPos sourcePos, BlockPos curr, boolean isCreative, boolean replaceSeeds) {
+        Vector3f sourcePos3f = new Vector3f(sourcePos.getX(), sourcePos.getY(), sourcePos.getZ());
+        Vector3f curr3f = new Vector3f(curr.getX(), curr.getY(), curr.getZ());
         Minecraft minecraft = Minecraft.getInstance();
-        Objects.requireNonNull(minecraft.getConnection()).send(new C2SVeinMinerBreakPacket(new Vector3f(pos.getX(), pos.getY(), pos.getZ()), isCreative, replaceSeeds));
+        Objects.requireNonNull(minecraft.getConnection()).send(new C2SVeinMinerBreakPacket(sourcePos3f, curr3f, isCreative, replaceSeeds));
         //PacketHandler.sendToServer(new VeinMinerBreakPacket(mainHandStack, pos, isCreative, replaceSeeds));
     }
 

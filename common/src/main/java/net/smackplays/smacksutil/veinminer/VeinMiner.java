@@ -4,7 +4,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
@@ -85,6 +84,8 @@ public class VeinMiner {
     public boolean isDrawing = false;
     /** isExactMatch*/
     public boolean isExactMatch = false;
+    private int currToMine = 0;
+    private String actualMode;
     /** Constructor*/
     public VeinMiner() {
 
@@ -137,11 +138,12 @@ public class VeinMiner {
         if (Services.CONFIG != null){
             maxRenderBlocks = Services.CONFIG.getMaxRenderBlocks();
         }
-        if (toBreak.size() > maxRenderBlocks) {
-            toBreak = new ArrayList<>(toBreak.subList(0, maxRenderBlocks));
+        ArrayList<BlockPos> toRender = new ArrayList<>(toBreak);
+        if (toRender.size() > maxRenderBlocks) {
+            toRender = new ArrayList<>(toBreak.subList(0, maxRenderBlocks));
         }
 
-        VoxelShape shape = combine(world, pos, new ArrayList<>(toBreak));
+        VoxelShape shape = combine(world, pos, new ArrayList<>(toRender));
         VertexConsumer vertex = Minecraft.getInstance().renderBuffers().bufferSource().getBuffer(RenderType.lines());
 
         drawCuboidShapeOutline(pose, vertex, shape,
@@ -160,16 +162,21 @@ public class VeinMiner {
         setMode();
         if (sourceBlockState.is(ModTags.Blocks.CROP_BLOCKS)) {
             matching = new ArrayList<>(CropsMode.getBlocks(worldIn, playerIn, sourcePosIn, radius, isExactMatch));
+            actualMode = CropsMode.ModeName;
         } else if (sourceBlockState.is(ModTags.Blocks.ORE_BLOCKS)) {
             matching = new ArrayList<>(OresMode.getBlocks(worldIn, playerIn, sourcePosIn, radius, isExactMatch));
+            actualMode = OresMode.ModeName;
         } else if (sourceBlockState.is(ModTags.Blocks.VEGETATION_BLOCKS)) {
             matching = new ArrayList<>(VegetationMode.getBlocks(worldIn, playerIn, sourcePosIn, 10, isExactMatch));
+            actualMode = VegetationMode.ModeName;
         } else if (sourceBlockState.is(ModTags.Blocks.TREE_BLOCKS)) {
             matching = new ArrayList<>(TreeMode.getBlocks(worldIn, playerIn, sourcePosIn, 10, isExactMatch));
+            actualMode = TreeMode.ModeName;
         } else {
             matching = new ArrayList<>(mode.getBlocks(worldIn, playerIn, sourcePosIn, radius, isExactMatch));
+            actualMode = null;
         }
-
+        currToMine = matching.size();
         return matching;
     }
 
@@ -199,7 +206,7 @@ public class VeinMiner {
             boolean canHarvest = (player.hasCorrectToolForDrops(currBlockState) || player.isCreative());
             if (canHarvest) {
                 if (Services.C2S_PACKET_SENDER != null) {
-                    Services.C2S_PACKET_SENDER.VeinMinerBreakPacket(curr, isCreative, replaceSeeds);
+                    Services.C2S_PACKET_SENDER.VeinMinerBreakPacket(sourcePos, curr, isCreative, replaceSeeds);
                 }
             }
         }
@@ -390,5 +397,13 @@ public class VeinMiner {
             modes.add(modeList.get(currMode + 1).getName());
         }
         return modes;
+    }
+
+    public int getCurrToMine(){
+        return currToMine;
+    }
+
+    public String getActualMode(){
+        return actualMode;
     }
 }

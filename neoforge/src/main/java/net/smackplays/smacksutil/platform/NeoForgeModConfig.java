@@ -20,6 +20,7 @@ public class NeoForgeModConfig implements IModConfig, ConfigData {
     public static NeoForgeModConfig INSTANCE;
     private static ConfigManager<NeoForgeModConfig> MANAGER;
     public int maxRenderBlocks = IModConfig.maxRenderBlocks;
+    public int maxMiningBlocks = IModConfig.maxMiningBlocks;
     public int maxShapelessRadius = IModConfig.maxShapelessRadius;
     public int maxRenderShapelessRadius = IModConfig.maxRenderShapelessRadius;
     public boolean enabledShapelessVerticalMode = IModConfig.enabledShapelessVerticalMode;
@@ -49,6 +50,14 @@ public class NeoForgeModConfig implements IModConfig, ConfigData {
                     .setTooltip(Component.translatable("text.autoconfig.smacksutil.option.maxRenderBlocks.@Tooltip"))
                     .setDefaultValue(150)
                     .setSaveConsumer(Services.CONFIG::setMaxRenderBlocks)
+                    .build());
+
+            config.addEntry(entryBuilder
+                    .startIntField(Component.translatable("text.autoconfig.smacksutil.option.maxMiningBlocks")
+                            , Services.CONFIG.getMaxMiningBlocks())
+                    .setTooltip(Component.translatable("text.autoconfig.smacksutil.option.maxMiningBlocks.@Tooltip"))
+                    .setDefaultValue(150)
+                    .setSaveConsumer(Services.CONFIG::setMaxMiningBlocks)
                     .build());
 
             config.addEntry(entryBuilder
@@ -188,6 +197,17 @@ public class NeoForgeModConfig implements IModConfig, ConfigData {
     @Override
     public void setMaxRenderBlocks(int toSet) {
         INSTANCE.maxRenderBlocks = toSet;
+        MANAGER.save();
+    }
+
+    @Override
+    public int getMaxMiningBlocks() {
+        return INSTANCE.maxMiningBlocks;
+    }
+
+    @Override
+    public void setMaxMiningBlocks(int toSet) {
+        INSTANCE.maxMiningBlocks = toSet;
         MANAGER.save();
     }
 

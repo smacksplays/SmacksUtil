@@ -73,4 +73,18 @@ public class Tunnel extends VeinMode {
         }
         return result;
     }
+
+    @Override
+    public boolean checkConnected(BlockPos curr) {
+        var condition = false;
+        if (world.getBlockState(curr).is(ModTags.Blocks.VEIN_BLACKLIST)) return false;
+        if (!player.hasCorrectToolForDrops(world.getBlockState(curr)) && !player.isCreative()) return false;
+        if (isExactMatch || tag == null) {
+            condition = world.getBlockState(curr).is(sourceBlock);
+        } else {
+            condition = world.getBlockState(curr).is(tag);
+        }
+        return condition
+                && (result != null && !result.contains(curr));
+    }
 }
