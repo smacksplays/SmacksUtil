@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
@@ -141,7 +142,6 @@ public class VeinMiner {
         }
 
         VoxelShape shape = combine(world, pos, new ArrayList<>(toBreak));
-
         VertexConsumer vertex = Minecraft.getInstance().renderBuffers().bufferSource().getBuffer(RenderType.lines());
 
         drawCuboidShapeOutline(pose, vertex, shape,

@@ -95,12 +95,12 @@ public abstract class VeinMode {
      * @return List of surrounding matching blocks*/
     public ArrayList<BlockPos> findConnected(BlockPos curr) {
         ArrayList<BlockPos> connected = new ArrayList<>();
-        for (int x = -1; x <= 3; x++) {
-            for (int y = -1; y <= 3; y++) {
-                for (int z = -1; z <= 3; z++) {
-                    BlockPos test2 = curr.offset(x, y, z);
-                    if (checkConnected(test2)) {
-                        connected.add(test2);
+        for (int x = -1; x < 2; x++) {
+            for (int y = -1; y < 2; y++) {
+                for (int z = -1; z < 2; z++) {
+                    BlockPos c = curr.offset(x, y, z);
+                    if (checkConnected(c)) {
+                        connected.add(c);
                     }
                 }
             }
